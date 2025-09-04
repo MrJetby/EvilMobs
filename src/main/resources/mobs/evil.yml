@@ -29,6 +29,11 @@ bossBars:
 
 
 phases:
+  # Types:
+  # DAMAGE
+  # TIME_TO_END
+  # PLACEHOLDER
+
   damage:
     type: DAMAGE
     phases:

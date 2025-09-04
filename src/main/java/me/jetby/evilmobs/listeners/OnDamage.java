@@ -28,10 +28,12 @@ public class OnDamage implements Listener {
 
         if (!entity.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) return;
 
-        Mob mob = mobs.getMobs().get(entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING));
+        String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+
+        Mob mob = mobs.getMobs().get(id);
         if (mob==null) return;
 
-        Bukkit.getPluginManager().callEvent(new MobDamageEvent(entity, damager));
+        Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager));
 
     }
 

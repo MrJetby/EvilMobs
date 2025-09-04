@@ -6,6 +6,7 @@ import me.jetby.evilmobs.api.event.MobSpawnEvent;
 import me.jetby.evilmobs.records.Mob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -29,6 +30,14 @@ public class MobCreator {
         boss.setCanPickupItems(mob.canPickupItems());
         boss.setRemoveWhenFarAway(false);
         boss.setPersistent(true);
+
+        if (boss instanceof Ageable age) {
+            if (mob.isBaby()) {
+                age.setBaby();
+            } else {
+                age.setAdult();
+            }
+        }
 
         boss.setCustomNameVisible(mob.nameVisible());
         if (mob.nameVisible()) {
@@ -73,7 +82,8 @@ public class MobCreator {
 
         boss.getPersistentDataContainer().set(NAMESPACED_KEY, PersistentDataType.STRING, mob.id());
 
-        Bukkit.getPluginManager().callEvent(new MobSpawnEvent(boss));
+        String id = boss.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+        Bukkit.getPluginManager().callEvent(new MobSpawnEvent(id, boss));
 
     }
 

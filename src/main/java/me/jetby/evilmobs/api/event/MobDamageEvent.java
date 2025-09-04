@@ -9,10 +9,12 @@ public class MobDamageEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
+    private final String id;
     private final Entity entity;
     private final Entity damager;
 
-    public MobDamageEvent(Entity entity, Entity damager) {
+    public MobDamageEvent(String id, Entity entity, Entity damager) {
+        this.id = id;
         this.entity = entity;
         this.damager = damager;
     }

@@ -10,13 +10,14 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@Getter
 public final class Main extends JavaPlugin {
 
 
-    @Getter private ArmorSets armorSets;
-    @Getter private Mobs mobs;
+    private ArmorSets armorSets;
+    private Mobs mobs;
 
-    public static NamespacedKey NAMESPACED_KEY = new NamespacedKey("evilmobs", "spawn_date");
+    public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("evilmobs", "data");
 
 
     private static Main INSTANCE;
@@ -40,7 +41,6 @@ public final class Main extends JavaPlugin {
         PluginCommand evilmobs = getCommand("evilmobs");
         if (evilmobs != null)
             evilmobs.setExecutor(new Admin(this));
-
 
     }
 

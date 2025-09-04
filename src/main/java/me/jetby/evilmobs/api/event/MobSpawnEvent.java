@@ -10,9 +10,11 @@ public class MobSpawnEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
+    private final String id;
     private final LivingEntity entity;
 
-    public MobSpawnEvent(LivingEntity entity) {
+    public MobSpawnEvent(String id, LivingEntity entity) {
+        this.id = id;
         this.entity = entity;
     }
 

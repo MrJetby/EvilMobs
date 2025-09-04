@@ -1,4 +1,12 @@
 package me.jetby.evilmobs.records;
 
-public record Phases() {
+import java.util.List;
+import java.util.Map;
+
+public record Phases(
+        String id,
+        String type,
+        Map<String, List<String>> phase
+
+) {
 }
