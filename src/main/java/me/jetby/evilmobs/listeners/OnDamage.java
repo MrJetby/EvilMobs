@@ -1,0 +1,39 @@
+package me.jetby.evilmobs.listeners;
+
+import me.jetby.evilmobs.Main;
+import me.jetby.evilmobs.api.event.MobDamageEvent;
+import me.jetby.evilmobs.configurations.Mobs;
+import me.jetby.evilmobs.records.Mob;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.persistence.PersistentDataType;
+
+import static me.jetby.evilmobs.Main.NAMESPACED_KEY;
+
+public class OnDamage implements Listener {
+
+    private final Mobs mobs;
+
+    public OnDamage(Main plugin) {
+        this.mobs = plugin.getMobs();
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent e) {
+        Entity entity = e.getEntity();
+        Entity damager = e.getDamager();
+
+        if (!entity.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) return;
+
+        Mob mob = mobs.getMobs().get(entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING));
+        if (mob==null) return;
+
+        Bukkit.getPluginManager().callEvent(new MobDamageEvent(entity, damager));
+
+    }
+
+
+}

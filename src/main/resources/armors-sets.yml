@@ -1,0 +1,11 @@
+example:
+  helmet:
+    item: DIAMOND_HELMET
+    enchants:
+      - 'PROTECTION;3'
+    drop-chance: 0
+  hand:
+    item: GOLDEN_SWORD
+    enchants:
+      - 'SHARPNESS;2'
+    drop-chance: 0

@@ -1,0 +1,65 @@
+id: evil
+
+name: "&4Mister Evil" # Delete the line if you want to disable
+type: ZOMBIE
+health: 1000
+
+AI: false
+glow: false
+can-pickup-items: false
+isBaby: false
+
+spawn-location: 0;100;0;world
+
+armor: example
+
+listeners: {}
+
+bossBars:
+  example:
+    title: "Пример"
+    # Доступно: PINK, BLUE, RED ,GREEN ,YELLOW ,PURPLE, WHITE
+    Color: BLUE
+    # Доступно: PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+    Style: PROGRESS
+    # Время спустя которое боссбар исчезнет
+    # Если оставить -1 то боссбар пропадёт когда ивент завершится
+    duration: -1
+
+
+
+phases:
+  damage:
+    type: DAMAGE
+    phases:
+      '100':
+        # %closest_player%
+        # %rand_player_near_<radius>%
+        # %last_damaged_player%
+        - '[lightning] 15' # radius or --player:%closest_player%
+        - '[fireball] ' # %closest_player% --explode:false
+        - '[effect] BLINDNESS;3;1' # --radius:15
+        - '[create_minion] default'
+        - '[teleport] %rand_player_near_25%'
+        - '[]'
+        - '[]'
+        - '[]'
+        - '[]'
+        - '[]'
+
+
+actions:
+  onSpawn: {}
+  onDeath:
+    - '[message] '
+    - '[drop] '
+    - '[console] money give %damage_top_1_name% 150000'
+
+minions:
+  default:
+    name: ""
+    type: ZOMBIE
+    isBaby: true
+    health: 25
+
+    max-radius: 10 # максимальный радиус движения от главного моба

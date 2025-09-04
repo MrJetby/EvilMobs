@@ -1,0 +1,7 @@
+name: EvilMobs
+version: '${project.version}'
+main: me.jetby.evilmobs.Main
+api-version: '1.16'
+authors: [MrJetby]
+commands:
+  evilmobs: {}
