@@ -1,6 +1,6 @@
 package me.jetby.evilmobs.listeners;
 
-import me.jetby.evilmobs.Main;
+import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.api.event.MobDeathEvent;
 import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.records.Mob;
@@ -13,15 +13,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.persistence.PersistentDataType;
 
-import static me.jetby.evilmobs.Main.NAMESPACED_KEY;
+import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 public class OnDeath implements Listener {
 
-    private final Main plugin;
     private final Mobs mobs;
 
-    public OnDeath(Main plugin) {
-        this.plugin = plugin;
+    public OnDeath(EvilMobs plugin) {
         this.mobs = plugin.getMobs();
     }
 

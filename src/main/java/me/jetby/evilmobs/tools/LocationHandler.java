@@ -1,7 +1,7 @@
 package me.jetby.evilmobs.tools;
 
 import lombok.experimental.UtilityClass;
-import me.jetby.evilmobs.Main;
+import me.jetby.evilmobs.EvilMobs;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -23,7 +23,7 @@ public class LocationHandler {
             double x = Double.parseDouble(parts[0]);
             double y = Double.parseDouble(parts[1]);
             double z = Double.parseDouble(parts[2]);
-            World world = Main.getInstance().getServer().getWorld(parts[3]);
+            World world = EvilMobs.getInstance().getServer().getWorld(parts[3]);
 
             return world != null ? new Location(world, x, y, z) : null;
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {

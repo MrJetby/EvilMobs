@@ -1,8 +1,7 @@
 package me.jetby.evilmobs.configurations;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import me.jetby.evilmobs.Main;
+import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.records.ArmorItem;
 import me.jetby.evilmobs.records.BossBars;
 import me.jetby.evilmobs.records.Mob;
@@ -21,14 +20,14 @@ import java.util.Map;
 
 public class Mobs {
 
-    private final Main plugin;
+    private final EvilMobs plugin;
 
 
     @Getter
     private final Map<String, Mob> mobs = new HashMap<>();
     private final File file;
 
-    public Mobs(Main plugin) {
+    public Mobs(EvilMobs plugin) {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "mobs");
 

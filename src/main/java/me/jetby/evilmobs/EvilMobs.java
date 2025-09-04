@@ -10,7 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Main extends JavaPlugin {
+public final class EvilMobs extends JavaPlugin {
 
 
     @Getter
@@ -21,9 +21,9 @@ public final class Main extends JavaPlugin {
     public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("evilmobs", "data");
 
 
-    private static Main INSTANCE;
+    private static EvilMobs INSTANCE;
 
-    public static Main getInstance() {
+    public static EvilMobs getInstance() {
         return INSTANCE;
     }
     @Override
@@ -32,6 +32,7 @@ public final class Main extends JavaPlugin {
 
         armorSets = new ArmorSets();
         armorSets.load();
+
         mobs = new Mobs(this);
         mobs.load();
 

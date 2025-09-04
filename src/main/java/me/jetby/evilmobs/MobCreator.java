@@ -10,7 +10,7 @@ import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 
-import static me.jetby.evilmobs.Main.NAMESPACED_KEY;
+import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 @RequiredArgsConstructor
 public class MobCreator {

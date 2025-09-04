@@ -1,6 +1,6 @@
 package me.jetby.evilmobs.commands;
 
-import me.jetby.evilmobs.Main;
+import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.MobCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -9,19 +9,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static me.jetby.evilmobs.Main.NAMESPACED_KEY;
+import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 public class Admin implements CommandExecutor, TabCompleter {
-    private final Main plugin;
+    private final EvilMobs plugin;
 
-    public Admin(Main plugin) {
+    public Admin(EvilMobs plugin) {
         this.plugin = plugin;
     }
 

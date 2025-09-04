@@ -1,6 +1,6 @@
 package me.jetby.evilmobs.listeners;
 
-import me.jetby.evilmobs.Main;
+import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.api.event.MobDamageEvent;
 import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.records.Mob;
@@ -11,13 +11,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
 
-import static me.jetby.evilmobs.Main.NAMESPACED_KEY;
+import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 public class OnDamage implements Listener {
 
     private final Mobs mobs;
 
-    public OnDamage(Main plugin) {
+    public OnDamage(EvilMobs plugin) {
         this.mobs = plugin.getMobs();
     }
 
@@ -33,6 +33,7 @@ public class OnDamage implements Listener {
         Mob mob = mobs.getMobs().get(id);
         if (mob==null) return;
 
+        System.out.println("callEvent fired");
         Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager));
 
     }
