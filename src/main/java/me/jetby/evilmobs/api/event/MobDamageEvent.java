@@ -1,5 +1,6 @@
 package me.jetby.evilmobs.api.event;
 
+import lombok.Getter;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -9,9 +10,9 @@ public class MobDamageEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private final String id;
-    private final Entity entity;
-    private final Entity damager;
+    @Getter private final String id;
+    @Getter private final Entity entity;
+    @Getter private final Entity damager;
 
     public MobDamageEvent(String id, Entity entity, Entity damager) {
         this.id = id;

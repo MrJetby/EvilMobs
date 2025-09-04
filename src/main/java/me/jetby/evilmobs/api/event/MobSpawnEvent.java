@@ -1,5 +1,6 @@
 package me.jetby.evilmobs.api.event;
 
+import lombok.Getter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
@@ -10,8 +11,8 @@ public class MobSpawnEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private final String id;
-    private final LivingEntity entity;
+    @Getter private final String id;
+    @Getter private final LivingEntity entity;
 
     public MobSpawnEvent(String id, LivingEntity entity) {
         this.id = id;
