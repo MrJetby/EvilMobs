@@ -10,11 +10,12 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@Getter
 public final class Main extends JavaPlugin {
 
 
+    @Getter
     private ArmorSets armorSets;
+    @Getter
     private Mobs mobs;
 
     public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("evilmobs", "data");
