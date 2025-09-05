@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.persistence.PersistentDataType;
 
 import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
@@ -33,8 +34,10 @@ public class OnDamage implements Listener {
         Mob mob = mobs.getMobs().get(id);
         if (mob==null) return;
 
-        System.out.println("callEvent fired");
-        Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager));
+        double damage = e.getDamage();
+        EntityDamageEvent.DamageCause damageCause = e.getCause();
+
+        Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager, damage, damageCause));
 
     }
 
