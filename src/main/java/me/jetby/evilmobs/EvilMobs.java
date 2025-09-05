@@ -6,9 +6,17 @@ import me.jetby.evilmobs.configurations.ArmorSets;
 import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.listeners.OnDamage;
 import me.jetby.evilmobs.listeners.OnDeath;
+import me.jetby.evilmobs.tools.actions.ActionExecutor;
+import me.jetby.evilmobs.tools.actions.ActionRegistry;
+import me.jetby.evilmobs.tools.actions.ActionType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
+import java.util.Map;
 
 public final class EvilMobs extends JavaPlugin {
 
@@ -44,6 +52,12 @@ public final class EvilMobs extends JavaPlugin {
         if (evilmobs != null)
             evilmobs.setExecutor(new Admin(this));
 
+    }
+
+
+    // for API
+    public void sendActionExecutor(Player player, List<String> actions, Entity entity) {
+        ActionExecutor.execute(player, ActionRegistry.transform(actions), entity);
     }
 
 
