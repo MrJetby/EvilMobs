@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 @UtilityClass
 public class ActionRegistry {
-    private static final Pattern ACTION_PATTERN = Pattern.compile("\\[(\\S+)] ?(.*)");
+    private final Pattern ACTION_PATTERN = Pattern.compile("\\[(\\S+)] ?(.*)");
 
     public Map<ActionType, List<String>> transform(List<String> settings) {
         Map<ActionType, List<String>> actions = new HashMap<>();
