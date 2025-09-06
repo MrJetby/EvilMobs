@@ -1,6 +1,7 @@
 package me.jetby.evilmobs.tools.actions;
 
 import lombok.experimental.UtilityClass;
+import me.jetby.evilmobs.tools.TextUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -14,7 +15,7 @@ public class ActionExecutor {
         actions.keySet().forEach(type -> {
             var contexts = actions.get(type);
             for (String context : contexts) {
-                var c = context;
+                var c = TextUtil.setPapi(player, TextUtil.colorize(context));
                 type.getAction().execute(player, c, entity);
             }
         });
