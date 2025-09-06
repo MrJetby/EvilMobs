@@ -19,6 +19,14 @@ public class FileLoader {
         return YamlConfiguration.loadConfiguration(file);
     }
 
+    public FileConfiguration getFileConfiguration(String path, String fileName) {
+        File file = new File(path, fileName);
+        if (!file.exists()) {
+            EvilMobs.getInstance().saveResource(fileName, false);
+
+        }
+        return YamlConfiguration.loadConfiguration(file);
+    }
     public File getFile(String fileName) {
         File file = new File(EvilMobs.getInstance().getDataFolder().getAbsoluteFile(), fileName);
         if (!file.exists()) {
@@ -26,5 +34,11 @@ public class FileLoader {
         }
         return file;
     }
-
+    public File getFile(String path, String fileName) {
+        File file = new File(path, fileName);
+        if (!file.exists()) {
+            EvilMobs.getInstance().saveResource(fileName, false);
+        }
+        return file;
+    }
 }
