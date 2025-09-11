@@ -26,7 +26,7 @@ public class Admin implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return List.of( );
+        return List.of();
     }
 
     @Override
@@ -34,16 +34,16 @@ public class Admin implements CommandExecutor, TabCompleter {
 
         switch (args[0]) {
             case "spawn": {
-               MobCreator mobCreator=  new MobCreator(plugin.getMobs().getMobs().get(args[1]));
-               mobCreator.spawn();
-               break;
+                MobCreator mobCreator = new MobCreator(plugin.getMobs().getMobs().get(args[1]));
+                mobCreator.spawn();
+                break;
             }
             case "list": {
                 for (World world : Bukkit.getWorlds()) {
                     for (Entity e : world.getEntities()) {
-                        if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING))  continue;
+                        if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) continue;
                         String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-                        sender.sendMessage(id+" ("+plugin.getMobs().getMobs().get(id).name()+")");
+                        sender.sendMessage(id + " (" + plugin.getMobs().getMobs().get(id).name() + ")");
 
                     }
                 }

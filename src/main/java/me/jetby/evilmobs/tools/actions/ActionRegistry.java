@@ -15,21 +15,23 @@ public class ActionRegistry {
 
     public Map<ActionType, List<String>> transform(List<String> settings) {
         Map<ActionType, List<String>> actions = new HashMap<>();
-        settings.forEach(s -> {
+        for (String s : settings) {
             var matcher = ACTION_PATTERN.matcher(s);
             if (!matcher.matches()) {
                 Logger.warn("Illegal action pattern " + s);
-                return;
+                continue;
             }
+
             var type = ActionType.getType(matcher.group(1).toUpperCase());
             if (type == null) {
                 Logger.warn("ActionType " + s + " is not available!");
-                return;
+                continue;
             }
+
             var context = matcher.group(2).trim();
             actions.putIfAbsent(type, new ArrayList<>());
             actions.get(type).add(context);
-        });
+        }
         return actions;
     }
 }

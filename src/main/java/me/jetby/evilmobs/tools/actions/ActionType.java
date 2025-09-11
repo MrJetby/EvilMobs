@@ -1,8 +1,10 @@
 package me.jetby.evilmobs.tools.actions;
 
 import lombok.Getter;
-import me.jetby.evilmobs.tools.actions.impl.mob.Fireball;
-import me.jetby.evilmobs.tools.actions.impl.mob.Lightning;
+import me.jetby.evilmobs.tools.actions.impl.mob.abillities.Fireball;
+import me.jetby.evilmobs.tools.actions.impl.mob.abillities.Lightning;
+import me.jetby.evilmobs.tools.actions.impl.mob.bossBar.*;
+import me.jetby.evilmobs.tools.actions.impl.mob.task.*;
 import me.jetby.evilmobs.tools.actions.impl.standard.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +13,16 @@ public enum ActionType {
 
     LIGHTNING(new Lightning()),
     FIREBALL(new Fireball()),
+
+    CREATE_BOSSBAR(new CreateBossBar()),
+    SHOW_BOSSBAR(new ShowBossBar()),
+    SHOW_BOSSBAR_NEAR(new ShowBossBarNear()),
+    REMOVE_BOSSBAR_NEAR(new RemoveBossBarNear()),
+    REMOVE_BOSSBAR(new RemoveBossBar()),
+    DELETE_BOSSBAR(new DeleteBossBar()),
+
+    TASK_RUN(new TaskRun()),
+    TASK_STOP(new TaskStop()),
 
     MESSAGE(new Message()),
     MSG(new Message()),

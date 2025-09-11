@@ -21,6 +21,7 @@ public class MobSpawnEvent extends Event implements Cancellable {
         this.id = id;
         this.entity = entity;
     }
+
     public static HandlerList getHandlerList() {
         return handlers;
     }

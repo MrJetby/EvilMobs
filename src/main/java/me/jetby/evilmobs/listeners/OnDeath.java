@@ -30,10 +30,10 @@ public class OnDeath implements Listener {
 
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
         Mob mob = mobs.getMobs().get(id);
-        if (mob==null) return;
+        if (mob == null) return;
 
         Bukkit.getPluginManager().callEvent(new MobDeathEvent(id, entity, entity.getKiller()));
 
-        ActionExecutor.execute(null, ActionRegistry.transform(mob.onDeathActions()), entity);
+        ActionExecutor.execute(null, ActionRegistry.transform(mob.onDeathActions()), entity, mob);
     }
 }

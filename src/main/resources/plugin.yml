@@ -2,6 +2,6 @@ name: EvilMobs
 version: '${project.version}'
 main: me.jetby.evilmobs.EvilMobs
 api-version: '1.16'
-authors: [MrJetby]
+authors: [ MrJetby ]
 commands:
-  evilmobs: {}
+  evilmobs: { }

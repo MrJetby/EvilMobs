@@ -13,7 +13,7 @@ spawn-location: 0;100;0;world
 
 armor: example
 
-listeners: {}
+listeners: { }
 
 bossBars:
   example:
@@ -28,33 +28,42 @@ bossBars:
 
 
 
+tasks:
+  example:
+    # delay - задержка перед первым выполнением в тиках (20 тиков = 1 секунда)
+    # period - период между выполнениями в тиках (20 тиков = 1 секунда)
+    delay: 0
+    period: 20
+    actions:
+      - '[message] &cTest action every second'
+
 phases:
   # Types:
-  # DAMAGE
+  # HEALTH
   # TIME_TO_END
   # PLACEHOLDER
 
   damage:
-    type: DAMAGE
-    phases:
+    type: HEALTH
+    actions:
       '100':
         # %closest_player%
         # %rand_player_near_<radius>%
         # %last_damaged_player%
         - '[lightning] 15' # radius or --player:%closest_player%
-        - '[fireball] ' # %closest_player% --explode:false
+        - '[fireball] ' # %closest_player% --explode:false --FROM:MOB/TOP/DOWN/LEFT/RIGHT
         - '[effect] BLINDNESS;3;1' # --radius:15
         - '[create_minion] default'
         - '[teleport] %rand_player_near_25%'
-        - '[]'
-        - '[]'
+        - '[task_run] example'
+        - '[task_stop] example'
         - '[]'
         - '[]'
         - '[]'
 
 
 actions:
-  onSpawn: {}
+  onSpawn: { }
   onDeath:
     - '[message] '
     - '[drop] '

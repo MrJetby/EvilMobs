@@ -6,9 +6,15 @@ import me.jetby.evilmobs.configurations.ArmorSets;
 import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.listeners.OnDamage;
 import me.jetby.evilmobs.listeners.OnDeath;
+import me.jetby.evilmobs.tools.MiniTask;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public final class EvilMobs extends JavaPlugin {
 
@@ -18,17 +24,18 @@ public final class EvilMobs extends JavaPlugin {
     @Getter
     private Mobs mobs;
 
-    public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("evilmobs", "data");
-
+    public static NamespacedKey NAMESPACED_KEY;
 
     private static EvilMobs INSTANCE;
 
     public static EvilMobs getInstance() {
         return INSTANCE;
     }
+
     @Override
     public void onEnable() {
         INSTANCE = this;
+        NAMESPACED_KEY = new NamespacedKey(this, "data");
 
         armorSets = new ArmorSets();
         armorSets.load();
@@ -47,6 +54,6 @@ public final class EvilMobs extends JavaPlugin {
     }
 
 
-
-
+    @Getter
+    private final Map<UUID, Map<String, MiniTask>> tasks = new HashMap<>();
 }

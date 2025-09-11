@@ -1,5 +1,6 @@
 package me.jetby.evilmobs.tools.actions.impl.standard;
 
+import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.tools.Logger;
 import me.jetby.evilmobs.tools.actions.Action;
 import org.bukkit.entity.Entity;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Effect implements Action {
     @Override
-    public void execute(@Nullable Player player, @NotNull String context, @Nullable Entity entity) {
+    public void execute(@Nullable Player player, @NotNull String context, @Nullable Entity entity, @Nullable Mob mob) {
         if (player == null) return;
 
         var args = context.split(";");
@@ -35,6 +36,5 @@ public class Effect implements Action {
         } catch (NumberFormatException e) {
             Logger.warn("Strength and duration must be a number");
         }
-
     }
 }

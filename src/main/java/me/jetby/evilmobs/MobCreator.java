@@ -4,18 +4,31 @@ package me.jetby.evilmobs;
 import lombok.RequiredArgsConstructor;
 import me.jetby.evilmobs.api.event.MobSpawnEvent;
 import me.jetby.evilmobs.records.Mob;
+import me.jetby.evilmobs.records.Phases;
+import me.jetby.evilmobs.records.Task;
+import me.jetby.evilmobs.tools.Logger;
+import me.jetby.evilmobs.tools.MiniTask;
+import me.jetby.evilmobs.tools.actions.ActionExecutor;
+import me.jetby.evilmobs.tools.actions.ActionRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 @RequiredArgsConstructor
 public class MobCreator {
 
-    private final Mob mob;
+    final Mob mob;
+    int taskId = -1;
+
 
     public void spawn() {
         spawn(mob.spawnlocation());
@@ -44,47 +57,99 @@ public class MobCreator {
             boss.setCustomName(mob.name());
         }
 
-         mob.armorItems().forEach(armorItem -> {
+        mob.armorItems().forEach(armorItem -> {
 
-             switch (armorItem.id()) {
-                 case "helmet": {
-                     boss.getEquipment().setHelmet(armorItem.item());
-                     boss.getEquipment().setHelmetDropChance(armorItem.dropChance());
-                     break;
-                 }
-                 case "chestplate": {
-                     boss.getEquipment().setChestplate(armorItem.item());
-                     boss.getEquipment().setChestplateDropChance(armorItem.dropChance());
-                     break;
-                 }
-                 case "leggings": {
-                     boss.getEquipment().setLeggings(armorItem.item());
-                     boss.getEquipment().setLeggingsDropChance(armorItem.dropChance());
-                     break;
-                 }
-                 case "boots": {
-                     boss.getEquipment().setBoots(armorItem.item());
-                     boss.getEquipment().setBootsDropChance(armorItem.dropChance());
-                     break;
-                 }
-                 case "hand": {
-                     boss.getEquipment().setItemInMainHand(armorItem.item());
-                     boss.getEquipment().setItemInMainHandDropChance(armorItem.dropChance());
-                     break;
-                 }
-                 case "offhand": {
-                     boss.getEquipment().setItemInOffHand(armorItem.item());
-                     boss.getEquipment().setItemInOffHandDropChance(armorItem.dropChance());
-                     break;
-                 }
-             }
-         });
+            switch (armorItem.id()) {
+                case "helmet": {
+                    boss.getEquipment().setHelmet(armorItem.item());
+                    boss.getEquipment().setHelmetDropChance(armorItem.dropChance());
+                    break;
+                }
+                case "chestplate": {
+                    boss.getEquipment().setChestplate(armorItem.item());
+                    boss.getEquipment().setChestplateDropChance(armorItem.dropChance());
+                    break;
+                }
+                case "leggings": {
+                    boss.getEquipment().setLeggings(armorItem.item());
+                    boss.getEquipment().setLeggingsDropChance(armorItem.dropChance());
+                    break;
+                }
+                case "boots": {
+                    boss.getEquipment().setBoots(armorItem.item());
+                    boss.getEquipment().setBootsDropChance(armorItem.dropChance());
+                    break;
+                }
+                case "hand": {
+                    boss.getEquipment().setItemInMainHand(armorItem.item());
+                    boss.getEquipment().setItemInMainHandDropChance(armorItem.dropChance());
+                    break;
+                }
+                case "offhand": {
+                    boss.getEquipment().setItemInOffHand(armorItem.item());
+                    boss.getEquipment().setItemInOffHandDropChance(armorItem.dropChance());
+                    break;
+                }
+            }
+        });
 
         boss.getPersistentDataContainer().set(NAMESPACED_KEY, PersistentDataType.STRING, mob.id());
 
-        String id = boss.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-        Bukkit.getPluginManager().callEvent(new MobSpawnEvent(id, boss));
+        Bukkit.getPluginManager().callEvent(new MobSpawnEvent(mob.id(), boss));
 
+        ActionExecutor.execute(null, ActionRegistry.transform(mob.onSpawnActions()), boss, mob);
+
+
+        phasesCopy.addAll(mob.phases());
+        phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
+
+        taskId = Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+
+            if (boss.isDead()) {
+                end();
+                Bukkit.getScheduler().cancelTask(taskId);
+                return;
+            }
+
+            for (Phases phase : phasesCopy) {
+                try {
+                    sendPhasesCommand(phase.type(), boss);
+                } catch (NumberFormatException e) {
+                    Logger.warn(e.getMessage());
+                }
+            }
+        }, 0L, 5L).getTaskId();
+
+
+    }
+
+    final List<Phases> phasesCopy = new ArrayList<>();
+    final Map<String, List<String>> phases = new HashMap<>();
+
+    private void sendPhasesCommand(String type, LivingEntity entity) {
+        switch (type) {
+            case "health": {
+                double health = entity.getHealth();
+                for (String phaseId : phases.keySet()) {
+                    double trigger = Double.parseDouble(phaseId);
+                    if (health <= trigger) {
+                        ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
+                        phases.remove(phaseId);
+                    }
+                }
+            }
+            case "HEALTH_PERCENT": {
+                double healthPercent = (entity.getHealth() / entity.getMaxHealth()) * 100;
+                for (String phaseId : phases.keySet()) {
+                    double trigger = Double.parseDouble(phaseId);
+                    if (healthPercent <= trigger) {
+                        ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
+                        phases.remove(phaseId);
+                    }
+                }
+            }
+
+        }
     }
 
     public void end() {

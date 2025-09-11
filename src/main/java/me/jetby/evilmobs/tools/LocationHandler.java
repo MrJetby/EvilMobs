@@ -11,6 +11,7 @@ public class LocationHandler {
         return String.format("%d;%d;%d;%s", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName());
 
     }
+
     public Location deserialize(String str) {
         if (str == null || str.isEmpty() || str.equals("0;0;0;world")) {
             return null;

@@ -32,7 +32,7 @@ public class OnDamage implements Listener {
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
 
         Mob mob = mobs.getMobs().get(id);
-        if (mob==null) return;
+        if (mob == null) return;
 
         double damage = e.getDamage();
         EntityDamageEvent.DamageCause damageCause = e.getCause();

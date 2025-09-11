@@ -13,11 +13,11 @@ public class MobDamageEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
 
-     private final String id;
-     private final Entity entity;
-     private final Entity damager;
-     private final double damage;
-     private final EntityDamageEvent.DamageCause cause;
+    private final String id;
+    private final Entity entity;
+    private final Entity damager;
+    private final double damage;
+    private final EntityDamageEvent.DamageCause cause;
 
     private boolean cancelled = false;
 
@@ -34,9 +34,11 @@ public class MobDamageEvent extends Event implements Cancellable {
     public @NotNull HandlerList getHandlers() {
         return handlers;
     }
+
     public static HandlerList getHandlerList() {
         return handlers;
     }
+
     @Override
     public boolean isCancelled() {
         return cancelled;

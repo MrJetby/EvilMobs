@@ -64,8 +64,9 @@ public class TextUtil {
         message = processGradients(message);
         return message;
     }
+
     public String colorize(@Nullable String message) {
-        if (message==null) return "";
+        if (message == null) return "";
         message = processGradients(message);
 
         final Matcher matcher = HEX_PATTERN.matcher(message);
@@ -84,6 +85,7 @@ public class TextUtil {
         message = matcher.appendTail(builder).toString();
         return translateAlternateColorCodes('&', message);
     }
+
     public String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
         final char[] b = textToTranslate.toCharArray();
 
@@ -96,7 +98,6 @@ public class TextUtil {
 
         return new String(b);
     }
-
 
 
     private String processGradients(String message) {
@@ -203,7 +204,6 @@ public class TextUtil {
         }
         return segment.toString();
     }
-
 
 
     private boolean isFormat(char c) {

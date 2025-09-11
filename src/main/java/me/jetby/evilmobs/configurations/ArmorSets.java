@@ -31,23 +31,23 @@ public class ArmorSets {
                 items.clear();
 
                 ConfigurationSection itemsSection = configuration.getConfigurationSection(id);
-                if (itemsSection==null) {
-                    Logger.warn("Section "+id+" is null");
+                if (itemsSection == null) {
+                    Logger.warn("Section " + id + " is null");
                     continue;
                 }
 
                 for (String key : itemsSection.getKeys(false)) {
                     ConfigurationSection section = itemsSection.getConfigurationSection(key);
-                    if (section==null) {
-                        Logger.warn("Section "+key+" is null");
+                    if (section == null) {
+                        Logger.warn("Section " + key + " is null");
                         continue;
                     }
                     ItemStack item = new ItemStack(Material.valueOf(section.getString("item")));
                     for (String str : section.getStringList("enchants")) {
                         String[] parts = str.split(";");
                         Enchantment enchantment = Enchantment.getByName(parts[0]);
-                        if (enchantment==null) {
-                            Logger.warn("Enchantment "+parts[0]+" was not found");
+                        if (enchantment == null) {
+                            Logger.warn("Enchantment " + parts[0] + " was not found");
                             continue;
                         }
                         int level = Integer.parseInt(parts[1]);

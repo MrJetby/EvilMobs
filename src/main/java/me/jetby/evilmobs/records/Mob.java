@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 import java.util.List;
+import java.util.Map;
 
 public record Mob(
         String id,
@@ -18,11 +19,11 @@ public record Mob(
         boolean canPickupItems,
         boolean visualFire,
         boolean isBaby,
-        Phases phases,
-        BossBars bossBars,
+        List<Phases> phases,
+        Map<String, Task> tasks,
+        Map<String, Bar> bossBars,
         List<String> onSpawnActions,
         List<String> onDeathActions
-
 
 
 ) {
