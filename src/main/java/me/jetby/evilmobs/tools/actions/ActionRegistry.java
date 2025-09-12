@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
 public class ActionRegistry {
     private final Pattern ACTION_PATTERN = Pattern.compile("\\[(\\S+)] ?(.*)");
 
-    public Map<ActionType, List<String>> transform(List<String> settings) {
-        Map<ActionType, List<String>> actions = new HashMap<>();
+    public List<ActionEntry> transform(List<String> settings) {
+        List<ActionEntry> actions = new ArrayList<>();
         for (String s : settings) {
             var matcher = ACTION_PATTERN.matcher(s);
             if (!matcher.matches()) {
@@ -24,15 +24,16 @@ public class ActionRegistry {
                 continue;
             }
 
-            var type = ActionType.getType(matcher.group(1).toUpperCase());
+            var typeName = matcher.group(1).toUpperCase();
+            var type = ActionType.getType(typeName);
             if (type == null) {
-                Logger.warn("ActionType " + s + " is not available!");
+                Logger.warn("ActionType " + typeName + " is not available!");
                 continue;
             }
             var context = matcher.group(2).trim();
-            actions.putIfAbsent(type, new ArrayList<>());
-            actions.get(type).add(context);
+            actions.add(new ActionEntry(type, context));
         }
         return actions;
     }
+    public record ActionEntry(ActionType type, String context) {}
 }

@@ -30,10 +30,15 @@ public enum ActionType {
     TASK_STOP(new TaskStop()),
 
     SET_AGE(new SetAge()),
+    SETAGE(new SetAge()),
     SET_AI(new SetAI()),
+    SETAI(new SetAI()),
     SET_CAN_PICKUP_ITEMS(new SetCanPickupItems()),
+    SETCANPICKUPITEMS(new SetCanPickupItems()),
     SET_GLOW(new SetGlow()),
+    SETGLOW(new SetGlow()),
     SET_NAME(new SetName()),
+    SETNAME(new SetName()),
 
     MESSAGE(new Message()),
     MSG(new Message()),
