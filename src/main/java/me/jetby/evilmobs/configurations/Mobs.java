@@ -87,7 +87,7 @@ public class Mobs {
 
 
             List<Phases> phases = new ArrayList<>();
-            ConfigurationSection phasesSection = configuration.getConfigurationSection("actions");
+            ConfigurationSection phasesSection = configuration.getConfigurationSection("phases");
             if (phasesSection != null) {
                 for (String phaseId : phasesSection.getKeys(false)) {
                     ConfigurationSection phaseSection = phasesSection.getConfigurationSection(phaseId);
@@ -116,7 +116,9 @@ public class Mobs {
                     BossBar.Color bossBarColor = BossBar.Color.valueOf(bossBar.getString("Color", "BLUE"));
                     BossBar.Overlay bossBarStyle = BossBar.Overlay.valueOf(bossBar.getString("Style", "PROGRESS"));
 
-                    bossBarsMap.put(bossBarId, new Bar(bossBarId, bossBarTitle, bossBarColor, bossBarStyle, bossBarDuration));
+                    String bossBarProgress = bossBar.getString("Progress", "1.0");
+
+                    bossBarsMap.put(bossBarId, new Bar(bossBarId, bossBarTitle, bossBarColor, bossBarStyle, bossBarProgress, bossBarDuration));
                 }
             }
 
@@ -129,16 +131,18 @@ public class Mobs {
 
                     int delay = task.getInt("delay", 20);
                     int period = task.getInt("period", 20);
+                    int amount = task.getInt("amount", -1);
                     List<String> actions = task.getStringList("actions");
 
-                    tasks.put(taskId, new Task(delay, period, actions));
+                    tasks.put(taskId, new Task(delay, period, amount, actions));
                 }
             }
 
             List<String> onSpawnActions = configuration.getStringList("actions.onSpawn");
+            List<String> onHitActions = configuration.getStringList("actions.onHit");
             List<String> onDeathActions = configuration.getStringList("actions.onDeath");
 
-            Mob mob = new Mob(id, location, nameVisible, name, armorItem, entityType, health, ai, glow, canPickupItems, visualFire, isBaby, phases, tasks, bossBarsMap, onSpawnActions, onDeathActions);
+            Mob mob = new Mob(id, location, nameVisible, name, armorItem, entityType, health, ai, glow, canPickupItems, visualFire, isBaby, phases, tasks, bossBarsMap, onSpawnActions, onHitActions, onDeathActions);
             mobs.put(id, mob);
 
         } catch (Exception e) {

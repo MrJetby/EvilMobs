@@ -1,6 +1,7 @@
 package me.jetby.evilmobs.listeners;
 
 import me.jetby.evilmobs.EvilMobs;
+import me.jetby.evilmobs.MobCreator;
 import me.jetby.evilmobs.api.event.MobDeathEvent;
 import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.records.Mob;
@@ -13,14 +14,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Map;
+
 import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 public class OnDeath implements Listener {
 
-    private final Mobs mobs;
+    final Mobs mobs;
+    final Map<String, MobCreator> mobCreators;
 
     public OnDeath(EvilMobs plugin) {
         this.mobs = plugin.getMobs();
+        this.mobCreators = plugin.getMobCreators();
     }
 
     @EventHandler
@@ -35,5 +40,6 @@ public class OnDeath implements Listener {
         Bukkit.getPluginManager().callEvent(new MobDeathEvent(id, entity, entity.getKiller()));
 
         ActionExecutor.execute(null, ActionRegistry.transform(mob.onDeathActions()), entity, mob);
+        mobCreators.remove(id);
     }
 }

@@ -13,15 +13,15 @@ spawn-location: 0;100;0;world
 
 armor: example
 
-listeners: { }
 
 bossBars:
   example:
-    title: "Пример"
+    title: "&4&lEvil Boss &7[Health: %health_percentage%%]"
     # Доступно: PINK, BLUE, RED ,GREEN ,YELLOW ,PURPLE, WHITE
     Color: BLUE
     # Доступно: PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
     Style: PROGRESS
+    Progress: '%health_percentage%'
     # Время спустя которое боссбар исчезнет
     # Если оставить -1 то боссбар пропадёт когда ивент завершится
     duration: -1
@@ -34,6 +34,7 @@ tasks:
     # period - период между выполнениями в тиках (20 тиков = 1 секунда)
     delay: 0
     period: 20
+    amount: -1 # -1 бесконечное выполнение или количество выполнений если указать число
     actions:
       - '[message] &cTest action every second'
 
@@ -42,7 +43,6 @@ phases:
   # HEALTH
   # TIME_TO_END
   # PLACEHOLDER
-
   damage:
     type: HEALTH
     actions:
@@ -51,19 +51,24 @@ phases:
         # %rand_player_near_<radius>%
         # %last_damaged_player%
         - '[lightning] 15' # radius or --player:%closest_player%
-        - '[fireball] ' # %closest_player% --explode:false --FROM:MOB/TOP/DOWN/LEFT/RIGHT
+        - '[fireball] ' # --TARGET:%closest_player% --EXPLODE:false --FROM:MOB/TOP/DOWN/LEFT/RIGHT
         - '[effect] BLINDNESS;3;1' # --radius:15
         - '[create_minion] default'
         - '[teleport] %rand_player_near_25%'
         - '[task_run] example'
         - '[task_stop] example'
-        - '[]'
+        - '[setAI] true'
+        - '[setAge] baby/adult'
+        - '[set_can_pickup_items] true'
+        - '[setGlow] true'
+        - '[setName] &6Mister Evil'
         - '[]'
         - '[]'
 
 
 actions:
   onSpawn: { }
+  onHit: { }
   onDeath:
     - '[message] '
     - '[drop] '

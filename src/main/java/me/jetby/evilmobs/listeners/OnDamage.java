@@ -4,8 +4,10 @@ import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.api.event.MobDamageEvent;
 import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.records.Mob;
+import me.jetby.evilmobs.tools.MiniBar;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -38,7 +40,6 @@ public class OnDamage implements Listener {
         EntityDamageEvent.DamageCause damageCause = e.getCause();
 
         Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager, damage, damageCause));
-
     }
 
 

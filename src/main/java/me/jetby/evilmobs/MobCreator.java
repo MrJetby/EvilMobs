@@ -1,13 +1,12 @@
 package me.jetby.evilmobs;
 
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.jetby.evilmobs.api.event.MobSpawnEvent;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.records.Phases;
-import me.jetby.evilmobs.records.Task;
 import me.jetby.evilmobs.tools.Logger;
-import me.jetby.evilmobs.tools.MiniTask;
 import me.jetby.evilmobs.tools.actions.ActionExecutor;
 import me.jetby.evilmobs.tools.actions.ActionRegistry;
 import org.bukkit.Bukkit;
@@ -30,6 +29,9 @@ public class MobCreator {
     int taskId = -1;
 
 
+    @Getter
+    private LivingEntity livingEntity;
+
     public void spawn() {
         spawn(mob.spawnlocation());
     }
@@ -43,6 +45,7 @@ public class MobCreator {
         boss.setCanPickupItems(mob.canPickupItems());
         boss.setRemoveWhenFarAway(false);
         boss.setPersistent(true);
+
 
         if (boss instanceof Ageable age) {
             if (mob.isBaby()) {
@@ -121,6 +124,7 @@ public class MobCreator {
         }, 0L, 5L).getTaskId();
 
 
+        livingEntity = boss;
     }
 
     final List<Phases> phasesCopy = new ArrayList<>();
@@ -130,27 +134,40 @@ public class MobCreator {
         switch (type) {
             case "health": {
                 double health = entity.getHealth();
-                for (String phaseId : phases.keySet()) {
+                for (String phaseId : new ArrayList<>(phases.keySet())) {
                     double trigger = Double.parseDouble(phaseId);
                     if (health <= trigger) {
                         ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
                         phases.remove(phaseId);
                     }
                 }
+                break;
             }
             case "HEALTH_PERCENT": {
                 double healthPercent = (entity.getHealth() / entity.getMaxHealth()) * 100;
-                for (String phaseId : phases.keySet()) {
+                for (String phaseId : new ArrayList<>(phases.keySet())) {
                     double trigger = Double.parseDouble(phaseId);
                     if (healthPercent <= trigger) {
                         ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
                         phases.remove(phaseId);
                     }
                 }
+                break;
             }
-
+            case "TIME_TO_END": {
+                double healthPercent = (entity.getHealth() / entity.getMaxHealth()) * 100;
+                for (String phaseId : new ArrayList<>(phases.keySet())) {
+                    double trigger = Double.parseDouble(phaseId);
+                    if (healthPercent <= trigger) {
+                        ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
+                        phases.remove(phaseId);
+                    }
+                }
+                break;
+            }
         }
     }
+
 
     public void end() {
 

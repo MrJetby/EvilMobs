@@ -1,18 +1,22 @@
-package me.jetby.evilmobs.tools.actions.impl.mob.bossBar;
+package me.jetby.evilmobs.tools.actions.impl.mob;
 
 import me.jetby.evilmobs.records.Mob;
-import me.jetby.evilmobs.tools.MiniBar;
 import me.jetby.evilmobs.tools.actions.Action;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CreateBossBar implements Action {
+public class SetName implements Action {
     @Override
     public void execute(@Nullable Player player, @NotNull String context, @Nullable Entity entity, @Nullable Mob mob) {
-        if (mob == null) return;
-        if (entity == null) return;
-        MiniBar.createBossBar(context, mob, entity);
+        if (entity==null) return;
+        if (mob==null) return;
+
+        if (entity instanceof LivingEntity livingEntity) {
+            entity.setCustomName(context);
+            entity.setCustomNameVisible(true);
+        }
     }
 }

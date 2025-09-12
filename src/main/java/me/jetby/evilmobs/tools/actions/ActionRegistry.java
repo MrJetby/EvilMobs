@@ -1,7 +1,9 @@
 package me.jetby.evilmobs.tools.actions;
 
 import lombok.experimental.UtilityClass;
+import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.tools.Logger;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +29,6 @@ public class ActionRegistry {
                 Logger.warn("ActionType " + s + " is not available!");
                 continue;
             }
-
             var context = matcher.group(2).trim();
             actions.putIfAbsent(type, new ArrayList<>());
             actions.get(type).add(context);

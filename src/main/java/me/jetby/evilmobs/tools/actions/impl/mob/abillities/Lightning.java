@@ -22,10 +22,15 @@ public class Lightning implements Action {
 
         var args = context.split(";");
         var radius = args.length > 0 ? Integer.parseInt(args[0]) : 0;
+        boolean visual = args.length > 1 && Boolean.parseBoolean(args[1]);
 
         if (radius == 0) {
-            entity.getWorld().strikeLightningEffect(entity.getLocation());
+            if (visual) {
+                entity.getWorld().strikeLightningEffect(entity.getLocation());
+            } else {
+                entity.getWorld().strikeLightning(entity.getLocation());}
         } else {
+
             entity.getWorld().strikeLightningEffect(getRandomLocation(entity.getLocation(), radius));
         }
 

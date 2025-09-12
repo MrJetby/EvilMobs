@@ -8,11 +8,14 @@ import lombok.experimental.UtilityClass;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.records.Bar;
 import me.jetby.evilmobs.records.Mob;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -27,21 +30,26 @@ public class MiniBar {
     @Setter
     @Getter
     public class Data {
-        net.kyori.adventure.bossbar.BossBar bossBar = null;
-        Set<Audience> audiences = new HashSet<>();
+        BossBar bossBar = null;
+        Set<Player> players = new HashSet<>();
         int durationTask;
         int nearTask = 0;
         String id;
+        String progress;
+        String originalTitle;
+        Entity entity;
+    }
+
+    public void initialize(EvilMobs plugin) {
+        Bukkit.getScheduler().runTaskTimer(plugin, MiniBar::updateAll, 0L, 5L);
     }
 
     public void createBossBar(@NonNull String id, @NonNull Mob mob, @NonNull Entity entity) {
         Bar bossBarConfig = mob.bossBars().get(id);
-        Component title = Component.text(bossBarConfig.title());
-        net.kyori.adventure.bossbar.BossBar bar = net.kyori.adventure.bossbar.BossBar.bossBar(
-                title,
-                1.0f,
-                bossBarConfig.color(),
-                bossBarConfig.style()
+        BossBar bar = Bukkit.createBossBar(
+                bossBarConfig.title(),
+                convertColor(bossBarConfig.color()),
+                convertStyle(bossBarConfig.style())
         );
 
         UUID entityId = entity.getUniqueId();
@@ -62,33 +70,61 @@ public class MiniBar {
         data.setDurationTask(taskId);
         data.setBossBar(bar);
         data.setId(id);
+        data.setEntity(entity);
+        data.setOriginalTitle(bar.getTitle());
+        data.setProgress(bossBarConfig.progress());
         datas.put(entityId, data);
     }
 
-    public void show(@NonNull String id, @NonNull Audience target) {
+    public void show(@NonNull String id, @NonNull Player target) {
         datas.values().stream()
                 .filter(data -> data.id.equals(id))
                 .forEach(data -> {
-                    net.kyori.adventure.bossbar.BossBar bar = data.bossBar;
+                    BossBar bar = data.bossBar;
                     if (bar == null) return;
 
-                    Set<Audience> viewers = data.audiences;
-                    target.showBossBar(bar);
+                    Set<Player> viewers = data.players;
+                    bar.addPlayer(target);
                     viewers.add(target);
                 });
     }
 
-    public void show(@NonNull String id, @NonNull List<Audience> targets) {
+    public void updateAll() {
+        datas.values().forEach(data -> {
+            BossBar bossBar = data.bossBar;
+            if (bossBar == null) return;
+
+            if (data.entity instanceof LivingEntity livingEntity) {
+                double healthPercent = livingEntity.getHealth() / livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
+                if (data.progress.equalsIgnoreCase("%health_percentage%")) {
+                    bossBar.setProgress(healthPercent);
+                } else {
+                    bossBar.setProgress(Double.parseDouble(data.progress));
+
+                }
+
+                String raw = data.originalTitle;
+                raw = raw.replace("%health_percentage%", String.format("%.1f", healthPercent * 100));
+                String parsed = TextUtil.setPapi(null, TextUtil.colorize(raw));
+                bossBar.setTitle(parsed);
+
+                data.setBossBar(bossBar);
+            }
+        });
+    }
+
+    public void show(@NonNull String id, @NonNull List<Player> targets) {
         datas.values().stream()
-                .filter(data -> data.id.equals(id))
+                .filter(data -> data.id.equalsIgnoreCase(id))
                 .forEach(data -> {
-                    net.kyori.adventure.bossbar.BossBar bar = data.bossBar;
+                    BossBar bar = data.bossBar;
                     if (bar == null) return;
 
-                    Set<Audience> viewers = data.audiences;
-                    for (Audience audience : targets) {
-                        audience.showBossBar(bar);
-                        viewers.add(audience);
+                    Set<Player> viewers = data.players;
+                    for (Player player : targets) {
+                        bar.addPlayer(player);
+                        viewers.add(player);
                     }
                 });
     }
@@ -103,22 +139,22 @@ public class MiniBar {
         }
 
         int taskId = Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
-            Set<Audience> viewers = data.audiences;
-            net.kyori.adventure.bossbar.BossBar bar = data.bossBar;
+            Set<Player> viewers = data.players;
+            BossBar bar = data.bossBar;
             Location location = entity.getLocation();
 
             for (Player player : location.getWorld().getPlayers()) {
                 boolean inRange = player.getLocation().distance(location) <= radius;
 
                 if (inRange && !viewers.contains(player)) {
-                    player.showBossBar(bar);
+                    bar.addPlayer(player);
                     viewers.add(player);
                 } else if (!inRange && viewers.contains(player)) {
-                    player.hideBossBar(bar);
+                    bar.removePlayer(player);
                     viewers.remove(player);
                 }
             }
-            viewers.removeIf(audience -> audience instanceof Player p && !p.isOnline());
+            viewers.removeIf(player -> !player.isOnline());
 
         }, 0L, 5L).getTaskId();
 
@@ -135,58 +171,58 @@ public class MiniBar {
                         Bukkit.getScheduler().cancelTask(data.nearTask);
                     }
 
-                    Set<Audience> viewers = data.audiences;
-                    net.kyori.adventure.bossbar.BossBar bar = data.bossBar;
+                    Set<Player> viewers = data.players;
+                    BossBar bar = data.bossBar;
 
                     for (Player player : location.getWorld().getPlayers()) {
                         boolean inRange = player.getLocation().distance(location) <= radius;
 
                         if (inRange && viewers.contains(player)) {
-                            player.hideBossBar(bar);
+                            bar.removePlayer(player);
                             viewers.remove(player);
                         }
                     }
                 });
     }
 
-    public void remove(@NonNull String id, @NonNull Audience target) {
+    public void remove(@NonNull String id, @NonNull Player target) {
         datas.values().stream()
                 .filter(data -> data.id.equals(id))
                 .forEach(data -> {
-                    net.kyori.adventure.bossbar.BossBar bar = data.bossBar;
+                    BossBar bar = data.bossBar;
                     if (bar == null) return;
 
-                    Set<Audience> viewers = data.audiences;
+                    Set<Player> viewers = data.players;
                     if (viewers == null) return;
 
-                    target.hideBossBar(bar);
+                    bar.removePlayer(target);
                     viewers.remove(target);
                 });
     }
 
-    public void remove(@NonNull String id, @NonNull List<Audience> targets) {
+    public void remove(@NonNull String id, @NonNull List<Player> targets) {
         datas.values().stream()
                 .filter(data -> data.id.equals(id))
                 .forEach(data -> {
-                    net.kyori.adventure.bossbar.BossBar bar = data.bossBar;
+                    BossBar bar = data.bossBar;
                     if (bar == null) return;
 
-                    Set<Audience> viewers = data.audiences;
+                    Set<Player> viewers = data.players;
                     if (viewers == null) return;
 
-                    for (Audience audience : targets) {
-                        audience.hideBossBar(bar);
-                        viewers.remove(audience);
+                    for (Player player : targets) {
+                        bar.removePlayer(player);
+                        viewers.remove(player);
                     }
                 });
     }
 
-    public List<Audience> getPlayers(@NonNull String id) {
-        Set<Audience> allViewers = new HashSet<>();
+    public List<Player> getPlayers(@NonNull String id) {
+        Set<Player> allViewers = new HashSet<>();
         datas.values().stream()
                 .filter(data -> data.id.equals(id))
                 .forEach(data -> {
-                    Set<Audience> viewers = data.audiences;
+                    Set<Player> viewers = data.players;
                     if (viewers != null) {
                         allViewers.addAll(viewers);
                     }
@@ -198,13 +234,14 @@ public class MiniBar {
         Data data = datas.get(entityId);
         if (data == null) return;
 
-        remove(data.id, new ArrayList<>(data.audiences));
+        remove(data.id, new ArrayList<>(data.players));
         if (data.nearTask != 0) {
             Bukkit.getScheduler().cancelTask(data.nearTask);
         }
         if (data.durationTask != 0) {
             Bukkit.getScheduler().cancelTask(data.durationTask);
         }
+        data.bossBar.removeAll();
         datas.remove(entityId);
     }
 
@@ -213,13 +250,14 @@ public class MiniBar {
         Data data = datas.get(entityId);
         if (data == null || !data.id.equals(id)) return;
 
-        remove(data.id, new ArrayList<>(data.audiences));
+        remove(data.id, new ArrayList<>(data.players));
         if (data.nearTask != 0) {
             Bukkit.getScheduler().cancelTask(data.nearTask);
         }
         if (data.durationTask != 0) {
             Bukkit.getScheduler().cancelTask(data.durationTask);
         }
+        data.bossBar.removeAll();
         datas.remove(entityId);
     }
 
@@ -227,16 +265,39 @@ public class MiniBar {
         List<UUID> toRemove = new ArrayList<>();
         datas.forEach((entityId, data) -> {
             if (data.id.equals(id)) {
-                remove(id, new ArrayList<>(data.audiences));
+                remove(id, new ArrayList<>(data.players));
                 if (data.nearTask != 0) {
                     Bukkit.getScheduler().cancelTask(data.nearTask);
                 }
                 if (data.durationTask != 0) {
                     Bukkit.getScheduler().cancelTask(data.durationTask);
                 }
+                data.bossBar.removeAll();
                 toRemove.add(entityId);
             }
         });
         toRemove.forEach(datas::remove);
+    }
+
+    private BarColor convertColor(net.kyori.adventure.bossbar.BossBar.Color kyoriColor) {
+        return switch (kyoriColor) {
+            case PINK -> BarColor.PINK;
+            case BLUE -> BarColor.BLUE;
+            case RED -> BarColor.RED;
+            case GREEN -> BarColor.GREEN;
+            case YELLOW -> BarColor.YELLOW;
+            case PURPLE -> BarColor.PURPLE;
+            case WHITE -> BarColor.WHITE;
+        };
+    }
+
+    private BarStyle convertStyle(net.kyori.adventure.bossbar.BossBar.Overlay kyoriStyle) {
+        return switch (kyoriStyle) {
+            case PROGRESS -> BarStyle.SOLID;
+            case NOTCHED_6 -> BarStyle.SEGMENTED_6;
+            case NOTCHED_10 -> BarStyle.SEGMENTED_10;
+            case NOTCHED_12 -> BarStyle.SEGMENTED_12;
+            case NOTCHED_20 -> BarStyle.SEGMENTED_20;
+        };
     }
 }

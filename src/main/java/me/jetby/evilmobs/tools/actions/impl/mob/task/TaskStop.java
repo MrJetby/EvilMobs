@@ -18,8 +18,11 @@ public class TaskStop implements Action {
         if (mob == null) return;
         if (entity == null) return;
 
+        if (EvilMobs.getInstance().getTasks().get(entity.getUniqueId())==null) return;
+
         MiniTask miniTask = EvilMobs.getInstance().getTasks().get(entity.getUniqueId()).get(context);
         if (miniTask==null) return;
+
         miniTask.cancel();
 
     }

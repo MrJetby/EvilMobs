@@ -25,11 +25,14 @@ public class TaskRun implements Action {
         Task task = mob.tasks().get(context);
         if (task == null) return;
 
-        MiniTask miniTask = new MiniTask(task.delay(), task.period(), task.actions());
+        MiniTask miniTask = new MiniTask(task.delay(), task.period(), task.amount(), task.actions(), entity, mob);
 
         miniTask.run();
 
-        Map<String, MiniTask> tasks = new HashMap<>(EvilMobs.getInstance().getTasks().get(entity.getUniqueId()));
+        Map<String, MiniTask> tasks = new HashMap<>();
+        if (EvilMobs.getInstance().getTasks().get(entity.getUniqueId())!=null) {
+            tasks.putAll(EvilMobs.getInstance().getTasks().get(entity.getUniqueId()));
+        }
 
         tasks.put(context, miniTask);
         EvilMobs.getInstance().getTasks().put(entity.getUniqueId(), tasks);

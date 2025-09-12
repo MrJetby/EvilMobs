@@ -8,6 +8,7 @@ public record Bar(
         String title,
         BossBar.Color color,
         BossBar.Overlay style,
+        String progress,
         int duration
 ) {
 }

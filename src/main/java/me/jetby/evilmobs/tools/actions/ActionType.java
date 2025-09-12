@@ -1,8 +1,10 @@
 package me.jetby.evilmobs.tools.actions;
 
 import lombok.Getter;
+import me.jetby.evilmobs.tools.actions.impl.mob.*;
 import me.jetby.evilmobs.tools.actions.impl.mob.abillities.Fireball;
 import me.jetby.evilmobs.tools.actions.impl.mob.abillities.Lightning;
+import me.jetby.evilmobs.tools.actions.impl.mob.abillities.Teleport;
 import me.jetby.evilmobs.tools.actions.impl.mob.bossBar.*;
 import me.jetby.evilmobs.tools.actions.impl.mob.task.*;
 import me.jetby.evilmobs.tools.actions.impl.standard.*;
@@ -13,6 +15,9 @@ public enum ActionType {
 
     LIGHTNING(new Lightning()),
     FIREBALL(new Fireball()),
+    TELEPORT(new Teleport()),
+
+    DELAY(new Delay()),
 
     CREATE_BOSSBAR(new CreateBossBar()),
     SHOW_BOSSBAR(new ShowBossBar()),
@@ -23,6 +28,12 @@ public enum ActionType {
 
     TASK_RUN(new TaskRun()),
     TASK_STOP(new TaskStop()),
+
+    SET_AGE(new SetAge()),
+    SET_AI(new SetAI()),
+    SET_CAN_PICKUP_ITEMS(new SetCanPickupItems()),
+    SET_GLOW(new SetGlow()),
+    SET_NAME(new SetName()),
 
     MESSAGE(new Message()),
     MSG(new Message()),

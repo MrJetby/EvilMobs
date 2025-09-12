@@ -23,6 +23,7 @@ public record Mob(
         Map<String, Task> tasks,
         Map<String, Bar> bossBars,
         List<String> onSpawnActions,
+        List<String> onHitActions,
         List<String> onDeathActions
 
 
