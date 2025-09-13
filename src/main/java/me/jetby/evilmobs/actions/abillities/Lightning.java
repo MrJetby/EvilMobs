@@ -1,13 +1,11 @@
-package me.jetby.evilmobs.tools.actions.impl.mob.abillities;
+package me.jetby.evilmobs.actions.abillities;
 
-import me.jetby.evilmobs.records.Mob;
-import me.jetby.evilmobs.tools.actions.Action;
+import me.jetby.treex.actions.Action;
+import me.jetby.treex.actions.ActionContext;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -16,8 +14,11 @@ public class Lightning implements Action {
     Random random = new Random();
 
     @Override
-    public void execute(@Nullable Player player, @NotNull String context, @Nullable Entity entity, @Nullable Mob mob) {
-        if (entity == null) return;
+    public void execute(@NotNull ActionContext ctx) {
+        Entity entity = ctx.get("entity", Entity.class);
+        String context = ctx.get("message", String.class);
+
+        if (entity == null || context == null) return;
 
 
         var args = context.split(";");

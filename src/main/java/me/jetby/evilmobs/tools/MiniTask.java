@@ -3,8 +3,9 @@ package me.jetby.evilmobs.tools;
 import lombok.RequiredArgsConstructor;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.records.Mob;
-import me.jetby.evilmobs.tools.actions.ActionExecutor;
-import me.jetby.evilmobs.tools.actions.ActionRegistry;
+import me.jetby.treex.actions.ActionContext;
+import me.jetby.treex.actions.ActionExecutor;
+import me.jetby.treex.actions.ActionRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 
@@ -33,7 +34,10 @@ public class MiniTask {
                     return;
                 }
             }
-            ActionExecutor.execute(null, ActionRegistry.transform(actions), entity, mob);
+            ActionContext ctx = new ActionContext(null);
+            ctx.put("mob", mob);
+            ctx.put("entity", entity);
+            ActionExecutor.execute(ctx, ActionRegistry.transform(actions));
 
         }, delay, period).getTaskId();
     }

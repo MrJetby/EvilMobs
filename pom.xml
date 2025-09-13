@@ -62,9 +62,24 @@
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>Jodexindustries-releases</id>
+            <name>JodexIndustries Repo</name>
+            <url>https://repo.jodex.xyz/releases</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.MrJetby</groupId>
+            <artifactId>Treex</artifactId>
+            <version>35fe8016</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -76,6 +91,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.38</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jodexindustries.jguiwrapper</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0.0.7</version>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>

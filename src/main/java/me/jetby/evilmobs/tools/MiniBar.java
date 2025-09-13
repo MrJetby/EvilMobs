@@ -18,6 +18,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 @UtilityClass
@@ -40,7 +41,7 @@ public class MiniBar {
         Entity entity;
     }
 
-    public void initialize(EvilMobs plugin) {
+    public void init(EvilMobs plugin) {
         Bukkit.getScheduler().runTaskTimer(plugin, MiniBar::updateAll, 0L, 5L);
     }
 
@@ -90,6 +91,7 @@ public class MiniBar {
     }
 
     public void updateAll() {
+        if (datas.isEmpty()) return;
         datas.values().forEach(data -> {
             BossBar bossBar = data.bossBar;
             if (bossBar == null) return;
@@ -104,8 +106,7 @@ public class MiniBar {
 
                 }
 
-                String raw = data.originalTitle;
-                raw = raw.replace("%health_percentage%", String.format("%.1f", healthPercent * 100));
+                String raw = data.originalTitle.replace("%health_percentage%", String.format("%.1f", healthPercent * 100));
                 String parsed = TextUtil.setPapi(null, TextUtil.colorize(raw));
                 bossBar.setTitle(parsed);
 
@@ -156,6 +157,7 @@ public class MiniBar {
             }
             viewers.removeIf(player -> !player.isOnline());
 
+
         }, 0L, 5L).getTaskId();
 
         data.setNearTask(taskId);
@@ -182,6 +184,7 @@ public class MiniBar {
                             viewers.remove(player);
                         }
                     }
+
                 });
     }
 
@@ -245,7 +248,11 @@ public class MiniBar {
         datas.remove(entityId);
     }
 
-    public void deleteBossBar(@NonNull String id, @NonNull Entity entity) {
+    public void deleteBossBar(@NonNull String id, @Nullable Entity entity) {
+        if (entity==null) {
+            deleteBossBar(id);
+            return;
+        }
         UUID entityId = entity.getUniqueId();
         Data data = datas.get(entityId);
         if (data == null || !data.id.equals(id)) return;

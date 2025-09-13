@@ -43,25 +43,31 @@ phases:
   # HEALTH
   # TIME_TO_END
   # PLACEHOLDER
+  example_placeholder:
+    type: %some_placeholder%
+    actions:
+      'true': #it can be boolean, number or string
+        - '[message] &cPlaceholder is true!'
+      'false':
+        - '[message] &aPlaceholder is false!'
   damage:
     type: HEALTH
     actions:
       '100':
         # %closest_player%
         # %rand_player_near_<radius>%
-        # %last_damaged_player%
         - '[lightning] 15' # radius or --player:%closest_player%
-        - '[fireball] ' # --TARGET:%closest_player% --EXPLODE:false --FROM:MOB/TOP/DOWN/LEFT/RIGHT
+        - '[fireball] ' # --TARGET:%closest_player% --EXPLODE:false --FROM:MOB/TOP
         - '[effect] BLINDNESS;3;1' # --radius:15
         - '[create_minion] default'
         - '[teleport] %rand_player_near_25%'
         - '[task_run] example'
         - '[task_stop] example'
-        - '[setAI] true'
-        - '[setAge] baby/adult'
+        - '[set_AI] true'
+        - '[set_Age] baby/adult'
         - '[set_can_pickup_items] true'
-        - '[setGlow] true'
-        - '[setName] &6Mister Evil'
+        - '[set_Glow] true'
+        - '[set_Name] &6Mister Evil'
         - '[]'
         - '[]'
 

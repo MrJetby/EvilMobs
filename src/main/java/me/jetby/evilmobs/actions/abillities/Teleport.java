@@ -1,13 +1,11 @@
-package me.jetby.evilmobs.tools.actions.impl.mob.abillities;
+package me.jetby.evilmobs.actions.abillities;
 
-import me.jetby.evilmobs.records.Mob;
-import me.jetby.evilmobs.tools.actions.Action;
-import me.jetby.evilmobs.tools.LocationHandler;
-import org.bukkit.Bukkit;
+import me.jetby.treex.actions.Action;
+import me.jetby.treex.actions.ActionContext;
+import me.jetby.treex.bukkit.LocationHandler;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,18 +16,9 @@ public class Teleport implements Action {
 
     private final Random random = new Random();
 
-    @Override
-    public void execute(@Nullable Player player, @NotNull String context, @Nullable Entity entity, @Nullable Mob mob) {
-        if (entity == null) return;
-
-        Location targetLocation = parseContext(context, entity, player);
-        if (targetLocation != null) {
-            entity.teleport(targetLocation);
-        }
-    }
 
     private Location parseContext(@NotNull String context, @NotNull Entity entity, @Nullable Player player) {
-        // Handle placeholders first
+
         if ("%closest_player%".equalsIgnoreCase(context)) {
             return getClosestPlayer(entity);
         }
@@ -37,10 +26,10 @@ public class Teleport implements Action {
             try {
                 int radius = Integer.parseInt(context.replaceAll("%rand_player_near_(\\d+)%", "$1"));
                 return getRandomPlayerNearby(entity, radius);
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
 
-        // Fallback: deserialize a location string
         return LocationHandler.deserialize(context);
     }
 
@@ -67,5 +56,19 @@ public class Teleport implements Action {
 
         Player target = players.get(random.nextInt(players.size()));
         return target.getLocation();
+    }
+
+    @Override
+    public void execute(@NotNull ActionContext ctx) {
+        Entity entity = ctx.get("entity", Entity.class);
+        Player player = ctx.getPlayer();
+        String context = ctx.get("message", String.class);
+
+        if (entity == null || context == null) return;
+
+        Location targetLocation = parseContext(context, entity, player);
+        if (targetLocation != null) {
+            entity.teleport(targetLocation);
+        }
     }
 }

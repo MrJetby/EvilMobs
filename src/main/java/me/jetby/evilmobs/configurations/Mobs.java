@@ -3,8 +3,7 @@ package me.jetby.evilmobs.configurations;
 import lombok.Getter;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.records.*;
-import me.jetby.evilmobs.tools.LocationHandler;
-import me.jetby.evilmobs.tools.Logger;
+import me.jetby.treex.bukkit.LocationHandler;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static me.jetby.evilmobs.EvilMobs.LOGGER;
 
 public class Mobs {
 
@@ -44,7 +45,7 @@ public class Mobs {
                 }
                 FileConfiguration config = YamlConfiguration.loadConfiguration(defaultFile);
                 loadMob(config);
-                Logger.info("Файл mobs/" + config.getString("id") + ".yml создан");
+                LOGGER.info("Файл mobs/" + config.getString("id") + ".yml создан");
                 return;
             }
         }
@@ -55,7 +56,7 @@ public class Mobs {
             if (!file.getName().endsWith(".yml")) continue;
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
             loadMob(config);
-            Logger.info("Файл mobs/" + config.getString("id") + ".yml загружен");
+            LOGGER.info("Файл mobs/" + config.getString("id") + ".yml загружен");
         }
     }
 

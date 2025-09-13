@@ -3,7 +3,6 @@ package me.jetby.evilmobs.configurations;
 import lombok.Getter;
 import me.jetby.evilmobs.records.ArmorItem;
 import me.jetby.evilmobs.tools.FileLoader;
-import me.jetby.evilmobs.tools.Logger;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static me.jetby.evilmobs.EvilMobs.LOGGER;
 
 
 public class ArmorSets {
@@ -32,14 +33,14 @@ public class ArmorSets {
 
                 ConfigurationSection itemsSection = configuration.getConfigurationSection(id);
                 if (itemsSection == null) {
-                    Logger.warn("Section " + id + " is null");
+                    LOGGER.warn("Section " + id + " is null");
                     continue;
                 }
 
                 for (String key : itemsSection.getKeys(false)) {
                     ConfigurationSection section = itemsSection.getConfigurationSection(key);
                     if (section == null) {
-                        Logger.warn("Section " + key + " is null");
+                        LOGGER.warn("Section " + key + " is null");
                         continue;
                     }
                     ItemStack item = new ItemStack(Material.valueOf(section.getString("item")));
@@ -47,7 +48,7 @@ public class ArmorSets {
                         String[] parts = str.split(";");
                         Enchantment enchantment = Enchantment.getByName(parts[0]);
                         if (enchantment == null) {
-                            Logger.warn("Enchantment " + parts[0] + " was not found");
+                            LOGGER.warn("Enchantment " + parts[0] + " was not found");
                             continue;
                         }
                         int level = Integer.parseInt(parts[1]);
@@ -60,7 +61,7 @@ public class ArmorSets {
             }
 
         } catch (Exception e) {
-            Logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 

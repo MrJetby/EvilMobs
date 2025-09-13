@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import me.jetby.evilmobs.api.event.MobSpawnEvent;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.records.Phases;
-import me.jetby.evilmobs.tools.Logger;
-import me.jetby.evilmobs.tools.actions.ActionExecutor;
-import me.jetby.evilmobs.tools.actions.ActionRegistry;
+import me.jetby.treex.actions.ActionContext;
+import me.jetby.treex.actions.ActionExecutor;
+import me.jetby.treex.actions.ActionRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Ageable;
@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static me.jetby.evilmobs.EvilMobs.LOGGER;
 import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 @RequiredArgsConstructor
@@ -100,7 +101,10 @@ public class MobCreator {
 
         Bukkit.getPluginManager().callEvent(new MobSpawnEvent(mob.id(), boss));
 
-        ActionExecutor.execute(null, ActionRegistry.transform(mob.onSpawnActions()), boss, mob);
+        ActionContext ctx = new ActionContext(null);
+        ctx.put("mob", mob);
+        ctx.put("entity", boss);
+        ActionExecutor.execute(ctx, ActionRegistry.transform(mob.onSpawnActions()));
 
 
         phasesCopy.addAll(mob.phases());
@@ -118,7 +122,7 @@ public class MobCreator {
                 try {
                     sendPhasesCommand(phase.type(), boss);
                 } catch (NumberFormatException e) {
-                    Logger.warn(e.getMessage());
+                    LOGGER.warn(e.getMessage());
                 }
             }
         }, 0L, 5L).getTaskId();
@@ -137,7 +141,11 @@ public class MobCreator {
                 for (String phaseId : new ArrayList<>(phases.keySet())) {
                     double trigger = Double.parseDouble(phaseId);
                     if (health <= trigger) {
-                        ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
+                        ActionContext ctx = new ActionContext(null);
+                        ctx.put("entity", entity);
+
+                        me.jetby.treex.actions.ActionExecutor.execute(ctx, me.jetby.treex.actions.ActionRegistry.transform(phases.get(phaseId)));
+
                         phases.remove(phaseId);
                     }
                 }
@@ -148,7 +156,10 @@ public class MobCreator {
                 for (String phaseId : new ArrayList<>(phases.keySet())) {
                     double trigger = Double.parseDouble(phaseId);
                     if (healthPercent <= trigger) {
-                        ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
+                        ActionContext ctx = new ActionContext(null);
+                        ctx.put("mob", mob);
+                        ctx.put("entity", entity);
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
                         phases.remove(phaseId);
                     }
                 }
@@ -159,7 +170,10 @@ public class MobCreator {
                 for (String phaseId : new ArrayList<>(phases.keySet())) {
                     double trigger = Double.parseDouble(phaseId);
                     if (healthPercent <= trigger) {
-                        ActionExecutor.execute(null, ActionRegistry.transform(phases.get(phaseId)), entity, mob);
+                        ActionContext ctx = new ActionContext(null);
+                        ctx.put("mob", mob);
+                        ctx.put("entity", entity);
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
                         phases.remove(phaseId);
                     }
                 }

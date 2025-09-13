@@ -1,19 +1,21 @@
-package me.jetby.evilmobs.tools.actions.impl.mob;
+package me.jetby.evilmobs.actions;
 
 import me.jetby.evilmobs.records.Mob;
-import me.jetby.evilmobs.tools.actions.Action;
+import me.jetby.treex.actions.Action;
+import me.jetby.treex.actions.ActionContext;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SetAge implements Action {
     @Override
-    public void execute(@Nullable Player player, @NotNull String context, @Nullable Entity entity, @Nullable Mob mob) {
-        if (entity==null) return;
-        if (mob==null) return;
+    public void execute(@NotNull ActionContext ctx) {
+        Entity entity = ctx.get("entity", Entity.class);
+        Mob mob = ctx.get("mob", Mob.class);
+        String context = ctx.get("message", String.class);
+
+        if (entity == null || mob==null || context == null) return;
 
         if (entity instanceof LivingEntity livingEntity) {
             if (livingEntity instanceof Ageable ageable) {

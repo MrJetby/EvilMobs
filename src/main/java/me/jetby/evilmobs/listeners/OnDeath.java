@@ -5,8 +5,9 @@ import me.jetby.evilmobs.MobCreator;
 import me.jetby.evilmobs.api.event.MobDeathEvent;
 import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.records.Mob;
-import me.jetby.evilmobs.tools.actions.ActionExecutor;
-import me.jetby.evilmobs.tools.actions.ActionRegistry;
+import me.jetby.treex.actions.ActionContext;
+import me.jetby.treex.actions.ActionExecutor;
+import me.jetby.treex.actions.ActionRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -39,7 +40,10 @@ public class OnDeath implements Listener {
 
         Bukkit.getPluginManager().callEvent(new MobDeathEvent(id, entity, entity.getKiller()));
 
-        ActionExecutor.execute(null, ActionRegistry.transform(mob.onDeathActions()), entity, mob);
+        ActionContext ctx = new ActionContext(null);
+        ctx.put("mob", mob);
+        ctx.put("entity", entity);
+        ActionExecutor.execute(ctx, ActionRegistry.transform(mob.onDeathActions()));
         mobCreators.remove(id);
     }
 }

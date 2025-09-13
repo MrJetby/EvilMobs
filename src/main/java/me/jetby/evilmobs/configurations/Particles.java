@@ -1,15 +1,15 @@
 package me.jetby.evilmobs.configurations;
 
 import lombok.Getter;
-import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.records.ParticleEffectConfig;
 import me.jetby.evilmobs.tools.FileLoader;
-import me.jetby.evilmobs.tools.Logger;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.*;
+
+import static me.jetby.evilmobs.EvilMobs.LOGGER;
 
 public class Particles {
 
@@ -23,7 +23,7 @@ public class Particles {
             for (String id : configuration.getKeys(false)) {
                 ConfigurationSection section = configuration.getConfigurationSection(id);
                 if (section == null) {
-                    Logger.warn("Section " + id + " is null");
+                    LOGGER.warn("Section " + id + " is null");
                     continue;
                 }
 
@@ -32,7 +32,7 @@ public class Particles {
                 try {
                     particle = Particle.valueOf(section.getString("particle", "FLAME").toUpperCase());
                 } catch (IllegalArgumentException e) {
-                    Logger.warn("Invalid particle type for " + id + ": " + section.getString("particle"));
+                    LOGGER.warn("Invalid particle type for " + id + ": " + section.getString("particle"));
                     continue;
                 }
                 int repeat = section.getInt("repeat", 1);
@@ -75,7 +75,7 @@ public class Particles {
                                         getDoubleFromObject(coords.get(2), 0)
                                 });
                             } catch (Exception e) {
-                                Logger.warn("Invalid point format in " + id);
+                                LOGGER.warn("Invalid point format in " + id);
                             }
                         }
                     }
@@ -99,11 +99,11 @@ public class Particles {
                         colorSec, keyframes, layers, sequence
                 );
                 effects.put(id, effect);
-                Logger.success(id + " загружен");
+                LOGGER.success(id + " загружен");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Logger.warn("Failed to load particle effects: " + e.getMessage());
+            LOGGER.warn("Failed to load particle effects: " + e.getMessage());
         }
     }
 
