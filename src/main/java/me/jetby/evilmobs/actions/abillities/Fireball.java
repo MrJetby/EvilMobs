@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -36,10 +37,7 @@ public class Fireball implements Action {
             to = entity.getNearbyEntities(radius, radius, radius).stream()
                     .filter(e -> e instanceof Player)
                     .map(Entity::getLocation)
-                    .min((loc1, loc2) -> Double.compare(
-                            loc1.distanceSquared(entity.getLocation()),
-                            loc2.distanceSquared(entity.getLocation())
-                    ))
+                    .min(Comparator.comparingDouble(loc -> loc.distanceSquared(entity.getLocation())))
                     .orElse(null);
         } else if (target.equalsIgnoreCase("%rand_player%")) {
             java.util.List<Player> nearby = entity.getNearbyEntities(radius, radius, radius).stream()
@@ -67,7 +65,6 @@ public class Fireball implements Action {
     }
 
     private Map<String, String> parseContext(String context) {
-        context = context.replace("[fireball]", "").trim();
 
         return Arrays.stream(context.split("\\s+"))
                 .filter(s -> s.contains(":"))
