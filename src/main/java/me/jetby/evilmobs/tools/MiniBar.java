@@ -20,12 +20,12 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @UtilityClass
 public class MiniBar {
 
-    @Getter
-    private final Map<UUID, Data> datas = new HashMap<>();
+    public final Map<UUID, Data> datas = new ConcurrentHashMap<>();
 
     @RequiredArgsConstructor
     @Setter

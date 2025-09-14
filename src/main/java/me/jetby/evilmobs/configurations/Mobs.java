@@ -87,6 +87,16 @@ public class Mobs {
             boolean isBaby = configuration.getBoolean("isBaby", false);
 
 
+            Map<String, List<String>> listeners = new HashMap<>();
+            ConfigurationSection listenerSection = configuration.getConfigurationSection("listeners");
+            if (listenerSection != null) {
+                for (String listenerId : listenerSection.getKeys(false)) {
+                    List<String> actions = listenerSection.getStringList(listenerId);
+                    listeners.put(listenerId, actions);
+                }
+            }
+
+
             List<Phases> phases = new ArrayList<>();
             ConfigurationSection phasesSection = configuration.getConfigurationSection("phases");
             if (phasesSection != null) {
@@ -143,7 +153,7 @@ public class Mobs {
             List<String> onHitActions = configuration.getStringList("actions.onHit");
             List<String> onDeathActions = configuration.getStringList("actions.onDeath");
 
-            Mob mob = new Mob(id, location, nameVisible, name, armorItem, entityType, health, ai, glow, canPickupItems, visualFire, isBaby, phases, tasks, bossBarsMap, onSpawnActions, onHitActions, onDeathActions);
+            Mob mob = new Mob(id, location, nameVisible, name, armorItem, entityType, health, ai, glow, canPickupItems, visualFire, isBaby, phases, listeners, tasks, bossBarsMap, onSpawnActions, onHitActions, onDeathActions);
             mobs.put(id, mob);
 
         } catch (Exception e) {

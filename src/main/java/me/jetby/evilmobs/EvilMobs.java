@@ -2,6 +2,7 @@ package me.jetby.evilmobs;
 
 import com.jodexindustries.jguiwrapper.common.JGuiInitializer;
 import lombok.Getter;
+import me.jetby.evilmobs.actions.particles.SendParticle;
 import me.jetby.evilmobs.commands.Admin;
 import me.jetby.evilmobs.configurations.ArmorSets;
 import me.jetby.evilmobs.configurations.Mobs;
@@ -114,6 +115,8 @@ public final class EvilMobs extends JavaPlugin {
         ActionTypeRegistry.register("SET_NAME", new SetName());
         ActionTypeRegistry.register("SETNAME", new SetName());
 
+        ActionTypeRegistry.register("SEND_PARTICLE", new SendParticle());
+
     }
 
     private void setupPlaceholders() {
@@ -124,7 +127,6 @@ public final class EvilMobs extends JavaPlugin {
             evilMobsPlaceholderExpansion.register();
         }
     }
-
     @Override
     public void onDisable() {
         for (Map<String, MiniTask> map : tasks.values()) {
@@ -132,9 +134,10 @@ public final class EvilMobs extends JavaPlugin {
                 miniTask.cancel();
             }
         }
-        MiniBar.getDatas().forEach((uuid, data) -> {
+        List<UUID> uuids = new ArrayList<>(MiniBar.datas.keySet());
+        for (UUID uuid : uuids) {
             MiniBar.deleteBossBar(uuid);
-        });
+        }
         if (evilMobsPlaceholderExpansion!=null) evilMobsPlaceholderExpansion.unregister();
     }
     @Getter

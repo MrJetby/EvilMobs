@@ -20,6 +20,7 @@ public record Mob(
         boolean visualFire,
         boolean isBaby,
         List<Phases> phases,
+        Map<String, List<String>> listeners,
         Map<String, Task> tasks,
         Map<String, Bar> bossBars,
         List<String> onSpawnActions,

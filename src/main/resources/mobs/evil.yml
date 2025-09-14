@@ -13,6 +13,9 @@ spawn-location: 0;100;0;world
 
 armor: example
 
+# ON_DAMAGE
+# ON_MOVE
+listeners: {}
 
 bossBars:
   example:
@@ -41,7 +44,7 @@ tasks:
 phases:
   # Types:
   # HEALTH
-  # TIME_TO_END
+  # HEALTH_PERCENTAGE
   # PLACEHOLDER
   example_placeholder:
     type: %some_placeholder%

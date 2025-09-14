@@ -16,12 +16,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static me.jetby.evilmobs.EvilMobs.LOGGER;
+
 @UtilityClass
 public class ParticleEffectManager {
 
-    public void playEffect(Player player, ParticleEffectConfig effect) {
+    public void playEffect(Player player, String effectName) {
+        ParticleEffectConfig effect = EvilMobs.getInstance().getParticles().getEffects().get(effectName);
+        playEffect(player.getLocation(), effect);
+    }
+    public void playEffect(Location location, String effectName) {
+        ParticleEffectConfig effect = EvilMobs.getInstance().getParticles().getEffects().get(effectName);
+        playEffect(location, effect);
+    }
+
+    public void playEffect(Location location, ParticleEffectConfig effect) {
         if (effect == null) {
-            player.sendMessage("§cEffect not found!");
+            LOGGER.warn("Effect not found");
             return;
         }
         int repeat = effect.repeat();
@@ -43,15 +54,15 @@ public class ParticleEffectManager {
                     return;
                 }
 
-                Location baseLoc = player.getLocation().clone().add(effect.offsetX(), effect.offsetY(), effect.offsetZ());
+                Location baseLoc = location.clone().add(effect.offsetX(), effect.offsetY(), effect.offsetZ());
                 interpolateKeyframe(effect, tick, baseLoc);
 
                 if (effect.sequence() != null) {
-                    playSequence(player, effect, tick);
+                    playSequence(location, effect, tick);
                 } else if (!effect.layers().isEmpty()) {
-                    playLayers(player, effect, baseLoc, tick);
+                    playLayers(effect, baseLoc, tick);
                 } else {
-                    drawShape(baseLoc, effect, tick, player);
+                    drawShape(baseLoc, effect, tick);
                 }
             }
         }.runTaskTimer(EvilMobs.getInstance(), 0L, interval);
@@ -95,17 +106,17 @@ public class ParticleEffectManager {
         }
     }
 
-    private void playLayers(Player player, ParticleEffectConfig effect, Location baseLoc, int tick) {
+    private void playLayers(ParticleEffectConfig effect, Location baseLoc, int tick) {
         for (Map.Entry<String, Particles.LayerConfig> layer : effect.layers().entrySet()) {
             ParticleEffectConfig layerEffect = createTempEffectFromLayer(layer.getValue());
             if (layerEffect != null) {
                 interpolateKeyframe(layerEffect, tick, baseLoc);
-                drawShape(baseLoc, layerEffect, tick, player);
+                drawShape(baseLoc, layerEffect, tick);
             }
         }
     }
 
-    private void playSequence(Player player, ParticleEffectConfig effect, int tick) {
+    private void playSequence(Location location, ParticleEffectConfig effect, int tick) {
         Particles.SequenceConfig seq = effect.sequence();
         if ("sequential".equals(seq.mode)) {
             int totalDuration = 0;
@@ -115,14 +126,14 @@ public class ParticleEffectManager {
                     if (se.ref != null) {
                         ParticleEffectConfig subEffect = EvilMobs.getInstance().getParticles().getEffects().get(se.ref);
                         if (subEffect != null) {
-                            playEffect(player, subEffect);
+                            playEffect(location, subEffect);
                         } else {
-                            player.sendMessage("§cReferenced effect not found: " + se.ref);
+                            LOGGER.warn("Referenced effect not found: " + se.ref);
                         }
                     } else if (se.inline != null) {
                         ParticleEffectConfig inlineEffect = parseInlineEffect(se.inline);
                         if (inlineEffect != null) {
-                            playEffect(player, inlineEffect);
+                            playEffect(location, inlineEffect);
                         }
                     }
                     break;
@@ -134,14 +145,14 @@ public class ParticleEffectManager {
                     if (se.ref != null) {
                         ParticleEffectConfig subEffect = EvilMobs.getInstance().getParticles().getEffects().get(se.ref);
                         if (subEffect != null) {
-                            playEffect(player, subEffect);
+                            playEffect(location, subEffect);
                         } else {
-                            player.sendMessage("§cReferenced effect not found: " + se.ref);
+                            LOGGER.warn("Referenced effect not found: " + se.ref);
                         }
                     } else if (se.inline != null) {
                         ParticleEffectConfig inlineEffect = parseInlineEffect(se.inline);
                         if (inlineEffect != null) {
-                            playEffect(player, inlineEffect);
+                            playEffect(location, inlineEffect);
                         }
                     }
                 }
@@ -237,7 +248,7 @@ public class ParticleEffectManager {
         return def;
     }
 
-    private void drawShape(Location center, ParticleEffectConfig effect, int tick, Player player) {
+    private void drawShape(Location center, ParticleEffectConfig effect, int tick) {
         String type = effect.type().toLowerCase();
         switch (type) {
             case "circle" -> drawCircle(center, effect);
@@ -247,7 +258,6 @@ public class ParticleEffectManager {
             case "helix" -> drawHelix(center, effect);
             case "ring" -> drawRing(center, effect);
             case "custom_points" -> drawCustomPoints(center, effect);
-            default -> player.sendMessage("§eНеизвестный тип: " + type);
         }
     }
 

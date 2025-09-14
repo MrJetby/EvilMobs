@@ -51,7 +51,7 @@ public class Admin implements CommandExecutor, TabCompleter {
                 break;
             }
             case "test": {
-                ParticleEffectManager.playEffect((Player) sender, plugin.getParticles().getEffects().get(args[1]));
+                if (sender instanceof Player player) ParticleEffectManager.playEffect(player.getLocation(), plugin.getParticles().getEffects().get(args[1]));
             }
             case "list": {
                 for (World world : Bukkit.getWorlds()) {

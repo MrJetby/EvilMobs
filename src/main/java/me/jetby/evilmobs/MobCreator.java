@@ -151,7 +151,7 @@ public class MobCreator {
                 }
                 break;
             }
-            case "HEALTH_PERCENT": {
+            case "HEALTH_PERCENTAGE": {
                 double healthPercent = (entity.getHealth() / entity.getMaxHealth()) * 100;
                 for (String phaseId : new ArrayList<>(phases.keySet())) {
                     double trigger = Double.parseDouble(phaseId);
@@ -165,18 +165,8 @@ public class MobCreator {
                 }
                 break;
             }
-            case "TIME_TO_END": {
-                double healthPercent = (entity.getHealth() / entity.getMaxHealth()) * 100;
-                for (String phaseId : new ArrayList<>(phases.keySet())) {
-                    double trigger = Double.parseDouble(phaseId);
-                    if (healthPercent <= trigger) {
-                        ActionContext ctx = new ActionContext(null);
-                        ctx.put("mob", mob);
-                        ctx.put("entity", entity);
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
-                        phases.remove(phaseId);
-                    }
-                }
+            case "PLACEHOLDER": {
+
                 break;
             }
         }
