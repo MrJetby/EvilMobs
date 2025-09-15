@@ -1,0 +1,44 @@
+lang: en
+
+
+
+null_section: "Section %s is null"
+file_created: ""
+
+gui:
+  main:
+    title: "EvilMobs"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Mob: <yellow>%s"
+    lore:
+      - "<!i><#FB430A><st>=                                   ="
+      - ""
+      - "<!i><#FB430A><b>▶</b> <white>Click to configure items"
+      - ""
+      - "<!i><#FB430A><st>=                                   ="
+  chanceEditor:
+    title: "Configure Chances"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <gold>%s"
+    lore:
+      - "<!i><#FB430A><st>=                                   ="
+      - " <!i><#FB430A><bold>Left click</bold> <gray>+<white>1% "
+      - " <!i><#FB430A><bold>Right click</bold> <gray>-<white>1% "
+      - " <!i><#FB430A><bold>SHIFT+Left click</bold> <gray>+<white>10% "
+      - " <!i><#FB430A><bold>SHIFT+Right click</bold> <gray>-<white>10% "
+      - ""
+      - "<!i><#FB430A><st>=                                   ="
+  invEditor:
+    title: "Inventory Selection"
+    inventory:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventory: <yellow>%s"
+      lore:
+        - "<!i><#FB430A><st>=                                   ="
+        - ""
+        - " <!i><#FB430A><bold>Left click</bold> <gray>- <white>Configure items "
+        - " <!i><#FB430A><bold>Right click</bold> <gray>- <white>Configure item chances "
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    new_inventory:
+      display_name: "<green>[+] Add new inventory"
+      lore: []
+  itemEditor:
+    title: 'Item Editor'

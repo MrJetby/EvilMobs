@@ -12,9 +12,11 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +30,6 @@ public class Admin implements CommandExecutor, TabCompleter {
         this.plugin = plugin;
         this.mobCreators = plugin.getMobCreators();
 
-    }
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return List.of();
     }
 
     @Override
@@ -51,8 +48,13 @@ public class Admin implements CommandExecutor, TabCompleter {
                 break;
             }
             case "test": {
-                if (sender instanceof Player player) ParticleEffectManager.playEffect(player.getLocation(), plugin.getParticles().getEffects().get(args[1]));
+                if (sender instanceof Player player) ParticleEffectManager.playEffect(args[1], player.getLocation(), plugin.getParticles());
+                break;
             }
+            case "menu":
+                if (sender instanceof Player player) plugin.getMainMenu().open(player);
+
+                break;
             case "list": {
                 for (World world : Bukkit.getWorlds()) {
                     for (Entity e : world.getEntities()) {
@@ -68,4 +70,39 @@ public class Admin implements CommandExecutor, TabCompleter {
 
         return false;
     }
+
+
+    private final List<String> completions = new ArrayList<>();
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        completions.clear();
+
+        if (args.length==1)  {
+            completions.add("spawn");
+            completions.add("menu");
+            completions.add("list");
+        }
+
+        if (args.length==2 && args[0].equalsIgnoreCase("spawn")) {
+            completions.addAll(plugin.getMobs().getMobs().keySet());
+        }
+
+
+        return getResult(args);
+    }
+
+    private List<String> getResult(String[] args) {
+        if (completions.isEmpty()) {
+            return completions;
+        }
+        final List<String> result = new ArrayList<>();
+        for (String c : completions) {
+            if (StringUtil.startsWithIgnoreCase(c, args[args.length - 1])) {
+                result.add(c);
+            }
+        }
+        return result;
+    }
+
 }

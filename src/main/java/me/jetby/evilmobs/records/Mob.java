@@ -1,5 +1,6 @@
 package me.jetby.evilmobs.records;
 
+import me.jetby.evilmobs.configurations.Items;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
@@ -20,12 +21,20 @@ public record Mob(
         boolean visualFire,
         boolean isBaby,
         List<Phases> phases,
+        boolean flyingDropParticle,
+        DropParticle dropParticle,
+        boolean isMask,
+        Map<String, Mask> masks,
         Map<String, List<String>> listeners,
         Map<String, Task> tasks,
         Map<String, Bar> bossBars,
         List<String> onSpawnActions,
         List<String> onHitActions,
-        List<String> onDeathActions
+        List<String> onDeathActions,
+
+        String lootAmount,
+        boolean onlyCustom,
+        List<Items.ItemsData> items
 
 
 ) {

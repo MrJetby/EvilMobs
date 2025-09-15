@@ -4,12 +4,14 @@ import com.jodexindustries.jguiwrapper.common.JGuiInitializer;
 import lombok.Getter;
 import me.jetby.evilmobs.actions.particles.SendParticle;
 import me.jetby.evilmobs.commands.Admin;
-import me.jetby.evilmobs.configurations.ArmorSets;
-import me.jetby.evilmobs.configurations.Mobs;
-import me.jetby.evilmobs.configurations.Particles;
+import me.jetby.evilmobs.configurations.*;
+import me.jetby.evilmobs.gui.MainMenu;
+import me.jetby.evilmobs.listeners.ItemPickup;
 import me.jetby.evilmobs.listeners.OnDamage;
 import me.jetby.evilmobs.listeners.OnDeath;
 import me.jetby.evilmobs.listeners.OnMove;
+import me.jetby.evilmobs.locale.Lang;
+import me.jetby.evilmobs.tools.FileLoader;
 import me.jetby.evilmobs.tools.MiniBar;
 import me.jetby.evilmobs.tools.MiniTask;
 import me.jetby.evilmobs.actions.*;
@@ -32,6 +34,8 @@ public final class EvilMobs extends JavaPlugin {
 
 
     @Getter
+    private Config cfg;
+    @Getter
     private ArmorSets armorSets;
     @Getter
     private Mobs mobs;
@@ -40,7 +44,7 @@ public final class EvilMobs extends JavaPlugin {
 
     public static NamespacedKey NAMESPACED_KEY;
 
-    private static EvilMobs INSTANCE;
+    static EvilMobs INSTANCE;
 
     EvilMobsPlaceholderExpansion evilMobsPlaceholderExpansion;
 
@@ -48,18 +52,30 @@ public final class EvilMobs extends JavaPlugin {
         return INSTANCE;
     }
 
+    @Getter
+    private MainMenu mainMenu;
+
     public static final Logger LOGGER = LogInitialize.getLogger("EvilMobs");
+    @Getter
+    private Items items;
 
     @Override
     public void onEnable() {
         INSTANCE = this;
         NAMESPACED_KEY = new NamespacedKey(this, "data");
 
+        cfg = new Config(this);
+        cfg.load();
+
+        Lang.init(this);
         MiniBar.init(this);
         JGuiInitializer.init(this, false);
 
         armorSets = new ArmorSets();
         armorSets.load();
+
+        items = new Items(FileLoader.getFile("items.yml"));
+        items.load();
 
         mobs = new Mobs(this);
         mobs.load();
@@ -67,11 +83,14 @@ public final class EvilMobs extends JavaPlugin {
         particles = new Particles();
         particles.load();
 
+        mainMenu = new MainMenu(this);
+
         setupPlaceholders();
 
         getServer().getPluginManager().registerEvents(new OnDeath(this), this);
         getServer().getPluginManager().registerEvents(new OnDamage(this), this);
         getServer().getPluginManager().registerEvents(new OnMove(this), this);
+        getServer().getPluginManager().registerEvents(new ItemPickup(), this);
 
         PluginCommand evilmobs = getCommand("evilmobs");
         if (evilmobs != null)
@@ -98,6 +117,7 @@ public final class EvilMobs extends JavaPlugin {
         ActionTypeRegistry.register("TASK_STOP", new TaskStop());
 
         ActionTypeRegistry.register("DROP", new Drop());
+        ActionTypeRegistry.register("DROP_CLEAR", new DropClear());
 
 
         ActionTypeRegistry.register("SET_AGE", new SetAge());
@@ -139,6 +159,8 @@ public final class EvilMobs extends JavaPlugin {
             MiniBar.deleteBossBar(uuid);
         }
         if (evilMobsPlaceholderExpansion!=null) evilMobsPlaceholderExpansion.unregister();
+
+        items.save();
     }
     @Getter
     private final Map<UUID, Map<String, MiniTask>> tasks = new HashMap<>();

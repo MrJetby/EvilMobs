@@ -4,8 +4,14 @@ import lombok.Getter;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.records.*;
 import me.jetby.treex.bukkit.LocationHandler;
+import me.jetby.treex.text.Colorize;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -69,7 +75,7 @@ public class Mobs {
 
             Location location = LocationHandler.deserialize(spawnLocation);
 
-            String name = configuration.getString("name");
+            String name = configuration.getString(Colorize.text("name"));
             boolean nameVisible = name != null && !name.isEmpty();
 
             String armorName = configuration.getString("armor");
@@ -86,12 +92,85 @@ public class Mobs {
             boolean visualFire = configuration.getBoolean("visual-fire", false);
             boolean isBaby = configuration.getBoolean("isBaby", false);
 
+            ConfigurationSection dropSettings = configuration.getConfigurationSection("drop-settings");
+
+
+            Map<String, Mask> masks = new HashMap<>();
+
+            boolean isMask = false;
+            String lootAmount = "0";
+            boolean customDrops = false;
+
+            boolean flyingDropParticle = false;
+            Sound sound = Sound.ENTITY_ITEM_PICKUP;
+            float soundVolume = 1;
+            float soundPitch = 1;
+            Particle particle = Particle.FLAME;
+            int paritcleAmount = 1;
+            double offsetX = 0;
+            double offsetY = 0;
+            double offsetZ = 0;
+            double minY = 5.0;
+            double maxY = 10.0;
+            double minSpeed = 0.5;
+            double maxSpeed = 1.0;
+            int pickupDelay = 0;
+
+            if (dropSettings != null) {
+                customDrops = dropSettings.getBoolean("only-custom", false);
+                lootAmount = dropSettings.getString("lootAmount", "0");
+
+
+                ConfigurationSection dropParticleSection = dropSettings.getConfigurationSection("flying-drop-particle");
+
+                if (dropParticleSection!=null) {
+                    flyingDropParticle = dropParticleSection.getBoolean("enabled", false);
+
+                    sound = Sound.valueOf(dropParticleSection.getString("sound".toUpperCase(), "ENTITY_ITEM_PICKUP"));
+                    soundVolume = (float) dropParticleSection.getDouble("volume", 1);
+                    soundPitch = (float) dropParticleSection.getDouble("pitch", 1);
+                    paritcleAmount = dropParticleSection.getInt("amount", 1);
+                    offsetX = dropParticleSection.getDouble("offset-x", 0);
+                    offsetY = dropParticleSection.getDouble("offset-y", 0);
+                    offsetZ = dropParticleSection.getDouble("offset-z", 0);
+                    minY = dropParticleSection.getDouble("min-y", 5.0);
+                    maxY = dropParticleSection.getDouble("max-y", 10.0);
+                    minSpeed = dropParticleSection.getDouble("min-speed", 0.5);
+                    maxSpeed = dropParticleSection.getDouble("max-speed", 1.0);
+                    particle = Particle.valueOf(dropParticleSection.getString("particle", "FLAME"));
+                    pickupDelay = dropParticleSection.getInt("pickup-delay", 0);
+                }
+
+
+                ConfigurationSection maskSection = dropSettings.getConfigurationSection("mask");
+                if (maskSection != null) {
+
+                    isMask = maskSection.getBoolean("enabled", false);
+
+                    ConfigurationSection maskItems = maskSection.getConfigurationSection("items");
+                    if (maskItems != null) {
+                        for (String maskId : maskItems.getKeys(false)) {
+
+                            ConfigurationSection mask = maskItems.getConfigurationSection(maskId);
+                            if (mask != null) {
+                                Material material = Material.valueOf(mask.getString("material", "STONE"));
+                                boolean enchanted = mask.getBoolean("enchanted", false);
+                                String s = Colorize.text(mask.getString("name", "Default item"));
+                                masks.put(maskId, new Mask(material, s, enchanted));
+                            }
+                        }
+                    }
+                }
+
+            }
+            DropParticle dropParticle = new DropParticle( sound, soundVolume, soundPitch, particle, paritcleAmount, offsetX, offsetY, offsetZ, minY, maxY, minSpeed, maxSpeed, pickupDelay);
+
 
             Map<String, List<String>> listeners = new HashMap<>();
             ConfigurationSection listenerSection = configuration.getConfigurationSection("listeners");
             if (listenerSection != null) {
                 for (String listenerId : listenerSection.getKeys(false)) {
-                    List<String> actions = listenerSection.getStringList(listenerId);
+                    List<String> actions = Colorize.list(listenerSection.getStringList(listenerId));
                     listeners.put(listenerId, actions);
                 }
             }
@@ -121,11 +200,12 @@ public class Mobs {
                 for (String bossBarId : bossBars.getKeys(false)) {
                     ConfigurationSection bossBar = bossBars.getConfigurationSection(bossBarId);
                     if (bossBar == null) continue;
-                    String bossBarTitle = bossBar.getString("title", "");
+
+                    String bossBarTitle = Colorize.text(bossBar.getString("title", ""));
                     int bossBarDuration = bossBar.getInt("duration", -1);
 
-                    BossBar.Color bossBarColor = BossBar.Color.valueOf(bossBar.getString("Color", "BLUE"));
-                    BossBar.Overlay bossBarStyle = BossBar.Overlay.valueOf(bossBar.getString("Style", "PROGRESS"));
+                    BarColor bossBarColor = BarColor.valueOf(bossBar.getString("Color", "BLUE"));
+                    BarStyle bossBarStyle = BarStyle.valueOf(bossBar.getString("Style", "PROGRESS"));
 
                     String bossBarProgress = bossBar.getString("Progress", "1.0");
 
@@ -153,7 +233,36 @@ public class Mobs {
             List<String> onHitActions = configuration.getStringList("actions.onHit");
             List<String> onDeathActions = configuration.getStringList("actions.onDeath");
 
-            Mob mob = new Mob(id, location, nameVisible, name, armorItem, entityType, health, ai, glow, canPickupItems, visualFire, isBaby, phases, listeners, tasks, bossBarsMap, onSpawnActions, onHitActions, onDeathActions);
+            List<Items.ItemsData> items = plugin.getItems().getData().get(id);
+
+
+            Mob mob = new Mob(
+                    id,
+                    location,
+                    nameVisible,
+                    name,
+                    armorItem,
+                    entityType,
+                    health,
+                    ai,
+                    glow,
+                    canPickupItems,
+                    visualFire,
+                    isBaby,
+                    phases,
+                    flyingDropParticle,
+                    dropParticle,
+                    isMask,
+                    masks,
+                    listeners,
+                    tasks,
+                    bossBarsMap,
+                    onSpawnActions,
+                    onHitActions,
+                    onDeathActions,
+                    lootAmount,
+                    customDrops,
+                    items);
             mobs.put(id, mob);
 
         } catch (Exception e) {

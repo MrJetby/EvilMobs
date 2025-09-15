@@ -1,0 +1,39 @@
+lang: ru
+
+gui:
+  main:
+    title: "EvilMobs"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Моб: <yellow>%s"
+    lore:
+      - "<!i><#FB430A><st>=                                   ="
+      - ""
+      - "<!i><#FB430A><b>▶</b> <white>Нажмите, чтобы настроить предметы"
+      - ""
+      - "<!i><#FB430A><st>=                                   ="
+  chanceEditor:
+    title: "Настроить шансы"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Шанс: <orange>%s%"
+    lore:
+      - - "<!i><#FB430A><st>=                                   ="
+      - " <!i><#FB430A><bold>ЛКМ</bold> <gray>+<white>1% "
+      - " <!i><#FB430A><bold>ПКМ</bold> <gray>-<white>1% "
+      - " <!i><#FB430A><bold>SHIFT+ЛКМ</bold> <gray>+<white>10% "
+      - " <!i><#FB430A><bold>SHIFT+ПКМ</bold> <gray>-<white>10% "
+      - ""
+      - "<!i><#FB430A><st>=                                   ="
+  invEditor:
+    title: "Выбор инвентаря"
+    inventory:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Инвентарь: <yellow>%s"
+      lore:
+        - - "<!i><#FB430A><st>=                                   ="
+        - ""
+        - " <!i><#FB430A><bold>ЛКМ</bold> <gray>+<white>Настроить предметы "
+        - " <!i><#FB430A><bold>ПКМ</bold> <gray>-<white>Настроить шансы предметов "
+        - ""
+        - - "<!i><#FB430A><st>=                                   ="
+    new_inventory:
+      display_name: "<green>[+] Добавить новый инвентарь"
+      lore: []
+  itemEditor:
+    title: 'Редактор предметов'

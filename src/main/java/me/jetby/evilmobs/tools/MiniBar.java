@@ -11,8 +11,6 @@ import me.jetby.evilmobs.records.Mob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -49,8 +47,8 @@ public class MiniBar {
         Bar bossBarConfig = mob.bossBars().get(id);
         BossBar bar = Bukkit.createBossBar(
                 bossBarConfig.title(),
-                convertColor(bossBarConfig.color()),
-                convertStyle(bossBarConfig.style())
+                bossBarConfig.color(),
+                bossBarConfig.style()
         );
 
         UUID entityId = entity.getUniqueId();
@@ -107,7 +105,7 @@ public class MiniBar {
                 }
 
                 String raw = data.originalTitle.replace("%health_percentage%", String.format("%.1f", healthPercent * 100));
-                String parsed = TextUtil.setPapi(null, TextUtil.colorize(raw));
+                String parsed = TextUtil.setPapi(null, raw);
                 bossBar.setTitle(parsed);
 
                 data.setBossBar(bossBar);
@@ -284,27 +282,5 @@ public class MiniBar {
             }
         });
         toRemove.forEach(datas::remove);
-    }
-
-    private BarColor convertColor(net.kyori.adventure.bossbar.BossBar.Color kyoriColor) {
-        return switch (kyoriColor) {
-            case PINK -> BarColor.PINK;
-            case BLUE -> BarColor.BLUE;
-            case RED -> BarColor.RED;
-            case GREEN -> BarColor.GREEN;
-            case YELLOW -> BarColor.YELLOW;
-            case PURPLE -> BarColor.PURPLE;
-            case WHITE -> BarColor.WHITE;
-        };
-    }
-
-    private BarStyle convertStyle(net.kyori.adventure.bossbar.BossBar.Overlay kyoriStyle) {
-        return switch (kyoriStyle) {
-            case PROGRESS -> BarStyle.SOLID;
-            case NOTCHED_6 -> BarStyle.SEGMENTED_6;
-            case NOTCHED_10 -> BarStyle.SEGMENTED_10;
-            case NOTCHED_12 -> BarStyle.SEGMENTED_12;
-            case NOTCHED_20 -> BarStyle.SEGMENTED_20;
-        };
     }
 }

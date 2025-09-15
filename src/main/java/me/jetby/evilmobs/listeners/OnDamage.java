@@ -35,6 +35,7 @@ public class OnDamage implements Listener {
         if (!entity.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) return;
 
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+        if (id==null) return;
 
         Mob mob = mobs.getMobs().get(id);
         if (mob == null) return;

@@ -1,5 +1,6 @@
 package me.jetby.evilmobs.actions.particles;
 
+import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.tools.ParticleEffectManager;
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;
@@ -19,12 +20,12 @@ public class SendParticle implements Action {
         String[] args = context.split(" ");
         if (args.length==2) {
             Location location = LocationHandler.deserialize(args[1]);
-            ParticleEffectManager.playEffect(location, args[0]);
+            ParticleEffectManager.playEffect(args[0], location, EvilMobs.getInstance().getParticles());
 
         }
 
         if (entity==null) return;
-        ParticleEffectManager.playEffect(entity.getLocation(), context);
+        ParticleEffectManager.playEffect(args[0], entity.getLocation(), EvilMobs.getInstance().getParticles());
 
     }
 

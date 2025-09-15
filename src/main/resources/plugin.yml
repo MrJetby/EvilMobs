@@ -4,6 +4,8 @@ main: me.jetby.evilmobs.EvilMobs
 api-version: '1.16'
 authors: [ MrJetby ]
 depend: [Treex]
+loadbefore:
+  - Treex
 softdepend:
   - PlaceholderAPI
 commands:

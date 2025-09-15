@@ -1,13 +1,14 @@
 package me.jetby.evilmobs.records;
 
 
-import net.kyori.adventure.bossbar.BossBar;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 
 public record Bar(
         String id,
         String title,
-        BossBar.Color color,
-        BossBar.Overlay style,
+        BarColor color,
+        BarStyle style,
         String progress,
         int duration
 ) {

@@ -1,3 +1,40 @@
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+# Actions
+# -------------------
+# [message] <message>
+# [lightning] <radius> --player:<player>
+# [fireball] --TARGET:<player> --EXPLODE:true/false --FROM
+# [effect] <effect>;<duration>;<amplifier> --radius:<radius>
+# [create_minion] <minion_id>
+# [teleport] <player> --TO:<player/mob> --OFFSET:x,y
+# [task_run] <task_id>
+# [task_stop] <task_id>
+# [set_AI] true/false
+# [set_Age] baby/adult
+# [set_can_pickup_items] true/false
+# [set_Glow] true/false
+# [set_Name] <name>
+# [particle] <particle_id> --player:<player> --radius:<radius>
+# [console] <command>
+# [drop] <item_id> --player:<player> --radius:<radius>
+# [sound] <sound> --player:<player> --radius:<radius> --pitch
+# [create_explosion] <power> --player:<player> --radius:<radius> --setFire:true/false --breakBlocks:true/false
+# [set_Health] <amount>
+# [add_Health] <amount>
+# [remove_Health] <amount>
+# [set_Potion_Immunity] true/false
+# [set_Silent] true/false
+# [set_Invulnerable] true/false
+# [set_Gravity] true/false
+# [set_Death_Loot] true/false
+# [set_Death_Experience] true/false
+# [set_Baby] true/false
+# [set_Adult] true/false
+# [set_Max_Health] <amount>
+# [set_Speed] <amount>
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 id: evil
 
 name: "&4Mister Evil" # Delete the line if you want to disable
@@ -12,10 +49,11 @@ isBaby: false
 spawn-location: 0;100;0;world
 
 armor: example
-
+# Call actions when mob get hit
+# You can use placeholder %damager% here to get damager name
 # ON_DAMAGE
 # ON_MOVE
-listeners: {}
+listeners: { }
 
 bossBars:
   example:
@@ -83,6 +121,50 @@ actions:
     - '[drop] '
     - '[console] money give %damage_top_1_name% 150000'
 
+
+drop-settings:
+  # Если true, то ванильный дроп не будут выпадать
+  only-custom: true
+  # Если хотите чтобы ничего не выпадало, ставьте 0
+  # Если хотите чтобы всё из возможных выпадало игнорируя шансы и рандом, ставьте -1
+  lootAmount: 2-5
+  # Партиклы дропа когда вызывается команда [drop]
+  flying-drop-particle:
+    enabled: true
+    pickup-delay: 40 # в тиках
+    sound: block_lava_extinguish # название звука
+    pitch: 1.0
+    volume: 1.0
+    particle: FLAME
+    #Количество частиц, создаваемых при выбросе ресурсов во время его полета
+    amount: 1
+    offset-x: 0.0
+    offset-y: 2.0
+    offset-z: 0.0
+    #Минимальная высота выбрасывания
+    min-y: 5.0
+    #Максимальная высота выбрасывания
+    max-y: 10.0
+    #Минимальная горизонтальная скорость
+    min-speed: 0.5
+    #Максимальная горизонтальная скорость
+    max-speed: 1.0
+
+  # Маскировка предметов для дропа вызванного командой [drop]
+  mask:
+    # Включить маскировку предметов при дропе?
+    enabled: true
+    items:
+      # Тут настраивается маскировка.
+      # Для маскировки дропа будет выбрана случайная маска
+      m1: # название может быть любым
+        material: COBWEB
+        enchanted: true
+        name: "&#0EC8E2&k|||||||||"
+      m2:
+        material: PHANTOM_MEMBRANE
+        enchanted: true
+        name: "&#0EC8E2&k|||||||||"
 minions:
   default:
     name: ""
