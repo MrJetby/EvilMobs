@@ -20,20 +20,6 @@
 # [console] <command>
 # [drop] <item_id> --player:<player> --radius:<radius>
 # [sound] <sound> --player:<player> --radius:<radius> --pitch
-# [create_explosion] <power> --player:<player> --radius:<radius> --setFire:true/false --breakBlocks:true/false
-# [set_Health] <amount>
-# [add_Health] <amount>
-# [remove_Health] <amount>
-# [set_Potion_Immunity] true/false
-# [set_Silent] true/false
-# [set_Invulnerable] true/false
-# [set_Gravity] true/false
-# [set_Death_Loot] true/false
-# [set_Death_Experience] true/false
-# [set_Baby] true/false
-# [set_Adult] true/false
-# [set_Max_Health] <amount>
-# [set_Speed] <amount>
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 id: evil
 
