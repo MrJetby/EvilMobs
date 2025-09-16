@@ -27,7 +27,7 @@ public class ChanceEditor extends AdvancedGui {
     private final Map<Integer, ItemStack> originalItems = new HashMap<>();
 
     public ChanceEditor(Player player, String type, String inv, EvilMobs plugin) {
-        super(Lang.GUI_CHANCE_EDITOR_TITLE);
+        super(Lang.getString("gui.chanceeditor.title"));
         this.type = type;
         this.inv = inv;
         this.items = plugin.getItems();
@@ -48,8 +48,8 @@ public class ChanceEditor extends AdvancedGui {
                 builder.slots(itemData.slot())
                         .defaultItem(ItemWrapper.builder(item.getType(), SerializerType.MINI_MESSAGE)
                                         .amount(item.getAmount())
-                                        .displayName(String.format(Lang.GUI_CHANCE_EDITOR_DISPLAY_NAME, chance[0]))
-                                        .lore(Lang.GUI_CHANCE_EDITOR_LORE).build());
+                                        .displayName(String.format(Lang.getString("gui.chanceeditor.display_name"), chance[0]))
+                                        .lore(Lang.getString("gui.chanceeditor.lore")).build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
@@ -67,7 +67,7 @@ public class ChanceEditor extends AdvancedGui {
                     item.setItemMeta(meta);
 
                     controller.updateItems(wrapper -> {
-                        wrapper.displayName(String.format(Lang.GUI_CHANCE_EDITOR_DISPLAY_NAME, chance[0]));
+                        wrapper.displayName(Lang.getString("gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])));
                     });
                 });
             });

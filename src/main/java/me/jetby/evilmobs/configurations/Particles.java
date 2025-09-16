@@ -77,6 +77,8 @@ public class Particles {
             e.printStackTrace();
             LOGGER.warn("Failed to load particle effects: " + e.getMessage());
         }
+
+        LOGGER.success(effects.size()+" effects loaded");
     }
 
     private double getDouble(ConfigurationSection sec, String key, double def) {

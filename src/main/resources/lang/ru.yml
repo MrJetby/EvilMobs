@@ -3,7 +3,7 @@ lang: ru
 gui:
   main:
     title: "EvilMobs"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Моб: <yellow>%s"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Моб: <yellow>{type}"
     lore:
       - "<!i><#FB430A><st>=                                   ="
       - ""
@@ -12,7 +12,7 @@ gui:
       - "<!i><#FB430A><st>=                                   ="
   chanceEditor:
     title: "Настроить шансы"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Шанс: <orange>%s%"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Шанс: <orange>{chance}%"
     lore:
       - - "<!i><#FB430A><st>=                                   ="
       - " <!i><#FB430A><bold>ЛКМ</bold> <gray>+<white>1% "
@@ -24,7 +24,7 @@ gui:
   invEditor:
     title: "Выбор инвентаря"
     inventory:
-      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Инвентарь: <yellow>%s"
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Инвентарь: <yellow>{inv}"
       lore:
         - - "<!i><#FB430A><st>=                                   ="
         - ""

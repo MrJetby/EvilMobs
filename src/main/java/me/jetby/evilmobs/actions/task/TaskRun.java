@@ -1,6 +1,6 @@
 package me.jetby.evilmobs.actions.task;
 
-import me.jetby.evilmobs.EvilMobs;
+import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.records.Task;
 import me.jetby.evilmobs.tools.MiniTask;
@@ -31,12 +31,12 @@ public class TaskRun implements Action {
         miniTask.run();
 
         Map<String, MiniTask> tasks = new HashMap<>();
-        if (EvilMobs.getInstance().getTasks().get(entity.getUniqueId())!=null) {
-            tasks.putAll(EvilMobs.getInstance().getTasks().get(entity.getUniqueId()));
+        if (Maps.tasks.get(entity.getUniqueId())!=null) {
+            tasks.putAll(Maps.tasks.get(entity.getUniqueId()));
         }
 
         tasks.put(context, miniTask);
-        EvilMobs.getInstance().getTasks().put(entity.getUniqueId(), tasks);
+        Maps.tasks.put(entity.getUniqueId(), tasks);
 
 
     }

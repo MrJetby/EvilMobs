@@ -1,33 +1,40 @@
 
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-# Actions
-# -------------------
-# [message] <message>
-# [lightning] <radius> --player:<player>
-# [fireball] --TARGET:<player> --EXPLODE:true/false --FROM
-# [effect] <effect>;<duration>;<amplifier> --radius:<radius>
-# [create_minion] <minion_id>
-# [teleport] <player> --TO:<player/mob> --OFFSET:x,y
-# [task_run] <task_id>
-# [task_stop] <task_id>
-# [set_AI] true/false
-# [set_Age] baby/adult
-# [set_can_pickup_items] true/false
-# [set_Glow] true/false
-# [set_Name] <name>
-# [particle] <particle_id> --player:<player> --radius:<radius>
-# [console] <command>
-# [drop] <item_id> --player:<player> --radius:<radius>
-# [sound] <sound> --player:<player> --radius:<radius> --pitch
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+#################################################################
+#
+## Actions
+#
+## [MESSAGE] <message>
+## [LIGHTNING] <radius>;false/true (you can set visual true or for real strike set false)
+## [FIREBALL] --TARGET:%closest_player%/%rand_player_near>radius>% --EXPLODE:true/false --FROM:MOB/TOP
+## [effect] EFFECT_NAME;DURATION;LEVEL
+## [spawn_as_minion] <minion_id>
+## [kill_all_minions] <minion_id>
+## [teleport] <player> --TO:<player/mob> --OFFSET:x,y
+## [task_run] <task_id>
+## [task_stop] <task_id>
+## [set_AI] true/false
+## [set_Age] baby/adult
+## [set_can_pickup_items] true/false
+## [set_Glow] true/false
+## [set_Name] Any name
+## [send_particle] <particle_id>
+## [console] <command>
+## [drop] <amount>
+## [sound] SOUND_NAME;VOLUME;PITCH
+## [set_target] %damager%/%closest_player%/%rand_player_near>radius>%
+#
+#################################################################
 id: evil
 
 name: "&4Mister Evil" # Delete the line if you want to disable
 type: ZOMBIE
 health: 1000
 
-AI: false
+# Remove the line or set it to -1 if you want infinite radius
+moving-radius: 15 # the mob cannot go beyond this radius
+
+AI: true
 glow: false
 can-pickup-items: false
 isBaby: false
@@ -35,14 +42,16 @@ isBaby: false
 spawn-location: 0;100;0;world
 
 armor: example
-# Call actions when mob get hit
-# You can use placeholder %damager% here to get damager name
+# Actions that will execute on any listener
 # ON_DAMAGE
 # ON_MOVE
-listeners: { }
+listeners:
+  ON_DAMAGE:
+    - '[msg] You hit the boss!'
+  ON_MOVE: {}
 
 bossBars:
-  example:
+  example_health:
     title: "&4&lEvil Boss &7[Health: %health_percentage%%]"
     # Доступно: PINK, BLUE, RED ,GREEN ,YELLOW ,PURPLE, WHITE
     Color: BLUE
@@ -52,7 +61,6 @@ bossBars:
     # Время спустя которое боссбар исчезнет
     # Если оставить -1 то боссбар пропадёт когда ивент завершится
     duration: -1
-
 
 
 tasks:
@@ -103,9 +111,8 @@ actions:
   onSpawn: { }
   onHit: { }
   onDeath:
-    - '[message] '
+    - '[message_all] Boss died'
     - '[drop] '
-    - '[console] money give %damage_top_1_name% 150000'
 
 
 drop-settings:
@@ -151,11 +158,3 @@ drop-settings:
         material: PHANTOM_MEMBRANE
         enchanted: true
         name: "&#0EC8E2&k|||||||||"
-minions:
-  default:
-    name: ""
-    type: ZOMBIE
-    isBaby: true
-    health: 25
-
-    max-radius: 10 # максимальный радиус движения от главного моба

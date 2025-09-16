@@ -21,7 +21,7 @@ public class ItemEditor extends AdvancedGui {
     private final Items items;
 
     public ItemEditor(Player player, String inv, String type, EvilMobs plugin) {
-        super(Lang.GUI_ITEM_EDITOR_TITLE);
+        super(Lang.getString("gui.itemeditor.title"));
         this.items = plugin.getItems();
 
 

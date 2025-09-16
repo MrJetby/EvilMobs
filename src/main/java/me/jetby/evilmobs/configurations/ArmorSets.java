@@ -33,14 +33,12 @@ public class ArmorSets {
 
                 ConfigurationSection itemsSection = configuration.getConfigurationSection(id);
                 if (itemsSection == null) {
-                    LOGGER.warn("Section " + id + " is null");
                     continue;
                 }
 
                 for (String key : itemsSection.getKeys(false)) {
                     ConfigurationSection section = itemsSection.getConfigurationSection(key);
                     if (section == null) {
-                        LOGGER.warn("Section " + key + " is null");
                         continue;
                     }
                     ItemStack item = new ItemStack(Material.valueOf(section.getString("item")));

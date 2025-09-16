@@ -38,6 +38,18 @@ public class OnMove implements Listener {
         Mob mob = mobs.getMobs().get(id);
         if (mob == null) return;
 
+        Bukkit.getPluginManager().callEvent(new MobMoveEvent(id, entity, e.getFrom(), e.getTo(),
+                e.hasChangedBlock(), e.hasChangedOrientation(),
+                e.hasChangedPosition(), e.hasExplicitlyChangedBlock(), e.hasExplicitlyChangedPosition()));
+
+        if (mob.movingRadius()!=-1) {
+            if (mob.spawnlocation().distanceSquared(e.getTo()) > mob.movingRadius() * mob.movingRadius()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+
+
         if (!mob.listeners().isEmpty()) {
             List<String> actions = mob.listeners().get("ON_MOVE");
             if (actions==null || actions.isEmpty()) return;
@@ -46,9 +58,5 @@ public class OnMove implements Listener {
             ctx.put("entity", entity);
             ActionExecutor.execute(ctx, ActionRegistry.transform(actions));
         }
-
-        Bukkit.getPluginManager().callEvent(new MobMoveEvent(id, entity, e.getFrom(), e.getTo(),
-                e.hasChangedBlock(), e.hasChangedOrientation(),
-                e.hasChangedPosition(), e.hasExplicitlyChangedBlock(), e.hasExplicitlyChangedPosition()));
     }
 }

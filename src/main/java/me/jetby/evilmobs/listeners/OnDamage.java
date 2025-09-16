@@ -9,6 +9,7 @@ import me.jetby.treex.actions.ActionExecutor;
 import me.jetby.treex.actions.ActionRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -40,20 +41,27 @@ public class OnDamage implements Listener {
         Mob mob = mobs.getMobs().get(id);
         if (mob == null) return;
 
+
         double damage = e.getDamage();
         EntityDamageEvent.DamageCause damageCause = e.getCause();
+
+        Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager, damage, damageCause));
+
+        Player player = null;
+        if (damager instanceof Player p) {
+            player = p;
+        }
 
         if (!mob.listeners().isEmpty()) {
             List<String> actions = mob.listeners().get("ON_DAMAGE");
             if (actions==null || actions.isEmpty()) return;
-            ActionContext ctx = new ActionContext(null);
+            ActionContext ctx = new ActionContext(player);
             ctx.put("mob", mob);
             ctx.put("entity", entity);
             ActionExecutor.execute(ctx, ActionRegistry.transform(actions));
         }
 
 
-        Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager, damage, damageCause));
     }
 
 

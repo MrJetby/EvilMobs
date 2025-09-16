@@ -1,14 +1,12 @@
 lang: en
 
-
-
-null_section: "Section %s is null"
-file_created: ""
+file-created: ""
+mob-creator-not-found: "No MobCreator found for context: {context}"
 
 gui:
   main:
     title: "EvilMobs"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Mob: <yellow>%s"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Mob: <yellow>{type}"
     lore:
       - "<!i><#FB430A><st>=                                   ="
       - ""
@@ -17,7 +15,7 @@ gui:
       - "<!i><#FB430A><st>=                                   ="
   chanceEditor:
     title: "Configure Chances"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <gold>%s"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <gold>{chance}"
     lore:
       - "<!i><#FB430A><st>=                                   ="
       - " <!i><#FB430A><bold>Left click</bold> <gray>+<white>1% "
@@ -29,7 +27,7 @@ gui:
   invEditor:
     title: "Inventory Selection"
     inventory:
-      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventory: <yellow>%s"
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventory: <yellow>{inv}"
       lore:
         - "<!i><#FB430A><st>=                                   ="
         - ""

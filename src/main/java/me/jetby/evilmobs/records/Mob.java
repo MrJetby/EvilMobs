@@ -9,6 +9,7 @@ import java.util.Map;
 
 public record Mob(
         String id,
+        int movingRadius,
         Location spawnlocation,
         boolean nameVisible,
         String name,

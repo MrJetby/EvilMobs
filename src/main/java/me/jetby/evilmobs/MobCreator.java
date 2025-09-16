@@ -9,6 +9,7 @@ import me.jetby.evilmobs.records.Phases;
 import me.jetby.treex.actions.ActionContext;
 import me.jetby.treex.actions.ActionExecutor;
 import me.jetby.treex.actions.ActionRegistry;
+import me.jetby.treex.text.Papi;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Ageable;
@@ -26,18 +27,22 @@ import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 @RequiredArgsConstructor
 public class MobCreator {
 
-    final Mob mob;
+
+    final Mob mainMob;
     int taskId = -1;
 
 
     @Getter
     private LivingEntity livingEntity;
+    private final List<LivingEntity> minions = new ArrayList<>();
 
     public void spawn() {
-        spawn(mob.spawnlocation());
+        spawn(mainMob, mainMob.spawnlocation());
     }
-
     public void spawn(Location location) {
+        spawn(mainMob, location);
+    }
+    private LivingEntity spawn(Mob mob, Location location) {
         LivingEntity boss = (LivingEntity) location.getWorld().spawnEntity(mob.spawnlocation(), mob.entityType());
         boss.setGlowing(mob.glow());
         boss.setMaxHealth(mob.health());
@@ -113,14 +118,13 @@ public class MobCreator {
         taskId = Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
 
             if (boss.isDead()) {
-                end();
                 Bukkit.getScheduler().cancelTask(taskId);
                 return;
             }
 
             for (Phases phase : phasesCopy) {
                 try {
-                    sendPhasesCommand(phase.type(), boss);
+                    sendPhasesCommand(phase.type(), boss, mob);
                 } catch (NumberFormatException e) {
                     LOGGER.warn(e.getMessage());
                 }
@@ -129,22 +133,34 @@ public class MobCreator {
 
 
         livingEntity = boss;
+        return boss;
+    }
+    public void spawnMinion(String id, Location location) {
+        LivingEntity entity = spawn(EvilMobs.getInstance().getMobs().getMobs().get(id), location);
+        minions.add(entity);
+    }
+
+    public void killAllMinions() {
+        for (LivingEntity e : minions) {
+            e.setHealth(0);
+        }
+        minions.clear();
     }
 
     final List<Phases> phasesCopy = new ArrayList<>();
     final Map<String, List<String>> phases = new HashMap<>();
 
-    private void sendPhasesCommand(String type, LivingEntity entity) {
+    private void sendPhasesCommand(String type, LivingEntity entity, Mob mob) {
         switch (type) {
             case "health": {
                 double health = entity.getHealth();
-                for (String phaseId : new ArrayList<>(phases.keySet())) {
+                for (var phaseId : new ArrayList<>(phases.keySet())) {
                     double trigger = Double.parseDouble(phaseId);
                     if (health <= trigger) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("entity", entity);
 
-                        me.jetby.treex.actions.ActionExecutor.execute(ctx, me.jetby.treex.actions.ActionRegistry.transform(phases.get(phaseId)));
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
 
                         phases.remove(phaseId);
                     }
@@ -165,16 +181,26 @@ public class MobCreator {
                 }
                 break;
             }
-            case "PLACEHOLDER": {
-
-                break;
+            default: {
+                var t = Papi.setPapi(null, type);
+                for (var phaseId : new ArrayList<>(phases.keySet())) {
+                    if (t.equals(phaseId)) {
+                        ActionContext ctx = new ActionContext(null);
+                        ctx.put("mob", mob);
+                        ctx.put("entity", entity);
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
+                        phases.remove(phaseId);
+                    }
+                }
             }
         }
     }
 
 
     public void end() {
-
+        Bukkit.getScheduler().cancelTask(taskId);
+        killAllMinions();
+        Maps.mobCreators.remove(mainMob.id());
     }
 
 }

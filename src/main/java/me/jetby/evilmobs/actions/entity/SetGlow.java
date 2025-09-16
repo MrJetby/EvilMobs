@@ -1,4 +1,4 @@
-package me.jetby.evilmobs.actions;
+package me.jetby.evilmobs.actions.entity;
 
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.treex.actions.Action;
@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class SetCanPickupItems implements Action {
+public class SetGlow implements Action {
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Entity entity = ctx.get("entity", Entity.class);
@@ -17,7 +17,7 @@ public class SetCanPickupItems implements Action {
         if (entity == null || mob==null || context == null) return;
 
         if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.setCanPickupItems(Boolean.parseBoolean(context));
+            livingEntity.setGlowing(Boolean.parseBoolean(context));
         }
     }
 }

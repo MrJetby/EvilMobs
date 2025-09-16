@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.configurations.Particles;
 import me.jetby.evilmobs.records.ParticleEffectConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -106,7 +107,7 @@ public class ParticleEffectManager {
                     cancel();
                 }
             }
-        }.runTaskTimer(EvilMobs.getInstance(), 0L, 1L);
+        }.runTaskTimerAsynchronously(EvilMobs.getInstance(), 0L, 1L);
     }
 
     private void renderCircle(ParticleEffectConfig config, Location center, double radius, double offsetX, double offsetY, double offsetZ, int points, Particle particle) {
@@ -163,29 +164,31 @@ public class ParticleEffectManager {
     }
 
     private void spawnParticle(ParticleEffectConfig pec, Location location) {
-        if (pec.particle() == Particle.REDSTONE) {
-            float r = pec.r() / 255.0f;
-            float g =pec.g() / 255.0f;
-            float b = pec.b() / 255.0f;
-            float size = (float) pec.size();
+        Bukkit.getScheduler().runTaskAsynchronously(EvilMobs.getInstance(), () -> {
+            if (pec.particle() == Particle.REDSTONE) {
+                float r = pec.r() / 255.0f;
+                float g =pec.g() / 255.0f;
+                float b = pec.b() / 255.0f;
+                float size = (float) pec.size();
 
-            location.getWorld().spawnParticle(
-                    pec.particle(),
-                    location,
-                    1,
-                    0, 0, 0,
-                    0,
-                    new Particle.DustOptions(org.bukkit.Color.fromRGB((int) (r * 255), (int) (g * 255), (int) (b * 255)), size)
-            );
-        } else {
-            location.getWorld().spawnParticle(
-                    pec.particle(),
-                    location,
-                    1,
-                    0, 0, 0,
-                    0,
-                    null
-            );
-        }
+                location.getWorld().spawnParticle(
+                        pec.particle(),
+                        location,
+                        1,
+                        0, 0, 0,
+                        0,
+                        new Particle.DustOptions(org.bukkit.Color.fromRGB((int) (r * 255), (int) (g * 255), (int) (b * 255)), size)
+                );
+            } else {
+                location.getWorld().spawnParticle(
+                        pec.particle(),
+                        location,
+                        1,
+                        0, 0, 0,
+                        0,
+                        null
+                );
+            }
+        });
     }
 }

@@ -120,10 +120,9 @@ public class MiniBar {
                     BossBar bar = data.bossBar;
                     if (bar == null) return;
 
-                    Set<Player> viewers = data.players;
                     for (Player player : targets) {
                         bar.addPlayer(player);
-                        viewers.add(player);
+                        data.players.add(player);
                     }
                 });
     }

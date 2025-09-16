@@ -51,7 +51,6 @@ public class Mobs {
                 }
                 FileConfiguration config = YamlConfiguration.loadConfiguration(defaultFile);
                 loadMob(config);
-                LOGGER.info("Файл mobs/" + config.getString("id") + ".yml создан");
                 return;
             }
         }
@@ -62,14 +61,15 @@ public class Mobs {
             if (!file.getName().endsWith(".yml")) continue;
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
             loadMob(config);
-            LOGGER.info("Файл mobs/" + config.getString("id") + ".yml загружен");
         }
+        LOGGER.success(mobs.size()+" mobs loaded");
     }
 
     private void loadMob(FileConfiguration configuration) {
         try {
 
             String id = configuration.getString("id");
+            int movingRadius = configuration.getInt("moving-radius", -1);
 
             String spawnLocation = configuration.getString("spawn-location");
 
@@ -238,6 +238,7 @@ public class Mobs {
 
             Mob mob = new Mob(
                     id,
+                    movingRadius,
                     location,
                     nameVisible,
                     name,

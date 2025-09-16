@@ -1,23 +1,24 @@
-package me.jetby.evilmobs.actions;
+package me.jetby.evilmobs.actions.minions;
 
+import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class SetAI implements Action {
+
+public class SpawnAsMinion implements Action {
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Entity entity = ctx.get("entity", Entity.class);
         Mob mob = ctx.get("mob", Mob.class);
         String context = ctx.get("message", String.class);
 
-        if (entity == null || mob==null || context == null) return;
+        if (entity == null || mob == null || context == null) return;
 
-        if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.setAI(Boolean.parseBoolean(context));
-        }
+        Maps.mobCreators.get(mob.id()).spawnMinion(context, entity.getLocation());
+
+
     }
 }

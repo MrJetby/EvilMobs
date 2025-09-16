@@ -1,6 +1,6 @@
 package me.jetby.evilmobs.actions.task;
 
-import me.jetby.evilmobs.EvilMobs;
+import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.tools.MiniTask;
 import me.jetby.treex.actions.Action;
@@ -19,9 +19,9 @@ public class TaskStop implements Action {
 
         if (entity == null || mob==null || context == null) return;
 
-        if (EvilMobs.getInstance().getTasks().get(entity.getUniqueId())==null) return;
+        if (Maps.tasks.get(entity.getUniqueId())==null) return;
 
-        MiniTask miniTask = EvilMobs.getInstance().getTasks().get(entity.getUniqueId()).get(context);
+        MiniTask miniTask = Maps.tasks.get(entity.getUniqueId()).get(context);
         if (miniTask==null) return;
 
         miniTask.cancel();

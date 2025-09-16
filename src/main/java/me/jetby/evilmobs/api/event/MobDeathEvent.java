@@ -2,6 +2,7 @@ package me.jetby.evilmobs.api.event;
 
 import lombok.Getter;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,11 +15,11 @@ public class MobDeathEvent extends Event implements Cancellable {
 
     private final String id;
     private final Entity entity;
-    private final Entity killer;
+    private final Player killer;
 
     private boolean cancelled = false;
 
-    public MobDeathEvent(String id, Entity entity, Entity killer) {
+    public MobDeathEvent(String id, Entity entity, Player killer) {
         this.id = id;
         this.entity = entity;
         this.killer = killer;

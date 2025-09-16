@@ -2,6 +2,9 @@ package me.jetby.evilmobs;
 
 import com.jodexindustries.jguiwrapper.common.JGuiInitializer;
 import lombok.Getter;
+import me.jetby.evilmobs.actions.entity.*;
+import me.jetby.evilmobs.actions.minions.KillAllMinions;
+import me.jetby.evilmobs.actions.minions.SpawnAsMinion;
 import me.jetby.evilmobs.actions.particles.SendParticle;
 import me.jetby.evilmobs.commands.Admin;
 import me.jetby.evilmobs.configurations.*;
@@ -137,19 +140,33 @@ public final class EvilMobs extends JavaPlugin {
 
         ActionTypeRegistry.register("SEND_PARTICLE", new SendParticle());
 
+        ActionTypeRegistry.register("EFFECT_NEAR", new EffectNear());
+        ActionTypeRegistry.register("EFFECTNEAR", new EffectNear());
+
+        ActionTypeRegistry.register("SET_TARGET", new SetTarget());
+        ActionTypeRegistry.register("SETTARGET", new SetTarget());
+
+        ActionTypeRegistry.register("SPAWN_AS_MINION", new SpawnAsMinion());
+        ActionTypeRegistry.register("SPAWNASMINION", new SpawnAsMinion());
+        ActionTypeRegistry.register("KILL_ALL_MINIONS", new KillAllMinions());
+        ActionTypeRegistry.register("KILLALLMINIONS", new KillAllMinions());
+        ActionTypeRegistry.register("KILL_ALL_MINION", new KillAllMinions());
+        ActionTypeRegistry.register("KILLALLMINION", new KillAllMinions());
+
+
     }
 
     private void setupPlaceholders() {
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
             LOGGER.warn("PlaceholderAPI not found. Placeholders are not being working");
         } else {
-            evilMobsPlaceholderExpansion = new EvilMobsPlaceholderExpansion(this);
+            evilMobsPlaceholderExpansion = new EvilMobsPlaceholderExpansion();
             evilMobsPlaceholderExpansion.register();
         }
     }
     @Override
     public void onDisable() {
-        for (Map<String, MiniTask> map : tasks.values()) {
+        for (Map<String, MiniTask> map : Maps.tasks.values()) {
             for (MiniTask miniTask : map.values()) {
                 miniTask.cancel();
             }
@@ -162,9 +179,5 @@ public final class EvilMobs extends JavaPlugin {
 
         items.save();
     }
-    @Getter
-    private final Map<UUID, Map<String, MiniTask>> tasks = new HashMap<>();
 
-    @Getter
-    private final Map<String, MobCreator> mobCreators = new HashMap<>();
 }

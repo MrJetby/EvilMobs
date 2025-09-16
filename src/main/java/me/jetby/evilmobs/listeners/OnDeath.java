@@ -1,6 +1,7 @@
 package me.jetby.evilmobs.listeners;
 
 import me.jetby.evilmobs.EvilMobs;
+import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.MobCreator;
 import me.jetby.evilmobs.actions.DropManager;
 import me.jetby.evilmobs.api.event.MobDeathEvent;
@@ -12,6 +13,7 @@ import me.jetby.treex.actions.ActionExecutor;
 import me.jetby.treex.actions.ActionRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -33,7 +35,7 @@ public class OnDeath implements Listener {
     public OnDeath(EvilMobs plugin) {
         this.plugin = plugin;
         this.mobs = plugin.getMobs();
-        this.mobCreators = plugin.getMobCreators();
+        this.mobCreators = Maps.mobCreators;
     }
 
     @EventHandler
@@ -46,9 +48,11 @@ public class OnDeath implements Listener {
         Mob mob = mobs.getMobs().get(id);
         if (mob == null) return;
 
-        Bukkit.getPluginManager().callEvent(new MobDeathEvent(id, entity, entity.getKiller()));
+        Player player = entity.getKiller();
 
-        ActionContext ctx = new ActionContext(null);
+        Bukkit.getPluginManager().callEvent(new MobDeathEvent(id, entity, player));
+
+        ActionContext ctx = new ActionContext(player);
         ctx.put("mob", mob);
         ctx.put("entity", entity);
         ActionExecutor.execute(ctx, ActionRegistry.transform(mob.onDeathActions()));
@@ -74,8 +78,10 @@ public class OnDeath implements Listener {
 
             }
         }
-        
 
-        mobCreators.remove(id);
+        if (mobCreators.get(id)!=null){
+            mobCreators.get(id).end();
+            LOGGER.success("ended from death");
+        }
     }
 }

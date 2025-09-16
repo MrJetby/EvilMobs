@@ -14,7 +14,7 @@ public class MainMenu extends AdvancedGui {
     public static final NamespacedKey CHANCE = new NamespacedKey("evilmobs", "chance");
     public MainMenu(EvilMobs plugin) {
 
-        super(Lang.GUI_MAIN_TITLE);
+        super(Lang.getString("gui.main.title"));
 
 
         int slot = 0;
@@ -24,8 +24,8 @@ public class MainMenu extends AdvancedGui {
             registerItem(type, builder -> {
                 builder.slots(finalSlot);
                 builder.defaultItem(ItemWrapper.builder(Material.valueOf(mob.entityType().name()+"_SPAWN_EGG"), SerializerType.MINI_MESSAGE)
-                        .displayName(String.format(Lang.GUI_MAIN_DISPLAY_NAME, type))
-                        .lore(Lang.GUI_MAIN_LORE)
+                        .displayName(Lang.getString("gui.main.display_name").replace("{type}", type))
+                        .lore(Lang.getList("gui.main.lore"))
                         .build());
 
                 builder.defaultClickHandler((event, controller) ->  {

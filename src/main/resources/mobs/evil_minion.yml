@@ -1,0 +1,40 @@
+
+id: evil_minion
+
+name: "&4Minion"
+type: ZOMBIE
+health: 20
+
+moving-radius: 15
+
+AI: true
+glow: false
+can-pickup-items: false
+isBaby: false
+
+spawn-location: 0;100;0;world
+
+armor: example
+
+bossBars:
+  example_health:
+    title: "&4&lEvil Boss &7[Health: %health_percentage%%]"
+    # Доступно: PINK, BLUE, RED ,GREEN ,YELLOW ,PURPLE, WHITE
+    Color: BLUE
+    # Доступно: PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+    Style: PROGRESS
+    Progress: '%health_percentage%'
+    # Время спустя которое боссбар исчезнет
+    # Если оставить -1 то боссбар пропадёт когда ивент завершится
+    duration: -1
+
+
+tasks:
+  example:
+    # delay - задержка перед первым выполнением в тиках (20 тиков = 1 секунда)
+    # period - период между выполнениями в тиках (20 тиков = 1 секунда)
+    delay: 0
+    period: 20
+    amount: -1 # -1 бесконечное выполнение или количество выполнений если указать число
+    actions:
+      - '[message] &cTest action every second'
