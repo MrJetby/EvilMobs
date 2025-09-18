@@ -21,7 +21,7 @@ public class KillAllMinions implements Action {
 
         MobCreator mobCreator = Maps.mobCreators.get(context);
         if (mobCreator == null) {
-            LOGGER.warn(Lang.getString("mob-creator-not-found").replace("{context}", context));
+            LOGGER.warn(EvilMobs.getInstance().getLang().getConfig().getString("mob-creator-not-found").replace("{context}", context));
             return;
         }
 

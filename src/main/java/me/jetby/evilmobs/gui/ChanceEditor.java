@@ -4,6 +4,7 @@ import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
 import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.evilmobs.EvilMobs;
+import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.configurations.Items;
 import me.jetby.evilmobs.locale.Lang;
 import org.bukkit.Bukkit;
@@ -27,7 +28,7 @@ public class ChanceEditor extends AdvancedGui {
     private final Map<Integer, ItemStack> originalItems = new HashMap<>();
 
     public ChanceEditor(Player player, String type, String inv, EvilMobs plugin) {
-        super(Lang.getString("gui.chanceeditor.title"));
+        super(plugin.getLang().getConfig().getString("gui.chanceeditor.title", "gui.chanceeditor.title"));
         this.type = type;
         this.inv = inv;
         this.items = plugin.getItems();
@@ -48,8 +49,8 @@ public class ChanceEditor extends AdvancedGui {
                 builder.slots(itemData.slot())
                         .defaultItem(ItemWrapper.builder(item.getType(), SerializerType.MINI_MESSAGE)
                                         .amount(item.getAmount())
-                                        .displayName(String.format(Lang.getString("gui.chanceeditor.display_name"), chance[0]))
-                                        .lore(Lang.getString("gui.chanceeditor.lore")).build());
+                                        .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])))
+                                        .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor.lore")).build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
@@ -67,7 +68,7 @@ public class ChanceEditor extends AdvancedGui {
                     item.setItemMeta(meta);
 
                     controller.updateItems(wrapper -> {
-                        wrapper.displayName(Lang.getString("gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])));
+                        wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])));
                     });
                 });
             });
@@ -76,7 +77,7 @@ public class ChanceEditor extends AdvancedGui {
         onClose(event -> {
             saveChanges();
             Bukkit.getScheduler().runTaskLater(plugin, ()->{
-                new InvEditor(plugin, player, plugin.getMobs().getMobs().get(type)).open(player);}, 1L);
+                new InvEditor(plugin, player, Maps.mobs.get(type)).open(player);}, 1L);
         });
     }
 

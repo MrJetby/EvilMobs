@@ -10,7 +10,7 @@ gui:
       - "<!i><#FB430A><b>▶</b> <white>Нажмите, чтобы настроить предметы"
       - ""
       - "<!i><#FB430A><st>=                                   ="
-  chanceEditor:
+  chanceeditor:
     title: "Настроить шансы"
     display_name: "<!i><#FB430A><bold>⭐</bold> <white>Шанс: <orange>{chance}%"
     lore:
@@ -21,7 +21,7 @@ gui:
       - " <!i><#FB430A><bold>SHIFT+ПКМ</bold> <gray>-<white>10% "
       - ""
       - "<!i><#FB430A><st>=                                   ="
-  invEditor:
+  inveditor:
     title: "Выбор инвентаря"
     inventory:
       display_name: "<!i><#FB430A><bold>⭐</bold> <white>Инвентарь: <yellow>{inv}"
@@ -35,5 +35,5 @@ gui:
     new_inventory:
       display_name: "<green>[+] Добавить новый инвентарь"
       lore: []
-  itemEditor:
+  itemeditor:
     title: 'Редактор предметов'

@@ -19,7 +19,7 @@ public class InvEditor extends AdvancedGui {
 
 
     public InvEditor(EvilMobs plugin, Player player, Mob mob) {
-        super(Lang.getString("gui.inveditor.title"));
+        super(plugin.getLang().getConfig().getString("gui.inveditor.title", "gui.inveditor.title"));
 
         String id = mob.id();
 
@@ -37,8 +37,8 @@ public class InvEditor extends AdvancedGui {
             registerItem(inv + "_" + slot, builder -> {
                 builder.slots(currentSlot);
                 builder.defaultItem(ItemWrapper.builder(Material.CHEST, SerializerType.MINI_MESSAGE)
-                        .displayName(Lang.getString("gui.inveditor.inventory.display_name").replace("{inv}", inv))
-                        .lore(Lang.getString("gui.inveditor.inventory.display_name"))
+                        .displayName(plugin.getLang().getConfig().getString("gui.inveditor.inventory.display_name", "gui.inveditor.inventory.display_name").replace("{inv}", inv))
+                        .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.inventory.lore"))
                         .build());
 
                 builder.defaultClickHandler((event, controller) -> {
@@ -60,8 +60,8 @@ public class InvEditor extends AdvancedGui {
         registerItem("add_button", builder -> {
             builder.slots(53);
             builder.defaultItem(ItemWrapper.builder(Material.EMERALD, SerializerType.MINI_MESSAGE)
-                    .displayName(Lang.getString("gui.inveditor.inventory.display_name"))
-                    .lore(Lang.getList("gui.inveditor.inventory.lore"))
+                    .displayName(plugin.getLang().getConfig().getString("gui.inveditor.new_inventory.display_name", "gui.inveditor.new_inventory.display_name"))
+                    .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.new_inventory.lore"))
                     .build());
 
             builder.defaultClickHandler((event, controller) -> {

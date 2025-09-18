@@ -1,8 +1,7 @@
 package me.jetby.evilmobs.listeners;
 
-import me.jetby.evilmobs.EvilMobs;
+import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.api.event.MobDamageEvent;
-import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.treex.actions.ActionContext;
 import me.jetby.treex.actions.ActionExecutor;
@@ -22,12 +21,6 @@ import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 public class OnDamage implements Listener {
 
-    private final Mobs mobs;
-
-    public OnDamage(EvilMobs plugin) {
-        this.mobs = plugin.getMobs();
-    }
-
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
         Entity entity = e.getEntity();
@@ -38,7 +31,7 @@ public class OnDamage implements Listener {
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
         if (id==null) return;
 
-        Mob mob = mobs.getMobs().get(id);
+        Mob mob = Maps.mobs.get(id);
         if (mob == null) return;
 
 
@@ -47,19 +40,18 @@ public class OnDamage implements Listener {
 
         Bukkit.getPluginManager().callEvent(new MobDamageEvent(id, entity, damager, damage, damageCause));
 
-        Player player = null;
-        if (damager instanceof Player p) {
-            player = p;
+        if (damager instanceof Player player) {
+            if (!mob.listeners().isEmpty()) {
+                List<String> actions = mob.listeners().get("ON_DAMAGE");
+                if (actions==null || actions.isEmpty()) return;
+                ActionContext ctx = new ActionContext(player);
+                ctx.put("mob", mob);
+                ctx.put("entity", entity);
+                ActionExecutor.execute(ctx, ActionRegistry.transform(actions));
+            }
         }
 
-        if (!mob.listeners().isEmpty()) {
-            List<String> actions = mob.listeners().get("ON_DAMAGE");
-            if (actions==null || actions.isEmpty()) return;
-            ActionContext ctx = new ActionContext(player);
-            ctx.put("mob", mob);
-            ctx.put("entity", entity);
-            ActionExecutor.execute(ctx, ActionRegistry.transform(actions));
-        }
+
 
 
     }

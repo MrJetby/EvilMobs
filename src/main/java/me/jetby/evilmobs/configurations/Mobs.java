@@ -1,11 +1,10 @@
 package me.jetby.evilmobs.configurations;
 
-import lombok.Getter;
 import me.jetby.evilmobs.EvilMobs;
+import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.records.*;
 import me.jetby.treex.bukkit.LocationHandler;
 import me.jetby.treex.text.Colorize;
-import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -29,9 +28,6 @@ public class Mobs {
 
     private final EvilMobs plugin;
 
-
-    @Getter
-    private final Map<String, Mob> mobs = new HashMap<>();
     private final File file;
 
     public Mobs(EvilMobs plugin) {
@@ -41,19 +37,25 @@ public class Mobs {
     }
 
     public void load() {
+        Maps.mobs.clear();
 
         File[] files = file.listFiles();
+
+        String[] defaults = {"example.yml", "example_minion.yml"};
+
         if (!file.exists()) {
-            if (file.mkdirs()) {
-                File defaultFile = new File(file, "evil.yml");
-                if (!defaultFile.exists()) {
-                    plugin.saveResource("mobs/evil.yml", false);
+            for (String name : defaults) {
+                File target = new File(file, name);
+
+                if (!target.exists()) {
+                    plugin.saveResource("mobs/" + name, false);
+                    FileConfiguration configuration = YamlConfiguration.loadConfiguration(target);
+                    loadMob(configuration);
+                    return;
                 }
-                FileConfiguration config = YamlConfiguration.loadConfiguration(defaultFile);
-                loadMob(config);
-                return;
             }
         }
+
 
         if (files == null) return;
 
@@ -62,7 +64,7 @@ public class Mobs {
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
             loadMob(config);
         }
-        LOGGER.success(mobs.size()+" mobs loaded");
+        LOGGER.success(Maps.mobs.size()+" mobs loaded");
     }
 
     private void loadMob(FileConfiguration configuration) {
@@ -75,8 +77,8 @@ public class Mobs {
 
             Location location = LocationHandler.deserialize(spawnLocation);
 
-            String name = configuration.getString(Colorize.text("name"));
-            boolean nameVisible = name != null && !name.isEmpty();
+            String name = Colorize.text(configuration.getString("name"));
+            boolean nameVisible = !name.isEmpty();
 
             String armorName = configuration.getString("armor");
             List<ArmorItem> armorItem = plugin.getArmorSets().getArmorItems().get(armorName);
@@ -264,7 +266,7 @@ public class Mobs {
                     lootAmount,
                     customDrops,
                     items);
-            mobs.put(id, mob);
+            Maps.mobs.put(id, mob);
 
         } catch (Exception e) {
             e.printStackTrace();

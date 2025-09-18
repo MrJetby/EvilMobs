@@ -21,6 +21,7 @@ public class Particles {
     private final FileConfiguration configuration = FileLoader.getFileConfiguration("particles.yml");
 
     public void load() {
+        effects.clear();
         try {
             for (String id : configuration.getKeys(false)) {
                 ConfigurationSection section = configuration.getConfigurationSection(id);

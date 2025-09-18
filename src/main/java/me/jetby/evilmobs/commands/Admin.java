@@ -3,7 +3,10 @@ package me.jetby.evilmobs.commands;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.MobCreator;
+import me.jetby.evilmobs.locale.Lang;
 import me.jetby.evilmobs.tools.ParticleEffectManager;
+import me.jetby.treex.text.Colorize;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -33,7 +36,6 @@ public class Admin implements CommandExecutor, TabCompleter {
         this.mobCreators = Maps.mobCreators;
 
     }
-
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
 
@@ -43,7 +45,7 @@ public class Admin implements CommandExecutor, TabCompleter {
                     sender.sendMessage("Mob with ID " + args[1] + " already exists.");
                     return true;
                 }
-                MobCreator mobCreator = new MobCreator(plugin.getMobs().getMobs().get(args[1]));
+                MobCreator mobCreator = new MobCreator(Maps.mobs.get(args[1]));
                 mobCreator.spawn();
 
                 mobCreators.put(args[1], mobCreator);
@@ -88,14 +90,32 @@ public class Admin implements CommandExecutor, TabCompleter {
                 break;
             case "list": {
                 for (World world : Bukkit.getWorlds()) {
-                    for (Entity e : world.getEntities()) {
+                    for (LivingEntity e : world.getLivingEntities()) {
                         if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) continue;
                         String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-                        sender.sendMessage(id + " (" + plugin.getMobs().getMobs().get(id).name() + ")");
+                        sender.sendMessage(id + " (" + Maps.mobs.get(id).name() + ") ["+e.getHealth()+"]");
 
                     }
                 }
                 break;
+            }
+            case "reload": {
+                try {
+                    long startTime = System.currentTimeMillis();
+                    plugin.getCfg().load();
+                    plugin.getItems().load();
+                    plugin.getMobs().load();
+                    plugin.getParticles().load();
+
+                    Lang lang = new Lang(plugin);
+                    plugin.setLang(lang );
+
+                    sender.sendMessage(Colorize.text(plugin.getLang().getConfig().getString("reload", "reload").replace("{time}", String.valueOf(System.currentTimeMillis()-startTime))));
+                } catch (Exception e) {
+                    sender.sendMessage(e.getMessage());
+                }
+
+
             }
         }
 
@@ -115,10 +135,11 @@ public class Admin implements CommandExecutor, TabCompleter {
             completions.add("kill");
             completions.add("menu");
             completions.add("list");
+            completions.add("reload");
         }
 
         if (args.length==2 && args[0].equalsIgnoreCase("spawn")) {
-            completions.addAll(plugin.getMobs().getMobs().keySet());
+            completions.addAll(Maps.mobs.keySet());
         }
         if (args.length==2 && args[0].equalsIgnoreCase("despawn") || args[0].equalsIgnoreCase("kill")) {
             completions.addAll(mobCreators.keySet());

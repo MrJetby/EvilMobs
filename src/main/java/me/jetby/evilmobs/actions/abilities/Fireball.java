@@ -1,4 +1,4 @@
-package me.jetby.evilmobs.actions.abillities;
+package me.jetby.evilmobs.actions.abilities;
 
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;
@@ -26,6 +26,7 @@ public class Fireball implements Action {
 
         Map<String, String> params = parseContext(context);
         double radius = Double.parseDouble(params.getOrDefault("RADIUS", "10.0"));
+        double speed = Double.parseDouble(params.getOrDefault("SPEED", "0.1"));
         boolean explode = Boolean.parseBoolean(params.getOrDefault("EXPLODE", "false"));
         String fromDirection = params.getOrDefault("FROM", "MOB");
         String target = params.getOrDefault("TARGET", "%closest_player%");
@@ -60,7 +61,7 @@ public class Fireball implements Action {
 
 
         if (to != null) {
-            shootFireball(from, to, explode, entity);
+            shootFireball(from, to, explode, entity, speed);
         }
     }
 
@@ -112,7 +113,7 @@ public class Fireball implements Action {
     }
 
 
-    private void shootFireball(Location from, Location to, boolean explode, Entity shooter) {
+    private void shootFireball(Location from, Location to, boolean explode, Entity shooter, double speed) {
         World world = from.getWorld();
 
         Vector direction = to.toVector().subtract(from.toVector()).normalize();
@@ -124,6 +125,6 @@ public class Fireball implements Action {
         fireball.setYield(explode ? 2 : 0);
         fireball.setIsIncendiary(explode);
 
-        fireball.setVelocity(direction.multiply(0.1));
+        fireball.setVelocity(direction.multiply(speed));
     }
 }

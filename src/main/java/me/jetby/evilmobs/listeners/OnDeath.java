@@ -28,13 +28,11 @@ import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 public class OnDeath implements Listener {
 
-    final Mobs mobs;
     final Map<String, MobCreator> mobCreators;
     private final EvilMobs plugin;
 
     public OnDeath(EvilMobs plugin) {
         this.plugin = plugin;
-        this.mobs = plugin.getMobs();
         this.mobCreators = Maps.mobCreators;
     }
 
@@ -45,7 +43,7 @@ public class OnDeath implements Listener {
 
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
         if (id==null) return;
-        Mob mob = mobs.getMobs().get(id);
+        Mob mob = Maps.mobs.get(id);
         if (mob == null) return;
 
         Player player = entity.getKiller();

@@ -6,7 +6,7 @@
 #
 ## [MESSAGE] <message>
 ## [LIGHTNING] <radius>;false/true (you can set visual true or for real strike set false)
-## [FIREBALL] --TARGET:%closest_player%/%rand_player_near>radius>% --EXPLODE:true/false --FROM:MOB/TOP
+## [FIREBALL] --TARGET:%closest_player%/%rand_player_near>radius>% --EXPLODE:true/false --FROM:MOB/TOP --SPEED:0.1
 ## [effect] EFFECT_NAME;DURATION;LEVEL
 ## [spawn_as_minion] <minion_id>
 ## [kill_all_minions] <minion_id>

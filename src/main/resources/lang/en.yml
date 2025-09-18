@@ -1,6 +1,6 @@
 lang: en
 
-file-created: ""
+reload: "&aAll configurations was successfully reloaded by {time} ms"
 mob-creator-not-found: "No MobCreator found for context: {context}"
 
 gui:
@@ -13,7 +13,7 @@ gui:
       - "<!i><#FB430A><b>▶</b> <white>Click to configure items"
       - ""
       - "<!i><#FB430A><st>=                                   ="
-  chanceEditor:
+  chanceeditor:
     title: "Configure Chances"
     display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <gold>{chance}"
     lore:
@@ -24,7 +24,7 @@ gui:
       - " <!i><#FB430A><bold>SHIFT+Right click</bold> <gray>-<white>10% "
       - ""
       - "<!i><#FB430A><st>=                                   ="
-  invEditor:
+  inveditor:
     title: "Inventory Selection"
     inventory:
       display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventory: <yellow>{inv}"
@@ -38,5 +38,5 @@ gui:
     new_inventory:
       display_name: "<green>[+] Add new inventory"
       lore: []
-  itemEditor:
+  itemeditor:
     title: 'Item Editor'

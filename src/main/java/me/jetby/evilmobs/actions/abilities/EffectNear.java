@@ -1,4 +1,4 @@
-package me.jetby.evilmobs.actions;
+package me.jetby.evilmobs.actions.abilities;
 
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;

@@ -6,20 +6,21 @@ import lombok.RequiredArgsConstructor;
 import me.jetby.evilmobs.api.event.MobSpawnEvent;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.records.Phases;
+import me.jetby.evilmobs.records.Task;
+import me.jetby.evilmobs.tools.MiniTask;
 import me.jetby.treex.actions.ActionContext;
 import me.jetby.treex.actions.ActionExecutor;
 import me.jetby.treex.actions.ActionRegistry;
 import me.jetby.treex.text.Papi;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static me.jetby.evilmobs.EvilMobs.LOGGER;
 import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
@@ -30,6 +31,7 @@ public class MobCreator {
 
     final Mob mainMob;
     int taskId = -1;
+    final Map<UUID, Integer> tasks = new HashMap<>();
 
 
     @Getter
@@ -37,12 +39,71 @@ public class MobCreator {
     private final List<LivingEntity> minions = new ArrayList<>();
 
     public void spawn() {
-        spawn(mainMob, mainMob.spawnlocation());
+        World world = mainMob.spawnlocation().getWorld();
+        Chunk chunk = world.getChunkAt(mainMob.spawnlocation());
+
+        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), task -> {
+            if (chunk.isLoaded()) {
+                spawn(mainMob, mainMob.spawnlocation());
+                task.cancel();
+            }
+        }, 0L, 20L);
     }
+
     public void spawn(Location location) {
-        spawn(mainMob, location);
+        World world = location.getWorld();
+        Chunk chunk = world.getChunkAt(location);
+
+        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), task -> {
+            if (chunk.isLoaded()) {
+                spawn(mainMob, location);
+                task.cancel();
+            }
+        }, 0L, 20L);
     }
+
+    public void runTasks(LivingEntity entity) {
+
+        phasesCopy.addAll(mainMob.phases());
+        phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
+
+        for (String taskId : mainMob.tasks().keySet()) {
+            Task task = mainMob.tasks().get(taskId);
+            if (task == null) return;
+
+            MiniTask miniTask = new MiniTask(task.delay(), task.period(), task.amount(), task.actions(), entity, mainMob);
+
+            miniTask.run();
+
+            Map<String, MiniTask> tasks = new HashMap<>();
+            if (Maps.tasks.get(entity.getUniqueId()) != null) {
+                tasks.putAll(Maps.tasks.get(entity.getUniqueId()));
+            }
+
+            tasks.put(taskId, miniTask);
+            Maps.tasks.put(entity.getUniqueId(), tasks);
+        }
+
+
+        tasks.put(entity.getUniqueId(), Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+
+            if (entity.isDead()) {
+                Bukkit.getScheduler().cancelTask(taskId);
+                return;
+            }
+
+            for (Phases phase : phasesCopy) {
+                try {
+                    sendPhasesCommand(phase.type(), entity, mainMob);
+                } catch (NumberFormatException e) {
+                    LOGGER.warn(e.getMessage());
+                }
+            }
+        }, 0L, 5L).getTaskId());
+    }
+
     private LivingEntity spawn(Mob mob, Location location) {
+
         LivingEntity boss = (LivingEntity) location.getWorld().spawnEntity(mob.spawnlocation(), mob.entityType());
         boss.setGlowing(mob.glow());
         boss.setMaxHealth(mob.health());
@@ -66,41 +127,43 @@ public class MobCreator {
             boss.setCustomName(mob.name());
         }
 
-        mob.armorItems().forEach(armorItem -> {
+        if (mob.armorItems()!=null && !mob.armorItems().isEmpty()) {
+            mob.armorItems().forEach(armorItem -> {
 
-            switch (armorItem.id()) {
-                case "helmet": {
-                    boss.getEquipment().setHelmet(armorItem.item());
-                    boss.getEquipment().setHelmetDropChance(armorItem.dropChance());
-                    break;
+                switch (armorItem.id()) {
+                    case "helmet": {
+                        boss.getEquipment().setHelmet(armorItem.item());
+                        boss.getEquipment().setHelmetDropChance(armorItem.dropChance());
+                        break;
+                    }
+                    case "chestplate": {
+                        boss.getEquipment().setChestplate(armorItem.item());
+                        boss.getEquipment().setChestplateDropChance(armorItem.dropChance());
+                        break;
+                    }
+                    case "leggings": {
+                        boss.getEquipment().setLeggings(armorItem.item());
+                        boss.getEquipment().setLeggingsDropChance(armorItem.dropChance());
+                        break;
+                    }
+                    case "boots": {
+                        boss.getEquipment().setBoots(armorItem.item());
+                        boss.getEquipment().setBootsDropChance(armorItem.dropChance());
+                        break;
+                    }
+                    case "hand": {
+                        boss.getEquipment().setItemInMainHand(armorItem.item());
+                        boss.getEquipment().setItemInMainHandDropChance(armorItem.dropChance());
+                        break;
+                    }
+                    case "offhand": {
+                        boss.getEquipment().setItemInOffHand(armorItem.item());
+                        boss.getEquipment().setItemInOffHandDropChance(armorItem.dropChance());
+                        break;
+                    }
                 }
-                case "chestplate": {
-                    boss.getEquipment().setChestplate(armorItem.item());
-                    boss.getEquipment().setChestplateDropChance(armorItem.dropChance());
-                    break;
-                }
-                case "leggings": {
-                    boss.getEquipment().setLeggings(armorItem.item());
-                    boss.getEquipment().setLeggingsDropChance(armorItem.dropChance());
-                    break;
-                }
-                case "boots": {
-                    boss.getEquipment().setBoots(armorItem.item());
-                    boss.getEquipment().setBootsDropChance(armorItem.dropChance());
-                    break;
-                }
-                case "hand": {
-                    boss.getEquipment().setItemInMainHand(armorItem.item());
-                    boss.getEquipment().setItemInMainHandDropChance(armorItem.dropChance());
-                    break;
-                }
-                case "offhand": {
-                    boss.getEquipment().setItemInOffHand(armorItem.item());
-                    boss.getEquipment().setItemInOffHandDropChance(armorItem.dropChance());
-                    break;
-                }
-            }
-        });
+            });
+        }
 
         boss.getPersistentDataContainer().set(NAMESPACED_KEY, PersistentDataType.STRING, mob.id());
 
@@ -115,7 +178,7 @@ public class MobCreator {
         phasesCopy.addAll(mob.phases());
         phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
 
-        taskId = Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+        tasks.put(boss.getUniqueId(), Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
 
             if (boss.isDead()) {
                 Bukkit.getScheduler().cancelTask(taskId);
@@ -129,14 +192,15 @@ public class MobCreator {
                     LOGGER.warn(e.getMessage());
                 }
             }
-        }, 0L, 5L).getTaskId();
+        }, 0L, 5L).getTaskId());
 
 
         livingEntity = boss;
         return boss;
     }
+
     public void spawnMinion(String id, Location location) {
-        LivingEntity entity = spawn(EvilMobs.getInstance().getMobs().getMobs().get(id), location);
+        LivingEntity entity = spawn(Maps.mobs.get(id), location);
         minions.add(entity);
     }
 
@@ -168,9 +232,9 @@ public class MobCreator {
                 break;
             }
             case "HEALTH_PERCENTAGE": {
-                double healthPercent = (entity.getHealth() / entity.getMaxHealth()) * 100;
+                int healthPercent = (int) (entity.getHealth() / entity.getMaxHealth()) * 100;
                 for (String phaseId : new ArrayList<>(phases.keySet())) {
-                    double trigger = Double.parseDouble(phaseId);
+                    int trigger = Integer.parseInt(phaseId);
                     if (healthPercent <= trigger) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("mob", mob);
