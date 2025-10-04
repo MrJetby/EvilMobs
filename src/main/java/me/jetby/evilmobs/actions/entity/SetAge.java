@@ -15,7 +15,7 @@ public class SetAge implements Action {
         Mob mob = ctx.get("mob", Mob.class);
         String context = ctx.get("message", String.class);
 
-        if (entity == null || mob==null || context == null) return;
+        if (entity == null || mob == null || context == null) return;
 
         if (entity instanceof LivingEntity livingEntity) {
             if (livingEntity instanceof Ageable ageable) {

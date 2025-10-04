@@ -25,6 +25,7 @@ public record ParticleEffectConfig(
         public record Opcode(
                 String key,
                 Object value
-        ) {}
+        ) {
+        }
     }
 }

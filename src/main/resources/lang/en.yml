@@ -15,7 +15,7 @@ gui:
       - "<!i><#FB430A><st>=                                   ="
   chanceeditor:
     title: "Configure Chances"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <gold>{chance}"
+    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <gold>{chance}%"
     lore:
       - "<!i><#FB430A><st>=                                   ="
       - " <!i><#FB430A><bold>Left click</bold> <gray>+<white>1% "
@@ -37,6 +37,31 @@ gui:
         - "<!i><#FB430A><st>=                                   ="
     new_inventory:
       display_name: "<green>[+] Add new inventory"
-      lore: []
+      lore: [ ]
   itemeditor:
     title: 'Item Editor'
+
+comments:
+  config:
+    lang:
+      - "Your preferred language"
+    auto-start:
+      min-online:
+        - "Minimum number of online players required to spawn a mob; if Freeze is enabled, the timer will be paused if the online count is below this"
+      freeze:
+        - "If true, the timer will pause if there are not enough players online."
+        - "If false, the timer will continue running regardless of the online count"
+      zone:
+        - "Time zone"
+      time:
+        - "If you specify time: <number>, a mob will attempt to spawn every <number> seconds"
+        - "Alternatively, you can specify exact times when mobs should spawn"
+        - "Time is specified in 24-hour format, e.g., 17:30 means 5:30 PM"
+        - "You can specify multiple times, and a mob will spawn at each of those times"
+        - "If multiple times are specified, they must be indented with 2 spaces"
+        - "Example:"
+        - " time:"
+        - "   - '10:00;id' # if you add \";mob_id\", this specific event will occur at this time"
+        - "   - '21:00' # if nothing is added, a random mob will spawn"
+        - "   - '23:00'"
+        - "   - '17:00:SUNDAY' # you can even specify days of the week"

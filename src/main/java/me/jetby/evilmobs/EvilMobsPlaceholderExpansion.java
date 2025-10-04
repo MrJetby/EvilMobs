@@ -7,6 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class EvilMobsPlaceholderExpansion extends PlaceholderExpansion {
 
+    private final EvilMobs plugin;
+
+    public EvilMobsPlaceholderExpansion(EvilMobs plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public @NotNull String getIdentifier() {
         return "evilmobs";
@@ -34,6 +40,15 @@ public class EvilMobsPlaceholderExpansion extends PlaceholderExpansion {
             LivingEntity livingEntity = Maps.mobCreators.get(args[1]).getLivingEntity();
             double healthPercent = livingEntity.getHealth() / livingEntity.getMaxHealth();
             return String.valueOf(healthPercent);
+        }
+
+        if (identifier.equalsIgnoreCase("time_to_start")) {
+            if (plugin.getAutoStart() == null) return "0";
+            return String.valueOf(plugin.getAutoStart().getTimeToStart());
+        }
+        if (identifier.equalsIgnoreCase("time_to_start_formatted") || identifier.equalsIgnoreCase("time_to_start_string")) {
+            if (plugin.getAutoStart() == null) return "0";
+            return plugin.getFormatTime().stringFormat(plugin.getAutoStart().getTimeToStart());
         }
 
         return null;

@@ -5,7 +5,6 @@ import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.configurations.Items;
-import me.jetby.evilmobs.locale.Lang;
 import me.jetby.evilmobs.records.Mob;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

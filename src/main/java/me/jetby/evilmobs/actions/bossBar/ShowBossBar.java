@@ -17,7 +17,7 @@ public class ShowBossBar implements Action {
         Mob mob = ctx.get("mob", Mob.class);
         String context = ctx.get("message", String.class);
 
-        if (mob==null || context == null) return;
+        if (mob == null || context == null) return;
         List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
         MiniBar.show(context, players);
 

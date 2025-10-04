@@ -5,22 +5,18 @@ import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.records.*;
 import me.jetby.treex.bukkit.LocationHandler;
 import me.jetby.treex.text.Colorize;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static me.jetby.evilmobs.EvilMobs.LOGGER;
 
@@ -64,7 +60,7 @@ public class Mobs {
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
             loadMob(config);
         }
-        LOGGER.success(Maps.mobs.size()+" mobs loaded");
+        LOGGER.success(Maps.mobs.size() + " mobs loaded");
     }
 
     private void loadMob(FileConfiguration configuration) {
@@ -73,15 +69,55 @@ public class Mobs {
             String id = configuration.getString("id");
             int movingRadius = configuration.getInt("moving-radius", -1);
 
-            String spawnLocation = configuration.getString("spawn-location");
+            World world = Bukkit.getWorld(configuration.getString("rtp.world", "world"));
+            int min, max;
 
-            Location location = LocationHandler.deserialize(spawnLocation);
+            min = configuration.getInt("rtp.min", 0);
+            max = configuration.getInt("rtp.max", 0);
+            Set<Material> materials = EnumSet.noneOf(Material.class);
+            for (String materialName : configuration.getStringList("rtp.materials")) {
+                materials.add(Material.getMaterial(materialName));
+            }
+            String materialBlockListType = configuration.getString("rtp.block-list-type", "WHITELIST").toUpperCase();
+            Rtp rtp = new Rtp(world, min, max, materials, materialBlockListType);
+
+
+            String locationType = configuration.getString("spawn-location", "rtp");
+            Location location;
+            if (!locationType.equalsIgnoreCase("rtp")) {
+                location = LocationHandler.deserialize(locationType);
+            } else {
+                location = null;
+            }
 
             String name = Colorize.text(configuration.getString("name"));
             boolean nameVisible = !name.isEmpty();
 
-            String armorName = configuration.getString("armor");
-            List<ArmorItem> armorItem = plugin.getArmorSets().getArmorItems().get(armorName);
+            List<ArmorItem> armorItems = new ArrayList<>();
+
+            ConfigurationSection armorSection = configuration.getConfigurationSection("armor");
+            if (armorSection != null) {
+                for (String key : armorSection.getKeys(false)) {
+                    ConfigurationSection section = armorSection.getConfigurationSection(key);
+                    if (section == null) {
+                        continue;
+                    }
+                    ItemStack item = new ItemStack(Material.valueOf(section.getString("item")));
+                    for (String str : section.getStringList("enchants")) {
+                        String[] parts = str.split(";");
+                        Enchantment enchantment = Enchantment.getByName(parts[0]);
+                        if (enchantment == null) {
+                            LOGGER.warn("Enchantment " + parts[0] + " was not found");
+                            continue;
+                        }
+                        int level = Integer.parseInt(parts[1]);
+                        item.addEnchantment(enchantment, level);
+                    }
+
+                    armorItems.add(new ArmorItem(key, item, section.getInt("drop-chance", 0)));
+                }
+            }
+
 
             String type = configuration.getString("type");
             EntityType entityType = EntityType.valueOf(type);
@@ -112,8 +148,8 @@ public class Mobs {
             double offsetX = 0;
             double offsetY = 0;
             double offsetZ = 0;
-            double minY = 5.0;
-            double maxY = 10.0;
+            double particleMinY = 5.0;
+            double particleMaxY = 10.0;
             double minSpeed = 0.5;
             double maxSpeed = 1.0;
             int pickupDelay = 0;
@@ -125,7 +161,7 @@ public class Mobs {
 
                 ConfigurationSection dropParticleSection = dropSettings.getConfigurationSection("flying-drop-particle");
 
-                if (dropParticleSection!=null) {
+                if (dropParticleSection != null) {
                     flyingDropParticle = dropParticleSection.getBoolean("enabled", false);
 
                     sound = Sound.valueOf(dropParticleSection.getString("sound".toUpperCase(), "ENTITY_ITEM_PICKUP"));
@@ -135,8 +171,8 @@ public class Mobs {
                     offsetX = dropParticleSection.getDouble("offset-x", 0);
                     offsetY = dropParticleSection.getDouble("offset-y", 0);
                     offsetZ = dropParticleSection.getDouble("offset-z", 0);
-                    minY = dropParticleSection.getDouble("min-y", 5.0);
-                    maxY = dropParticleSection.getDouble("max-y", 10.0);
+                    particleMinY = dropParticleSection.getDouble("min-y", 5.0);
+                    particleMaxY = dropParticleSection.getDouble("max-y", 10.0);
                     minSpeed = dropParticleSection.getDouble("min-speed", 0.5);
                     maxSpeed = dropParticleSection.getDouble("max-speed", 1.0);
                     particle = Particle.valueOf(dropParticleSection.getString("particle", "FLAME"));
@@ -165,7 +201,7 @@ public class Mobs {
                 }
 
             }
-            DropParticle dropParticle = new DropParticle( sound, soundVolume, soundPitch, particle, paritcleAmount, offsetX, offsetY, offsetZ, minY, maxY, minSpeed, maxSpeed, pickupDelay);
+            DropParticle dropParticle = new DropParticle(sound, soundVolume, soundPitch, particle, paritcleAmount, offsetX, offsetY, offsetZ, particleMinY, particleMaxY, minSpeed, maxSpeed, pickupDelay);
 
 
             Map<String, List<String>> listeners = new HashMap<>();
@@ -241,10 +277,11 @@ public class Mobs {
             Mob mob = new Mob(
                     id,
                     movingRadius,
+                    locationType,
                     location,
                     nameVisible,
                     name,
-                    armorItem,
+                    armorItems,
                     entityType,
                     health,
                     ai,
@@ -263,6 +300,7 @@ public class Mobs {
                     onSpawnActions,
                     onHitActions,
                     onDeathActions,
+                    rtp,
                     lootAmount,
                     customDrops,
                     items);

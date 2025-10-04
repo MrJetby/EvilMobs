@@ -1,10 +1,279 @@
-exampleCircle:
+circle:
   type: circle
+  particle: SOUL_FIRE_FLAME
+  radius: 5.0
+  points: 36
+  repeat: 100
+  interval: 1
+  offset:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  color:
+    r: 255
+    g: 0
+    b: 0
+    size: 1.0
+  animation:
+    - tick: 0
+      opcodes:
+        - radius: 1.0
+    - opcodes:
+        - radius: 1.1
+    - opcodes:
+        - radius: 1.2
+    - opcodes:
+        - radius: 1.3
+    - opcodes:
+        - radius: 1.4
+    - opcodes:
+        - radius: 1.5
+    - opcodes:
+        - radius: 1.6
+    - opcodes:
+        - radius: 1.7
+    - opcodes:
+        - radius: 1.8
+    - opcodes:
+        - radius: 1.9
+    - opcodes:
+        - radius: 2.0
+    - opcodes:
+        - radius: 2.1
+    - opcodes:
+        - radius: 2.2
+    - opcodes:
+        - radius: 2.3
+    - opcodes:
+        - radius: 2.4
+    - opcodes:
+        - radius: 2.5
+    - opcodes:
+        - radius: 2.6
+    - opcodes:
+        - radius: 2.7
+    - opcodes:
+        - radius: 2.8
+    - opcodes:
+        - radius: 2.9
+    - opcodes:
+        - radius: 3.0
+    - opcodes:
+        - radius: 3.1
+    - opcodes:
+        - radius: 3.2
+    - opcodes:
+        - radius: 3.3
+    - opcodes:
+        - radius: 3.4
+    - opcodes:
+        - radius: 3.5
+    - opcodes:
+        - radius: 3.6
+    - opcodes:
+        - radius: 3.7
+    - opcodes:
+        - radius: 3.8
+    - opcodes:
+        - radius: 3.9
+    - opcodes:
+        - radius: 4.0
+    - opcodes:
+        - radius: 4.1
+    - opcodes:
+        - radius: 4.2
+    - opcodes:
+        - radius: 4.3
+    - opcodes:
+        - radius: 4.4
+    - opcodes:
+        - radius: 4.5
+    - opcodes:
+        - radius: 4.6
+    - opcodes:
+        - radius: 4.7
+    - opcodes:
+        - radius: 4.8
+    - opcodes:
+        - radius: 4.9
+    - opcodes:
+        - radius: 5.0
+
+
+square:
+  type: square
   particle: FLAME
+  radius: 0.5
+  points: 36
+  repeat: 150
+  interval: 1
+  offset:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  color:
+    r: 255
+    g: 0
+    b: 0
+    size: 1.0
+  animation:
+    - tick: 0
+      opcodes:
+        - radius: 1.0
+    - opcodes:
+        - radius: 1.1
+    - opcodes:
+        - radius: 1.2
+    - opcodes:
+        - radius: 1.3
+    - opcodes:
+        - radius: 1.4
+    - opcodes:
+        - radius: 1.5
+    - opcodes:
+        - radius: 1.6
+    - opcodes:
+        - radius: 1.7
+    - opcodes:
+        - radius: 1.8
+    - opcodes:
+        - radius: 1.9
+    - opcodes:
+        - radius: 2.0
+    - opcodes:
+        - radius: 2.1
+    - opcodes:
+        - radius: 2.2
+    - opcodes:
+        - radius: 2.3
+    - opcodes:
+        - radius: 2.4
+    - opcodes:
+        - radius: 2.5
+    - opcodes:
+        - radius: 2.6
+    - opcodes:
+        - radius: 2.7
+    - opcodes:
+        - radius: 2.8
+    - opcodes:
+        - radius: 2.9
+    - opcodes:
+        - radius: 3.0
+    - opcodes:
+        - radius: 3.1
+    - opcodes:
+        - radius: 3.2
+    - opcodes:
+        - radius: 3.3
+    - opcodes:
+        - radius: 3.4
+    - opcodes:
+        - radius: 3.5
+    - opcodes:
+        - radius: 3.6
+    - opcodes:
+        - radius: 3.7
+    - opcodes:
+        - radius: 3.8
+    - opcodes:
+        - radius: 3.9
+    - opcodes:
+        - radius: 4.0
+    - opcodes:
+        - radius: 4.1
+    - opcodes:
+        - radius: 4.2
+    - opcodes:
+        - radius: 4.3
+    - opcodes:
+        - radius: 4.4
+    - opcodes:
+        - radius: 4.5
+    - opcodes:
+        - radius: 4.6
+    - opcodes:
+        - radius: 4.7
+    - opcodes:
+        - radius: 4.8
+    - opcodes:
+        - radius: 4.9
+    - opcodes:
+        - radius: 5.0
+
+
+acircle:
+  type: circle
+  particle: END_ROD
   radius: 2.5
   points: 36
   repeat: 20
-  interval: 2
+  interval: 15
+  offset:
+    x: 0.0
+    y: 1.0
+    z: 0.0
+
+very_angry:
+  type: circle
+  particle: DUST
+  radius: 1.0
+  points: 36
+  repeat: 1
+  interval: 5
+  offset:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  color:
+    r: 255
+    g: 0
+    b: 0
+    size: 1.0
+  animation:
+    - tick: 0
+      opcodes:
+        - offsetY: 2.0
+    - tick: 5
+      opcodes:
+        - offsetY: 1.0
+
+
+move:
+  type: square
+  particle: DUST
+  radius: 0.0
+  points: 1
+  repeat: 1
+  interval: 1
+  offset:
+    x: 0.0
+    y: 1.5
+    z: 0.0
+  color:
+    r: 255
+    g: 0
+    b: 0
+    size: 1.0
+
+hit:
+  type: helix
+  particle: SOUL
+  radius: 0.8
+  points: 15
+  repeat: 1
+  interval: 1
+  offset:
+    x: 0.0
+    y: 1.0
+    z: 0.0
+died:
+  type: square
+  particle: SOUL
+  radius: 0.0
+  points: 36
+  repeat: 400
+  interval: 0
   offset:
     x: 0.0
     y: 1.0
@@ -17,5 +286,86 @@ exampleCircle:
   animation:
     - tick: 0
       opcodes:
-        - offsetY: 5.0
+        - radius: 1.0
+    - opcodes:
+        - radius: 1.1
+    - opcodes:
+        - radius: 1.2
+    - opcodes:
+        - radius: 1.3
+    - opcodes:
+        - radius: 1.4
+    - opcodes:
+        - radius: 1.5
+    - opcodes:
+        - radius: 1.6
+    - opcodes:
+        - radius: 1.7
+    - opcodes:
+        - radius: 1.8
+    - opcodes:
+        - radius: 1.9
+    - opcodes:
+        - radius: 2.0
+    - opcodes:
+        - radius: 2.1
+    - opcodes:
+        - radius: 2.2
+    - opcodes:
+        - radius: 2.3
+    - opcodes:
+        - radius: 2.4
+    - opcodes:
+        - radius: 2.5
+    - opcodes:
+        - radius: 2.6
+    - opcodes:
+        - radius: 2.7
+    - opcodes:
+        - radius: 2.8
+    - opcodes:
+        - radius: 2.9
+    - opcodes:
+        - radius: 3.0
+    - opcodes:
+        - radius: 3.1
+    - opcodes:
+        - radius: 3.2
+    - opcodes:
+        - radius: 3.3
+    - opcodes:
+        - radius: 3.4
+    - opcodes:
         - radius: 3.5
+    - opcodes:
+        - radius: 3.6
+    - opcodes:
+        - radius: 3.7
+    - opcodes:
+        - radius: 3.8
+    - opcodes:
+        - radius: 3.9
+    - opcodes:
+        - radius: 4.0
+    - opcodes:
+        - radius: 4.1
+    - opcodes:
+        - radius: 4.2
+    - opcodes:
+        - radius: 4.3
+    - opcodes:
+        - radius: 4.4
+    - opcodes:
+        - radius: 4.5
+    - opcodes:
+        - radius: 4.6
+    - opcodes:
+        - radius: 4.7
+    - opcodes:
+        - radius: 4.8
+    - opcodes:
+        - radius: 4.9
+    - opcodes:
+        - radius: 5.0
+
+

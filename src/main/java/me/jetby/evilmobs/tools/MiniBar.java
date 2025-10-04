@@ -8,6 +8,7 @@ import lombok.experimental.UtilityClass;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.records.Bar;
 import me.jetby.evilmobs.records.Mob;
+import me.jetby.treex.text.Papi;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -40,7 +41,7 @@ public class MiniBar {
     }
 
     public void init(EvilMobs plugin) {
-        Bukkit.getScheduler().runTaskTimer(plugin, MiniBar::updateAll, 0L, 5L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, MiniBar::updateAll, 0L, 5L);
     }
 
     public void createBossBar(@NonNull String id, @NonNull Mob mob, @NonNull Entity entity) {
@@ -105,7 +106,7 @@ public class MiniBar {
                 }
 
                 String raw = data.originalTitle.replace("%health_percentage%", String.format("%.1f", healthPercent * 100));
-                String parsed = TextUtil.setPapi(null, raw);
+                String parsed = Papi.setPapi(null, raw);
                 bossBar.setTitle(parsed);
 
                 data.setBossBar(bossBar);
@@ -136,7 +137,7 @@ public class MiniBar {
             Bukkit.getScheduler().cancelTask(data.nearTask);
         }
 
-        int taskId = Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+        int taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(EvilMobs.getInstance(), () -> {
             Set<Player> viewers = data.players;
             BossBar bar = data.bossBar;
             Location location = entity.getLocation();
@@ -246,7 +247,7 @@ public class MiniBar {
     }
 
     public void deleteBossBar(@NonNull String id, @Nullable Entity entity) {
-        if (entity==null) {
+        if (entity == null) {
             deleteBossBar(id);
             return;
         }

@@ -5,7 +5,10 @@ import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.configurations.Items;
 import me.jetby.evilmobs.records.Mask;
 import me.jetby.evilmobs.records.Mob;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
@@ -119,10 +122,11 @@ public class DropManager {
 
 
         location.getWorld().playSound(location, mob.dropParticle().sound(),
-                 mob.dropParticle().volume(),
-                 mob.dropParticle().pitch());
+                mob.dropParticle().volume(),
+                mob.dropParticle().pitch());
         new BukkitRunnable() {
             final org.bukkit.util.Vector lastPosition = droppedItem.getLocation().toVector();
+
             @Override
             public void run() {
                 if (!droppedItem.isValid()) {
@@ -145,17 +149,17 @@ public class DropManager {
     public void dropItem(Integer amount, Mob mob, Location location) {
         long time = 1L;
         for (int i = 0; i < amount; i++) {
-            Bukkit.getScheduler().runTaskLater(EvilMobs.getInstance(), ()->{
-                dropItem(mob, getRandomItem(mob.id()), location );
+            Bukkit.getScheduler().runTaskLater(EvilMobs.getInstance(), () -> {
+                dropItem(mob, getRandomItem(mob.id()), location);
             }, time);
-            time = time+1L;
+            time = time + 1L;
         }
     }
 
     public ItemStack getRandomItem(String id) {
         List<ItemStack> weightedItems = new ArrayList<>();
         List<Items.ItemsData> items = EvilMobs.getInstance().getItems().getData().get(id);
-        if (items==null) {
+        if (items == null) {
             return new ItemStack(Material.DIAMOND);
         }
         for (Items.ItemsData itemData : items) {

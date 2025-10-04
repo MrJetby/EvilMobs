@@ -1,31 +1,35 @@
 package me.jetby.evilmobs;
 
 import com.jodexindustries.jguiwrapper.common.JGuiInitializer;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import me.jetby.evilmobs.actions.Drop;
+import me.jetby.evilmobs.actions.DropClear;
 import me.jetby.evilmobs.actions.abilities.EffectNear;
+import me.jetby.evilmobs.actions.abilities.Fireball;
+import me.jetby.evilmobs.actions.abilities.Lightning;
+import me.jetby.evilmobs.actions.abilities.Teleport;
+import me.jetby.evilmobs.actions.bossBar.*;
 import me.jetby.evilmobs.actions.entity.*;
 import me.jetby.evilmobs.actions.minions.KillAllMinions;
 import me.jetby.evilmobs.actions.minions.SpawnAsMinion;
 import me.jetby.evilmobs.actions.particles.SendParticle;
+import me.jetby.evilmobs.actions.task.TaskRun;
+import me.jetby.evilmobs.actions.task.TaskStop;
 import me.jetby.evilmobs.commands.Admin;
-import me.jetby.evilmobs.configurations.*;
+import me.jetby.evilmobs.configurations.Config;
+import me.jetby.evilmobs.configurations.Items;
+import me.jetby.evilmobs.configurations.Mobs;
+import me.jetby.evilmobs.configurations.Particles;
 import me.jetby.evilmobs.gui.MainMenu;
 import me.jetby.evilmobs.listeners.ItemPickup;
 import me.jetby.evilmobs.listeners.OnDamage;
 import me.jetby.evilmobs.listeners.OnDeath;
 import me.jetby.evilmobs.listeners.OnMove;
 import me.jetby.evilmobs.locale.Lang;
-import me.jetby.evilmobs.tools.FileLoader;
-import me.jetby.evilmobs.tools.MiniBar;
-import me.jetby.evilmobs.tools.MiniTask;
-import me.jetby.evilmobs.actions.*;
-import me.jetby.evilmobs.actions.bossBar.*;
-import me.jetby.evilmobs.actions.abilities.Fireball;
-import me.jetby.evilmobs.actions.abilities.Lightning;
-import me.jetby.evilmobs.actions.abilities.Teleport;
-import me.jetby.evilmobs.actions.task.TaskRun;
-import me.jetby.evilmobs.actions.task.TaskStop;
+import me.jetby.evilmobs.tools.*;
+import me.jetby.treex.Treex;
 import me.jetby.treex.actions.ActionTypeRegistry;
 import me.jetby.treex.tools.LogInitialize;
 import me.jetby.treex.tools.log.Logger;
@@ -39,54 +43,54 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+@Getter
 public final class EvilMobs extends JavaPlugin {
 
+    Config cfg;
+    FormatTime formatTime;
+    Mobs mobs;
+    Particles particles;
+    MainMenu mainMenu;
+    Items items;
+    @Setter
+    Lang lang;
+    AutoStart autoStart;
 
-    @Getter
-    private Config cfg;
-    @Getter
-    private ArmorSets armorSets;
-    @Getter
-    private Mobs mobs;
-    @Getter
-    private Particles particles;
+
+    @Getter(AccessLevel.NONE)
+    static EvilMobs INSTANCE;
+    @Getter(AccessLevel.NONE)
+    EvilMobsPlaceholderExpansion evilMobsPlaceholderExpansion;
+
 
     public static NamespacedKey NAMESPACED_KEY;
-
-    static EvilMobs INSTANCE;
-
-    EvilMobsPlaceholderExpansion evilMobsPlaceholderExpansion;
 
     public static EvilMobs getInstance() {
         return INSTANCE;
     }
 
-    @Getter
-    private MainMenu mainMenu;
-
     public static final Logger LOGGER = LogInitialize.getLogger("EvilMobs");
-    @Getter
-    private Items items;
 
-    @Getter @Setter
-    private Lang lang;
 
     @Override
     public void onEnable() {
+
         INSTANCE = this;
         NAMESPACED_KEY = new NamespacedKey(this, "data");
 
         cfg = new Config(this);
         cfg.load();
 
-        lang = new Lang(this);
+        formatTime = new FormatTime(this);
+
         MiniBar.init(this);
         JGuiInitializer.init(this, false);
 
-        armorSets = new ArmorSets();
-        armorSets.load();
 
         items = new Items(FileLoader.getFile("items.yml"));
         items.load();
@@ -99,7 +103,16 @@ public final class EvilMobs extends JavaPlugin {
 
         mainMenu = new MainMenu(this);
 
+        new bStats(this, 27388);
+
         setupPlaceholders();
+
+        if (cfg.isAutoStartEnabled()) autoStart = new AutoStart(this,
+                cfg.getAutoStartMinOnline(),
+                cfg.isFreeze(),
+                cfg.getZone(),
+                cfg.getTime()
+        );
 
         getServer().getPluginManager().registerEvents(new OnDeath(this), this);
         getServer().getPluginManager().registerEvents(new OnDamage(), this);
@@ -135,6 +148,8 @@ public final class EvilMobs extends JavaPlugin {
     }
 
     private void registerCustomActions() {
+        Treex.init(this);
+
         ActionTypeRegistry.register("TELEPORT", new Teleport());
         ActionTypeRegistry.register("FIREBALL", new Fireball());
         ActionTypeRegistry.register("LIGHTNING", new Lightning());
@@ -176,6 +191,11 @@ public final class EvilMobs extends JavaPlugin {
         ActionTypeRegistry.register("SET_TARGET", new SetTarget());
         ActionTypeRegistry.register("SETTARGET", new SetTarget());
 
+        ActionTypeRegistry.register("SET_HEALTH", new SetHealth());
+        ActionTypeRegistry.register("ADD_HEALTH", new AddHealth());
+        ActionTypeRegistry.register("TAKE_HEALTH", new TakeHealth());
+        ActionTypeRegistry.register("SET_MAX_HEALTH", new SetMaxHealth());
+
         ActionTypeRegistry.register("SPAWN_AS_MINION", new SpawnAsMinion());
         ActionTypeRegistry.register("SPAWNASMINION", new SpawnAsMinion());
         ActionTypeRegistry.register("KILL_ALL_MINIONS", new KillAllMinions());
@@ -190,12 +210,15 @@ public final class EvilMobs extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
             LOGGER.warn("PlaceholderAPI not found. Placeholders are not being working");
         } else {
-            evilMobsPlaceholderExpansion = new EvilMobsPlaceholderExpansion();
+            evilMobsPlaceholderExpansion = new EvilMobsPlaceholderExpansion(this);
             evilMobsPlaceholderExpansion.register();
         }
     }
+
     @Override
     public void onDisable() {
+        if (autoStart != null) autoStart.stop();
+
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity instanceof Item item && item.hasMetadata("evilmobs_originalItem")) {
@@ -212,7 +235,7 @@ public final class EvilMobs extends JavaPlugin {
         for (UUID uuid : uuids) {
             MiniBar.deleteBossBar(uuid);
         }
-        if (evilMobsPlaceholderExpansion!=null) evilMobsPlaceholderExpansion.unregister();
+        if (evilMobsPlaceholderExpansion != null) evilMobsPlaceholderExpansion.unregister();
 
         items.save();
     }

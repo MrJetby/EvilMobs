@@ -2,7 +2,6 @@ package me.jetby.evilmobs.locale;
 
 import lombok.Getter;
 import me.jetby.evilmobs.EvilMobs;
-import me.jetby.evilmobs.configurations.Config;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -14,10 +13,9 @@ public class Lang {
     @Getter
     private FileConfiguration config;
 
-    public Lang(EvilMobs plugin) {
+    public Lang(EvilMobs plugin, String lang) {
         File langFolder = new File(plugin.getDataFolder(), "lang");
 
-        Config config = plugin.getCfg();
 
         File[] files = langFolder.listFiles();
 
@@ -30,8 +28,8 @@ public class Lang {
                 plugin.saveResource("lang/" + name, false);
                 FileConfiguration configuration = YamlConfiguration.loadConfiguration(target);
                 String foundedLang = configuration.getString("lang");
-                if (foundedLang==null) continue;
-                if (!foundedLang.equalsIgnoreCase(config.getLang())) continue;
+                if (foundedLang == null) continue;
+                if (!foundedLang.equalsIgnoreCase(lang)) continue;
                 this.config = configuration;
                 break;
             }
@@ -44,8 +42,8 @@ public class Lang {
             if (!file.getName().endsWith(".yml")) continue;
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             String foundedLang = configuration.getString("lang");
-            if (foundedLang==null) continue;
-            if (!foundedLang.equalsIgnoreCase(config.getLang())) continue;
+            if (foundedLang == null) continue;
+            if (!foundedLang.equalsIgnoreCase(lang)) continue;
             this.config = configuration;
             break;
         }

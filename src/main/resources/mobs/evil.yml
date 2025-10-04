@@ -1,0 +1,251 @@
+id: evil
+
+name: "§4Mister Evil"
+type: ZOMBIFIED_PIGLIN
+health: 150
+
+moving-radius: 15
+
+AI: true
+glow: false
+can-pickup-items: false
+isBaby: false
+
+spawn-location: 0;105;0;world
+rtp:
+  world: world
+  min: -20
+  max: 20
+
+  block-list-type: WHITELIST # BLACKLIST or WHITELIST
+  blocks:
+    - STONE
+
+listeners:
+  ON_DAMAGE:
+    - '[set_target] %closest_player%'
+    - '[effect_near] SLOWNESS;5;10;15'
+    - '[effect_near] DARKNESS;3;10;15'
+    - '[effect_near] HUNGER;3;15;15'
+
+bossBars:
+  info:
+    title: "&cНа сервере босс, координаты: &f0,100,0"
+    Color: BLUE
+    Style: SOLID
+    Progress: '1'
+    duration: 300
+  boss:
+    title: "&4&lEvil Boss &7[Health: %health_percentage%%]"
+    Color: BLUE
+    Style: SOLID
+    Progress: '%health_percentage%'
+    duration: -1
+
+phases:
+  health:
+    type: HEALTH_PERCENTAGE
+    actions:
+      '80':
+        - '[teleport] %rand_player_near_15%'
+        - '[BROADCAST_SOUND] entity_enderman_teleport'
+      '50':
+        - '[msg_all] &r'
+        - '[msg_all] &fУ &4Evil Master &fосталось 50% здаровья'
+        - '[msg_all] &r'
+
+tasks:
+  main:
+    delay: 0
+    period: 620
+    actions:
+      - '[SEND_PARTICLE] very_angry'
+      - '[task_run] potions'
+      - '[set_age] baby'
+      - '[set_name] &b&lBABY EVIL'
+      - '[spawn_as_minion] evil_minion'
+      - '[spawn_as_minion] evil_minion'
+      - '[spawn_as_minion] evil_minion'
+      - '[delay] 200'
+      - '[set_age] adult'
+      - '[set_name] &4&lMister Evil'
+  potions:
+    delay: 0
+    period: 1
+    amount: 1
+    actions:
+      - '[effect] SPEED;10;10'
+      - '[effect] STRENGTH;10;1'
+  thor:
+    delay: 0
+    period: 350
+    actions:
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+      - '[lightning] 15;true'
+  fireball:
+    delay: 0
+    period: 350
+    actions:
+      - '[fireball] FROM:TOP[15.0,5,15.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-15.0,5,-15.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[14.0,3,14.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-14.0,3,-14.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[13.0,3,13.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-13.0,3,-13.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[12.0,3,12.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-12.0,3,-12.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[11.0,3,11.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-11.0,3,-11.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[10.0,3,10.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-10.0,3,-10.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[9.0,3,9.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-9.0,3,-9.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[8.0,3,.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-8.0,3,-8.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[7.0,3,7.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-7.0,3,-7.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[6.0,3,6.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-6.0,3,-6.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[delay] 5'
+      - '[fireball] FROM:TOP[5.0,3,5.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+      - '[fireball] FROM:TOP[-5.0,3,-5.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
+  damage_info:
+    delay: 0
+    period: 1200
+    actions:
+      - '[msg_all] &r'
+      - '[msg_all] <#FF394E>Топы по урону босса</#DE853C>'
+      - '[msg_all] &#FF394E#1 &f%emdamageaddon_top_evil_1_name% &7[%emdamageaddon_top_evil_1_damage%]'
+      - '[msg_all] &#FF394E#2 &f%emdamageaddon_top_evil_2_name% &7[%emdamageaddon_top_evil_2_damage%]'
+      - '[msg_all] &#FF394E#3 &f%emdamageaddon_top_evil_3_name% &7[%emdamageaddon_top_evil_3_damage%]'
+      - '[msg_all] &r'
+
+
+actions:
+  onSpawn:
+    - '[SEND_PARTICLE] circle'
+    - '[task_run] thor'
+    - '[task_run] fireball'
+    - '[task_run] main'
+    - '[task_run] damage_info'
+    - '[create_bossbar] info'
+    - '[create_bossbar] boss'
+    - '[show_bossbar] info'
+    - '[show_bossbar_near] boss 15'
+    - '[msg_all] &cБосс {prefix} &cпоявился'
+    - '[msg_all] &cна координатах &f{x} {y} {z}'
+  onDeath:
+    - '[KILL_ALL_MINION] evil'
+    - '[SEND_PARTICLE] died'
+    - '[task_stop] thor'
+    - '[task_stop] fireball'
+    - '[task_stop] main'
+    - '[task_stop] damage_info'
+    - '[DELETE_BOSSBAR] boss'
+    - '[DELETE_BOSSBAR] info'
+    - '[msg_all] &r'
+    - '[msg_all] &cБосс {prefix} &cбыл уничтожен'
+    - '[msg_all] &r'
+    - '[msg_all] <#FF394E>Игроки которые получают рубины</#DE853C>'
+    - '[msg_all] &#FF394E#1 &f%emdamageaddon_top_evil_1_name% &7(%emdamageaddon_top_evil_1_damage%) &8- <#FF394E>+350 рубинов</#DE853C>'
+    - '[msg_all] &#FF394E#2 &f%emdamageaddon_top_evil_2_name% &7(%emdamageaddon_top_evil_2_damage%) &8- <#FF394E>+200 рубинов</#DE853C>'
+    - '[msg_all] &#FF394E#3 &f%emdamageaddon_top_evil_3_name% &7(%emdamageaddon_top_evil_3_damage%) &8- <#FF394E>+50 рубинов</#DE853C>'
+    - '[msg_all] &r'
+    - '[DELAY] 50'
+    - '[DROP] 1'
+    - '[DELAY] 50'
+    - '[DROP] 2'
+    - '[DELAY] 50'
+    - '[DROP] 3'
+    - '[DELAY] 50'
+    - '[DROP] 4'
+    - '[DELAY] 50'
+    - '[DROP] 5'
+    - '[DELAY] 50'
+    - '[DROP] 4'
+    - '[DELAY] 50'
+    - '[DROP] 3'
+    - '[DELAY] 50'
+    - '[DROP] 2'
+    - '[DELAY] 50'
+    - '[DROP] 1'
+    - '[DELAY] 1200'
+    - '[DROP_CLEAR]'
+
+
+
+drop-settings:
+  only-custom: true
+  lootAmount: 0
+  flying-drop-particle:
+    enabled: true
+    sound: block_lava_extinguish
+    pitch: 1.0
+    volume: 1.0
+    particle: SOUL_FIRE_FLAME
+    amount: 1
+    offset-x: 0.0
+    offset-y: 3.0
+    offset-z: 0.0
+    min-y: 6.0
+    max-y: 10.0
+    min-speed: 0.3
+    max-speed: 1.0
+
+  mask:
+    enabled: true
+    items:
+      m1:
+        material: COBWEB
+        enchanted: true
+        name: "&#0EC8E2&k|||||||||"
+      m2:
+        material: PHANTOM_MEMBRANE
+        enchanted: true
+        name: "&#0EC8E2&k|||||||||"
+
+
+
+armor:
+  helmet:
+    item: NETHERITE_HELMET
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  chestplate:
+    item: NETHERITE_CHESTPLATE
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  leggings:
+    item: NETHERITE_LEGGINGS
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  boots:
+    item: NETHERITE_BOOTS
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  hand:
+    item: NETHERITE_SWORD
+    enchants:
+      - 'SHARPNESS;2'
+    drop-chance: 0

@@ -85,10 +85,14 @@ public class ParticleEffectManager {
                 }
 
                 switch (config.type()) {
-                    case "circle" -> renderCircle(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
-                    case "square" -> renderSquare(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
-                    case "helix" -> renderHelix(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
-                    case "line" -> renderLine(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
+                    case "circle" ->
+                            renderCircle(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
+                    case "square" ->
+                            renderSquare(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
+                    case "helix" ->
+                            renderHelix(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
+                    case "line" ->
+                            renderLine(config, center, currentRadius, currentOffsetX, currentOffsetY, currentOffsetZ, currentPoints, currentParticle);
                     default -> LOGGER.warn("Unknown effect type: " + config.type());
                 }
 
@@ -167,7 +171,7 @@ public class ParticleEffectManager {
         Bukkit.getScheduler().runTaskAsynchronously(EvilMobs.getInstance(), () -> {
             if (pec.particle() == Particle.REDSTONE) {
                 float r = pec.r() / 255.0f;
-                float g =pec.g() / 255.0f;
+                float g = pec.g() / 255.0f;
                 float b = pec.b() / 255.0f;
                 float size = (float) pec.size();
 

@@ -6,11 +6,14 @@ import lombok.RequiredArgsConstructor;
 import me.jetby.evilmobs.api.event.MobSpawnEvent;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.records.Phases;
+import me.jetby.evilmobs.records.Rtp;
 import me.jetby.evilmobs.records.Task;
 import me.jetby.evilmobs.tools.MiniTask;
+import me.jetby.evilmobs.tools.Placeholders;
 import me.jetby.treex.actions.ActionContext;
 import me.jetby.treex.actions.ActionExecutor;
 import me.jetby.treex.actions.ActionRegistry;
+import me.jetby.treex.bukkit.LocationGenerator;
 import me.jetby.treex.text.Papi;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -33,26 +36,48 @@ public class MobCreator {
     int taskId = -1;
     final Map<UUID, Integer> tasks = new HashMap<>();
 
+    @Getter
+    private Location spawnedLocation = null;
 
     @Getter
     private LivingEntity livingEntity;
     private final List<LivingEntity> minions = new ArrayList<>();
 
+    /**
+     * <li> Spawning the mob
+     **/
     public void spawn() {
-        World world = mainMob.spawnlocation().getWorld();
-        Chunk chunk = world.getChunkAt(mainMob.spawnlocation());
+
+        if (mainMob.locationType().equalsIgnoreCase("rtp")) {
+            Rtp rtp = mainMob.rtp();
+            Location location = LocationGenerator.getRandomLocation(rtp.world(), rtp.min(), rtp.max(), rtp.materials(), rtp.blockListType().equalsIgnoreCase("blacklist"));
+            if (location != null) {
+                spawn(location);
+            } else {
+                Maps.mobCreators.remove(mainMob.id());
+                LOGGER.error("Could not find a safe location to spawn the mob with ID: " + mainMob.id());
+            }
+            return;
+        }
+        spawnedLocation = mainMob.location();
+        World world = spawnedLocation.getWorld();
+        Chunk chunk = world.getChunkAt(spawnedLocation);
 
         Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), task -> {
             if (chunk.isLoaded()) {
-                spawn(mainMob, mainMob.spawnlocation());
+                spawn(mainMob, spawnedLocation);
                 task.cancel();
             }
         }, 0L, 20L);
     }
 
+    /**
+     * <li> Spawning the mob at a specific location
+     **/
     public void spawn(Location location) {
         World world = location.getWorld();
         Chunk chunk = world.getChunkAt(location);
+        spawnedLocation = location;
 
         Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), task -> {
             if (chunk.isLoaded()) {
@@ -62,8 +87,13 @@ public class MobCreator {
         }, 0L, 20L);
     }
 
+    /**
+     * <li> Running the tasks of the mob </li>
+     * It is used to restore the functionality of the mob after a server restart.
+     **/
     public void runTasks(LivingEntity entity) {
 
+        spawnedLocation = entity.getLocation();
         phasesCopy.addAll(mainMob.phases());
         phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
 
@@ -104,7 +134,7 @@ public class MobCreator {
 
     private LivingEntity spawn(Mob mob, Location location) {
 
-        LivingEntity boss = (LivingEntity) location.getWorld().spawnEntity(mob.spawnlocation(), mob.entityType());
+        LivingEntity boss = (LivingEntity) location.getWorld().spawnEntity(spawnedLocation, mob.entityType());
         boss.setGlowing(mob.glow());
         boss.setMaxHealth(mob.health());
         boss.setHealth(mob.health());
@@ -127,7 +157,7 @@ public class MobCreator {
             boss.setCustomName(mob.name());
         }
 
-        if (mob.armorItems()!=null && !mob.armorItems().isEmpty()) {
+        if (mob.armorItems() != null && !mob.armorItems().isEmpty()) {
             mob.armorItems().forEach(armorItem -> {
 
                 switch (armorItem.id()) {
@@ -172,7 +202,7 @@ public class MobCreator {
         ActionContext ctx = new ActionContext(null);
         ctx.put("mob", mob);
         ctx.put("entity", boss);
-        ActionExecutor.execute(ctx, ActionRegistry.transform(mob.onSpawnActions()));
+        ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(mob.onSpawnActions(), mob, boss)));
 
 
         phasesCopy.addAll(mob.phases());
@@ -231,7 +261,7 @@ public class MobCreator {
                 }
                 break;
             }
-            case "HEALTH_PERCENTAGE": {
+            case "health_percentage": {
                 int healthPercent = (int) (entity.getHealth() / entity.getMaxHealth()) * 100;
                 for (String phaseId : new ArrayList<>(phases.keySet())) {
                     int trigger = Integer.parseInt(phaseId);

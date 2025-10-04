@@ -1,8 +1,8 @@
 package me.jetby.evilmobs.actions.abilities;
 
+import me.jetby.treex.Treex;
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;
-import me.jetby.treex.Treex;
 import me.jetby.treex.tools.LogInitialize;
 import me.jetby.treex.tools.log.Logger;
 import org.bukkit.entity.Entity;
@@ -40,7 +40,7 @@ public class EffectNear implements Action {
         try {
             int duration = args.length > 1 ? Integer.parseInt(args[1]) : 0;
             int strength = args.length > 2 ? Integer.parseInt(args[2]) : 1;
-            int radius   = args.length > 3 ? Integer.parseInt(args[3]) : 10;
+            int radius = args.length > 3 ? Integer.parseInt(args[3]) : 10;
 
             Entity center = (entity != null ? entity : source);
 

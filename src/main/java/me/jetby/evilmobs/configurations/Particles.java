@@ -58,10 +58,10 @@ public class Particles {
                 int r = 255, g = 0, b = 0;
                 double size = 1.0;
                 if (colorSec != null) {
-                   r =  colorSec.getInt("r", 255);
-                   g =  colorSec.getInt("g", 0);
-                   b =  colorSec.getInt("b", 0);
-                   size = colorSec.getDouble("size", 1.0);
+                    r = colorSec.getInt("r", 255);
+                    g = colorSec.getInt("g", 0);
+                    b = colorSec.getInt("b", 0);
+                    size = colorSec.getDouble("size", 1.0);
                 }
 
                 List<ParticleEffectConfig.Keyframe> keyframes = parseKeyframes(section.getList("animation"));
@@ -79,7 +79,7 @@ public class Particles {
             LOGGER.warn("Failed to load particle effects: " + e.getMessage());
         }
 
-        LOGGER.success(effects.size()+" effects loaded");
+        LOGGER.success(effects.size() + " effects loaded");
     }
 
     private double getDouble(ConfigurationSection sec, String key, double def) {

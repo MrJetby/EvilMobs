@@ -3,9 +3,8 @@ version: '${project.version}'
 main: me.jetby.evilmobs.EvilMobs
 api-version: '1.16'
 authors: [ MrJetby ]
-depend: [Treex]
-loadbefore:
-  - Treex
+depend: [ Treex ]
+load: POSTWORLD
 softdepend:
   - PlaceholderAPI
 commands:

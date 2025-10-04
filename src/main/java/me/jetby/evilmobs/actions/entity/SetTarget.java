@@ -3,9 +3,9 @@ package me.jetby.evilmobs.actions.entity;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Creature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -21,6 +21,7 @@ public class SetTarget implements Action {
 
         if (entity == null || mob == null || context == null) return;
         if (!(entity instanceof Creature creature)) return;
+        if (!(creature instanceof Player)) return;
 
         Player target = null;
 
@@ -45,7 +46,8 @@ public class SetTarget implements Action {
                 if (!nearby.isEmpty()) {
                     target = nearby.get((int) (Math.random() * nearby.size()));
                 }
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
 
         if (target != null) {

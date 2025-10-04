@@ -59,7 +59,6 @@ public class Fireball implements Action {
         }
 
 
-
         if (to != null) {
             shootFireball(from, to, explode, entity, speed);
         }

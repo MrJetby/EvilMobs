@@ -7,7 +7,7 @@ import me.jetby.treex.actions.ActionContext;
 import me.jetby.treex.actions.ActionExecutor;
 import me.jetby.treex.actions.ActionRegistry;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class MiniTask {
     private final int period;
     private final int amount;
     private final List<String> actions;
-    private final Entity entity;
+    private final LivingEntity entity;
     private final Mob mob;
 
     int taskId;
@@ -27,7 +27,7 @@ public class MiniTask {
     public void run() {
         taskId = Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
 
-            if (amount!=-1) {
+            if (amount != -1) {
                 currentAmount++;
                 if (currentAmount > amount) {
                     cancel();

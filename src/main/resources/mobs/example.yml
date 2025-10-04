@@ -1,37 +1,41 @@
-
-
 #################################################################
 #
 ## Actions
 #
-## [MESSAGE] <message>
-## [LIGHTNING] <radius>;false/true (you can set visual true or for real strike set false)
-## [FIREBALL] --TARGET:%closest_player%/%rand_player_near>radius>% --EXPLODE:true/false --FROM:MOB/TOP --SPEED:0.1
-## [effect] EFFECT_NAME;DURATION;LEVEL
-## [spawn_as_minion] <minion_id>
-## [kill_all_minions] <minion_id>
-## [teleport] <player> --TO:<player/mob> --OFFSET:x,y
-## [task_run] <task_id>
-## [task_stop] <task_id>
-## [set_AI] true/false
-## [set_Age] baby/adult
-## [set_can_pickup_items] true/false
-## [set_Glow] true/false
-## [set_Name] Any name
-## [send_particle] <particle_id>
-## [console] <command>
-## [drop] <amount>
-## [sound] SOUND_NAME;VOLUME;PITCH
-## [set_target] %damager%/%closest_player%/%rand_player_near>radius>%
+## [LIGHTNING] RADIUS:15 TARGET:%closest_player%/%rand_player_near_<radius>% VISUAL:true/false
+## [TELEPORT] <player> --TO:<player/mob> --OFFSET:x,y
+## [FIREBALL] TARGET:%closest_player%/%rand_player_near_<radius>% EXPLODE:true/false FROM:MOB/TOP SPEED:0.1
+## [EFFECT_NEAR] EFFECT_NAME;DURATION;LEVEL;RADIUS
+## [SPAWN_AS_MINION] <minion_id>
+## [KILL_ALL_MINIONS] <minion_id>
+## [TASK_RUN] <task_id>
+## [TASK_STOP] <task_id>
+## [SET_AI] true/false
+## [SET_AGE] baby/adult
+## [SET_CAN_PICKUP_ITEMS] true/false
+## [SET_GLOW] true/false
+## [SET_NAME] &fИмя моба
+## [SET_HEALTH] <число>
+## [SET_MAX_HEALTH] <число>
+## [TAKE_HEALTH] <число>
+## [ADD_HEALTH] <число>
+## [SEND_PARTICLE] <particle_id>
+## [CONSOLE] <команда>
+## [MESSAGE] <текст>
+## [DROP] <кол-во>
+## [SOUND] SOUND_NAME;VOLUME;PITCH
+## [EFFECT] EFFECT_NAME;DURATION;LEVEL
+## [SET_TARGET] %damager%/%closest_player%/%rand_player_near_<radius>%
+## [DELAY] <в тиках>
 #
 #################################################################
 id: evil
 
-name: "&4Mister Evil" # Delete the line if you want to disable
+name: "&4Mister Evil" # Удалите эту линию если нужно скрыть имя
 type: ZOMBIE
 health: 1000
 
-# Remove the line or set it to -1 if you want infinite radius
+# Удалите строку или поставьте -1 чтобы у моба не было ограничения в радиусе
 moving-radius: 15 # the mob cannot go beyond this radius
 
 AI: true
@@ -39,7 +43,23 @@ glow: false
 can-pickup-items: false
 isBaby: false
 
+#
+# you can set coordinates like x;y;z;world
+# or use rtp, spawn in a random location
+#
 spawn-location: 0;100;0;world
+rtp:
+  world: world
+  min: -1000
+  max: 1000
+
+  block-list-type: BLACKLIST # BLACKLIST or WHITELIST
+  blocks:
+    - LAVA
+    - WATER
+    - CACTUS
+    - FIRE
+    - MAGMA_BLOCK
 
 armor: example
 # Actions that will execute on any listener
@@ -47,8 +67,14 @@ armor: example
 # ON_MOVE
 listeners:
   ON_DAMAGE:
+    - checks-1:
+      example1:
+        type: math
+        condition: '{health} < 300'
+        actions: {}
+        deny_actions: {}
     - '[msg] You hit the boss!'
-  ON_MOVE: {}
+  ON_MOVE: { }
 
 bossBars:
   example_health:

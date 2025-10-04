@@ -1,16 +1,13 @@
-package me.jetby.evilmobs.actions.task;
+package me.jetby.evilmobs.actions.entity;
 
-import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.records.Mob;
-import me.jetby.evilmobs.tools.MiniTask;
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class TaskStop implements Action {
-
-
+public class AddHealth implements Action {
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Entity entity = ctx.get("entity", Entity.class);
@@ -19,12 +16,8 @@ public class TaskStop implements Action {
 
         if (entity == null || mob == null || context == null) return;
 
-        if (Maps.tasks.get(entity.getUniqueId()) == null) return;
-
-        MiniTask miniTask = Maps.tasks.get(entity.getUniqueId()).get(context);
-        if (miniTask == null) return;
-
-        miniTask.cancel();
-
+        if (entity instanceof LivingEntity livingEntity) {
+            livingEntity.setHealth(livingEntity.getHealth()+Double.parseDouble(context));
+        }
     }
 }

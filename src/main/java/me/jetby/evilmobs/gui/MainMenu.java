@@ -5,7 +5,6 @@ import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
-import me.jetby.evilmobs.locale.Lang;
 import me.jetby.evilmobs.records.Mob;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Player;
 
 public class MainMenu extends AdvancedGui {
     public static final NamespacedKey CHANCE = new NamespacedKey("evilmobs", "chance");
+
     public MainMenu(EvilMobs plugin) {
 
         super(plugin.getLang().getConfig().getString("gui.main.title", "gui.main.title"));
@@ -24,12 +24,12 @@ public class MainMenu extends AdvancedGui {
             int finalSlot = slot;
             registerItem(type, builder -> {
                 builder.slots(finalSlot);
-                builder.defaultItem(ItemWrapper.builder(Material.valueOf(mob.entityType().name()+"_SPAWN_EGG"), SerializerType.MINI_MESSAGE)
+                builder.defaultItem(ItemWrapper.builder(Material.valueOf(mob.entityType().name() + "_SPAWN_EGG"), SerializerType.MINI_MESSAGE)
                         .displayName(plugin.getLang().getConfig().getString("gui.main.display_name", "gui.main.display_name").replace("{type}", type))
                         .lore(plugin.getLang().getConfig().getStringList("gui.main.lore"))
                         .build());
 
-                builder.defaultClickHandler((event, controller) ->  {
+                builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
 
                     if (event.getWhoClicked() instanceof Player player) {

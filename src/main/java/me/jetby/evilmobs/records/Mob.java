@@ -10,7 +10,8 @@ import java.util.Map;
 public record Mob(
         String id,
         int movingRadius,
-        Location spawnlocation,
+        String locationType,
+        Location location,
         boolean nameVisible,
         String name,
         List<ArmorItem> armorItems,
@@ -32,7 +33,7 @@ public record Mob(
         List<String> onSpawnActions,
         List<String> onHitActions,
         List<String> onDeathActions,
-
+        Rtp rtp,
         String lootAmount,
         boolean onlyCustom,
         List<Items.ItemsData> items

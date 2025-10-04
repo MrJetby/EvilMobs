@@ -3,7 +3,6 @@ package me.jetby.evilmobs.actions.minions;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.MobCreator;
-import me.jetby.evilmobs.locale.Lang;
 import me.jetby.treex.actions.Action;
 import me.jetby.treex.actions.ActionContext;
 import org.bukkit.entity.Entity;

@@ -6,7 +6,6 @@ import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.configurations.Items;
-import me.jetby.evilmobs.locale.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -48,9 +47,9 @@ public class ChanceEditor extends AdvancedGui {
             registerItem("slot_" + itemData.slot(), builder -> {
                 builder.slots(itemData.slot())
                         .defaultItem(ItemWrapper.builder(item.getType(), SerializerType.MINI_MESSAGE)
-                                        .amount(item.getAmount())
-                                        .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])))
-                                        .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor.lore")).build());
+                                .amount(item.getAmount())
+                                .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])))
+                                .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor.lore")).build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
@@ -76,8 +75,9 @@ public class ChanceEditor extends AdvancedGui {
 
         onClose(event -> {
             saveChanges();
-            Bukkit.getScheduler().runTaskLater(plugin, ()->{
-                new InvEditor(plugin, player, Maps.mobs.get(type)).open(player);}, 1L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                new InvEditor(plugin, player, Maps.mobs.get(type)).open(player);
+            }, 1L);
         });
     }
 

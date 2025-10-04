@@ -5,9 +5,14 @@ import me.jetby.treex.actions.ActionContext;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Lightning implements Action {
 
@@ -20,24 +25,54 @@ public class Lightning implements Action {
 
         if (entity == null || context == null) return;
 
+        Map<String, String> params = parseContext(context);
+        double radius = Double.parseDouble(params.getOrDefault("RADIUS", "0.0"));
+        boolean visual = Boolean.parseBoolean(params.getOrDefault("VISUAL", "false"));
+        String target = params.getOrDefault("TARGET", "");
 
-        var args = context.split(";");
-        var radius = args.length > 0 ? Integer.parseInt(args[0]) : 0;
-        boolean visual = args.length > 1 && Boolean.parseBoolean(args[1]);
+        Location strikeLocation;
 
-        if (radius == 0) {
-            if (visual) {
-                entity.getWorld().strikeLightningEffect(entity.getLocation());
+        if (target.equalsIgnoreCase("%closest_player%")) {
+            strikeLocation = entity.getNearbyEntities(radius, radius, radius).stream()
+                    .filter(e -> e instanceof Player)
+                    .map(Entity::getLocation)
+                    .min(Comparator.comparingDouble(loc -> loc.distanceSquared(entity.getLocation())))
+                    .orElse(null);
+        } else if (target.equalsIgnoreCase("%rand_player%")) {
+            java.util.List<Player> nearby = entity.getNearbyEntities(radius, radius, radius).stream()
+                    .filter(e -> e instanceof Player)
+                    .map(e -> (Player) e)
+                    .toList();
+            if (!nearby.isEmpty()) {
+                Player chosen = nearby.get(random.nextInt(nearby.size()));
+                strikeLocation = chosen.getLocation();
             } else {
-                entity.getWorld().strikeLightning(entity.getLocation());}
+                strikeLocation = null;
+            }
         } else {
-
-            entity.getWorld().strikeLightningEffect(getRandomLocation(entity.getLocation(), radius));
+            strikeLocation = radius > 0 ? getRandomLocation(entity.getLocation(), radius) : entity.getLocation();
         }
 
+        if (strikeLocation != null) {
+            if (visual) {
+                entity.getWorld().strikeLightningEffect(strikeLocation);
+            } else {
+                entity.getWorld().strikeLightning(strikeLocation);
+            }
+        }
     }
 
-    public Location getRandomLocation(Location center, double radius) {
+    private Map<String, String> parseContext(String context) {
+        return Arrays.stream(context.split("\\s+"))
+                .filter(s -> s.contains(":"))
+                .map(s -> s.split(":"))
+                .collect(Collectors.toMap(
+                        arr -> arr[0].toUpperCase(),
+                        arr -> arr.length > 1 ? arr[1] : ""
+                ));
+    }
+
+    private Location getRandomLocation(Location center, double radius) {
         World world = center.getWorld();
 
         double angle = random.nextDouble() * 2 * Math.PI;

@@ -6,8 +6,8 @@ import me.jetby.evilmobs.MobCreator;
 import me.jetby.evilmobs.actions.DropManager;
 import me.jetby.evilmobs.api.event.MobDeathEvent;
 import me.jetby.evilmobs.configurations.Items;
-import me.jetby.evilmobs.configurations.Mobs;
 import me.jetby.evilmobs.records.Mob;
+import me.jetby.evilmobs.tools.Placeholders;
 import me.jetby.treex.actions.ActionContext;
 import me.jetby.treex.actions.ActionExecutor;
 import me.jetby.treex.actions.ActionRegistry;
@@ -23,7 +23,6 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 import java.util.Map;
 
-import static me.jetby.evilmobs.EvilMobs.LOGGER;
 import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 
 public class OnDeath implements Listener {
@@ -42,7 +41,7 @@ public class OnDeath implements Listener {
         if (!entity.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) return;
 
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-        if (id==null) return;
+        if (id == null) return;
         Mob mob = Maps.mobs.get(id);
         if (mob == null) return;
 
@@ -53,7 +52,7 @@ public class OnDeath implements Listener {
         ActionContext ctx = new ActionContext(player);
         ctx.put("mob", mob);
         ctx.put("entity", entity);
-        ActionExecutor.execute(ctx, ActionRegistry.transform(mob.onDeathActions()));
+        ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(mob.onDeathActions(), mob, entity)));
 
         if (mob.onlyCustom()) {
             e.getDrops().clear();
@@ -77,9 +76,8 @@ public class OnDeath implements Listener {
             }
         }
 
-        if (mobCreators.get(id)!=null){
+        if (mobCreators.get(id) != null) {
             mobCreators.get(id).end();
-            LOGGER.success("ended from death");
         }
     }
 }

@@ -18,13 +18,13 @@ public class SendParticle implements Action {
         if (context == null) return;
 
         String[] args = context.split(" ");
-        if (args.length==2) {
+        if (args.length == 2) {
             Location location = LocationHandler.deserialize(args[1]);
             ParticleEffectManager.playEffect(args[0], location, EvilMobs.getInstance().getParticles());
 
         }
 
-        if (entity==null) return;
+        if (entity == null) return;
         ParticleEffectManager.playEffect(args[0], entity.getLocation(), EvilMobs.getInstance().getParticles());
 
     }
