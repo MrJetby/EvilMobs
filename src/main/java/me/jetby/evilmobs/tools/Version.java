@@ -16,10 +16,10 @@ public class Version implements Listener {
     private final EvilMobs plugin;
     private String LAST_VERSION = "error";
 
-    private final String VERSION_LINK = "https://raw.githubusercontent.com/MrJetby/TreexBuyer3/refs/heads/master/VERSION";
-    private String DOWNLOAD_LINK = "https://raw.githubusercontent.com/MrJetby/TreexBuyer3/refs/heads/master/UPDATE_LINK";
+    private final String VERSION_LINK = "https://raw.githubusercontent.com/MrJetby/EvilMobs/refs/heads/master/VERSION";
+    private String DOWNLOAD_LINK = "https://raw.githubusercontent.com/MrJetby/EvilMobs/refs/heads/master/UPDATE_LINK";
     private final String NAME = "EvilMobs";
-    private final String COLOR = "§6";
+    private final String COLOR = "§6§l";
 
     public Version(EvilMobs plugin) {
         this.plugin = plugin;
