@@ -32,34 +32,33 @@ public class Version implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if (player.hasPermission(NAME.toLowerCase()+".version")) {
+        if (player.hasPermission(NAME.toLowerCase() + ".version")) {
             if (!isLastVersion()) {
-                   for (String string : getAlert()) {
-                       player.sendMessage(string);
-                   }
+                for (String string : getAlert()) {
+                    player.sendMessage(string);
+                }
             }
         }
     }
 
 
-
     public List<String> getAlert() {
         List<String> oldVersion = new ArrayList<>(List.of(
                 "",
-                "§7-------- "+COLOR+NAME+" §7--------",
-                COLOR+"● §fAttention, update available, please update the plugin.",
-                COLOR+"● §7Your version: §c" + getVersion() + " §7а latest §a" + LAST_VERSION,
+                "§7-------- " + COLOR + NAME + " §7--------",
+                COLOR + "● §fAttention, update available, please update the plugin.",
+                COLOR + "● §7Your version: §c" + getVersion() + " §7а latest §a" + LAST_VERSION,
                 "",
-                COLOR+"● §fDownload here: §b" + DOWNLOAD_LINK,
+                COLOR + "● §fDownload here: §b" + DOWNLOAD_LINK,
                 "§7------------------------",
                 ""
         ));
         List<String> lastVersion = new ArrayList<>(List.of(
                 "",
-                "§7-------- "+COLOR+NAME+" §7--------",
-                COLOR+"● §7Plugin version: §a" + getVersion(),
+                "§7-------- " + COLOR + NAME + " §7--------",
+                COLOR + "● §7Plugin version: §a" + getVersion(),
                 "",
-                COLOR+"● §aYou are using the latest version ✔",
+                COLOR + "● §aYou are using the latest version ✔",
                 "",
                 "§7------------------------",
                 ""
@@ -88,6 +87,7 @@ public class Version implements Listener {
             return null;
         }
     }
+
     public String getVersion() {
         return plugin.getDescription().getVersion();
     }
@@ -102,6 +102,7 @@ public class Version implements Listener {
         assert result != null;
         return result;
     }
+
     private String getDownloadLink() {
         String result = getRaw(DOWNLOAD_LINK);
         assert result != null;
