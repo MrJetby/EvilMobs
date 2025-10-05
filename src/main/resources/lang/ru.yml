@@ -50,6 +50,11 @@ gui:
     title: 'Редактор предметов'
 
 comments:
+  mobs:
+    example:
+      id:
+
+
   config:
     lang:
       - "Предпочитаемый вами язык"

@@ -37,7 +37,7 @@ public class Mobs {
 
         File[] files = file.listFiles();
 
-        String[] defaults = {"example.yml", "example_minion.yml"};
+        String[] defaults = {"example.yml", "example_minion.yml", "evil.yml"};
 
         if (!file.exists()) {
             for (String name : defaults) {
@@ -47,9 +47,9 @@ public class Mobs {
                     plugin.saveResource("mobs/" + name, false);
                     FileConfiguration configuration = YamlConfiguration.loadConfiguration(target);
                     loadMob(configuration);
-                    return;
                 }
             }
+            return;
         }
 
 

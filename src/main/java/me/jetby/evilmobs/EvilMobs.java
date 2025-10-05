@@ -51,21 +51,21 @@ import java.util.UUID;
 @Getter
 public final class EvilMobs extends JavaPlugin {
 
-    Config cfg;
-    FormatTime formatTime;
-    Mobs mobs;
-    Particles particles;
-    MainMenu mainMenu;
-    Items items;
+    public Config cfg;
+    public FormatTime formatTime;
+    public Mobs mobs;
+    public Particles particles;
+    public MainMenu mainMenu;
+    public Items items;
     @Setter
-    Lang lang;
-    AutoStart autoStart;
+    public Lang lang;
+    public AutoStart autoStart;
 
 
     @Getter(AccessLevel.NONE)
-    static EvilMobs INSTANCE;
+    private static EvilMobs INSTANCE;
     @Getter(AccessLevel.NONE)
-    EvilMobsPlaceholderExpansion evilMobsPlaceholderExpansion;
+    public EvilMobsPlaceholderExpansion evilMobsPlaceholderExpansion;
 
 
     public static NamespacedKey NAMESPACED_KEY;
@@ -119,6 +119,8 @@ public final class EvilMobs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnMove(), this);
         getServer().getPluginManager().registerEvents(new ItemPickup(), this);
 
+
+
         PluginCommand evilmobs = getCommand("evilmobs");
         if (evilmobs != null)
             evilmobs.setExecutor(new Admin(this));
@@ -127,6 +129,11 @@ public final class EvilMobs extends JavaPlugin {
 
         rollbackMobTasks();
 
+        Version version = new Version(this);
+        getServer().getPluginManager().registerEvents(version, this);
+        for (String str : version.getAlert()) {
+            LOGGER.info(str);
+        }
     }
 
 

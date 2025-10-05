@@ -73,30 +73,46 @@ public class Admin implements CommandExecutor, TabCompleter {
                 break;
             }
             case "tp": {
-                if (sender instanceof Player player) {
-                    Location location = null;
-                    for (World world : Bukkit.getWorlds()) {
-                        for (Entity e : world.getEntities()) {
-                            if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING))
-                                continue;
-                            if (e instanceof LivingEntity l) {
-                                location = l.getLocation();
-                                break;
-                            }
-                        }
-                    }
-                    if (location != null) {
-                        player.teleport(location);
-                        sender.sendMessage("Teleported to mob");
-                    } else {
-                        sender.sendMessage("No mobs found");
-                    }
+                if (args.length < 2) {
+                    sender.sendMessage("Usage: /em tp <id>");
+                    break;
                 }
 
+                if (mobCreators.containsKey(args[1])) {
+                    if (sender instanceof Player player) {
+                        Location location = null;
+                        for (World world : Bukkit.getWorlds()) {
+                            for (Entity e : world.getEntities()) {
+                                if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING))
+                                    continue;
+                                if (!e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING).equalsIgnoreCase(args[1]))
+                                    continue;
+
+                                if (e instanceof LivingEntity l) {
+                                    location = l.getLocation();
+                                    break;
+                                }
+                            }
+                        }
+                        if (location != null) {
+                            player.teleport(location);
+                            sender.sendMessage("Teleported to mob");
+                        } else {
+                            sender.sendMessage("No mobs found");
+                        }
+                        player.teleport(mobCreators.get(args[1]).getLivingEntity().getLocation());
+                        sender.sendMessage("Teleported to mob");
+                    }
+                }
                 break;
             }
             case "kill": {
+                if (args.length < 2) {
+                    sender.sendMessage("Usage: /em kill <id>");
+                    break;
+                }
                 if (mobCreators.containsKey(args[1])) {
+                    mobCreators.get(args[1]).killAllMinions();
                     mobCreators.get(args[1]).getLivingEntity().setHealth(0);
                     mobCreators.remove(args[1]);
                 }
@@ -137,11 +153,13 @@ public class Admin implements CommandExecutor, TabCompleter {
             case "list": {
                 sender.sendMessage("Mobs list:");
                 sender.sendMessage("");
+                int num = 1;
                 for (World world : Bukkit.getWorlds()) {
                     for (LivingEntity e : world.getLivingEntities()) {
                         if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) continue;
                         String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-                        sender.sendMessage(id + " (" + Maps.mobs.get(id).name() + ") [" + e.getHealth() + "]");
+                        sender.sendMessage("§7#" + num + " §e" + id + " (" + Maps.mobs.get(id).name() + "§r) [" + e.getHealth() + "]");
+                        num++;
                     }
                 }
                 break;

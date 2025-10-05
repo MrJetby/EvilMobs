@@ -1,34 +1,40 @@
 #################################################################
-#
-## Actions
-#
-## [LIGHTNING] RADIUS:15 TARGET:%closest_player%/%rand_player_near_<radius>% VISUAL:true/false
-## [TELEPORT] <player> --TO:<player/mob> --OFFSET:x,y
-## [FIREBALL] TARGET:%closest_player%/%rand_player_near_<radius>% EXPLODE:true/false FROM:MOB/TOP SPEED:0.1
-## [EFFECT_NEAR] EFFECT_NAME;DURATION;LEVEL;RADIUS
-## [SPAWN_AS_MINION] <minion_id>
-## [KILL_ALL_MINIONS] <minion_id>
-## [TASK_RUN] <task_id>
-## [TASK_STOP] <task_id>
-## [SET_AI] true/false
-## [SET_AGE] baby/adult
-## [SET_CAN_PICKUP_ITEMS] true/false
-## [SET_GLOW] true/false
-## [SET_NAME] &fИмя моба
-## [SET_HEALTH] <число>
-## [SET_MAX_HEALTH] <число>
-## [TAKE_HEALTH] <число>
-## [ADD_HEALTH] <число>
-## [SEND_PARTICLE] <particle_id>
-## [CONSOLE] <команда>
-## [MESSAGE] <текст>
-## [DROP] <кол-во>
-## [SOUND] SOUND_NAME;VOLUME;PITCH
-## [EFFECT] EFFECT_NAME;DURATION;LEVEL
-## [SET_TARGET] %damager%/%closest_player%/%rand_player_near_<radius>%
-## [DELAY] <в тиках>
-#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ACTIONS LIST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+# [LIGHTNING] - strike lightning at target or radius. TARGET: %closest_player%/%rand_player%
+# [TELEPORT] - teleport mob to x;y;z;world or %closest_player%/%rand_player_near_<radius>%
+# [FIREBALL] - shoot fireball. TARGET:<target> EXPLODE:true/false FROM:MOB/TOP SPEED:<0.1-1.0>
+# [EFFECT_NEAR] - apply effect nearby. EFFECT_NAME;DURATION;LEVEL;RADIUS
+# [SPAWN_AS_MINION] - spawn a minion by id
+# [KILL_ALL_MINIONS] - kill all minions by id
+# [TASK_RUN] - run a predefined task by id
+# [TASK_STOP] - stop a predefined task by id
+# [SET_AI] - enable/disable mob AI (true/false)
+# [SET_AGE] - set mob age (baby/adult)
+# [SET_CAN_PICKUP_ITEMS] - allow/disallow item pickup (true/false)
+# [SET_GLOW] - enable/disable glow (true/false)
+# [SET_NAME] - set mob name, supports color codes (&)
+# [SET_HEALTH] - set mob health
+# [SET_MAX_HEALTH] - set mob max health
+# [TAKE_HEALTH] - reduce mob health by number
+# [ADD_HEALTH] - add health to mob
+# [SEND_PARTICLE] - spawn particles at mob. PARTICLE_ID
+# [CONSOLE] - execute console command
+# [MESSAGE] - send message to player
+# [DROP] - drop items, quantity
+# [SOUND] - play sound to player. SOUND_NAME;VOLUME;PITCH
+# [EFFECT] - apply effect to mob. EFFECT_NAME;DURATION;LEVEL
+# [SET_TARGET] - set mob target. %damager%/%closest_player%/%rand_player_near_<radius>%
+# [DELAY] - delay next action, in ticks (20 ticks = 1 second)
+# [CREATE_BOSSBAR] - create a bossbar by id
+# [SHOW_BOSSBAR] - show a bossbar by id
+# [SHOW_BOSSBAR_NEAR] - show a bossbar by id to players in radius
+# Example: [SHOW_BOSSBAR_NEAR] example 30
+# [REMOVE_BOSSBAR] - remove a bossbar by id
+# [REMOVE_BOSSBAR_NEAR] - remove a bossbar by id from players in radius
+# Example: [REMOVE_BOSSBAR_NEAR] example 30
+# [DELETE_BOSSBAR] - delete a bossbar by id
 #################################################################
+
 id: evil
 
 name: "&4Mister Evil" # Удалите эту линию если нужно скрыть имя
@@ -67,12 +73,6 @@ armor: example
 # ON_MOVE
 listeners:
   ON_DAMAGE:
-    - checks-1:
-      example1:
-        type: math
-        condition: '{health} < 300'
-        actions: {}
-        deny_actions: {}
     - '[msg] You hit the boss!'
   ON_MOVE: { }
 
