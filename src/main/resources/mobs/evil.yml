@@ -4,22 +4,25 @@ name: "§4Mister Evil"
 type: ZOMBIFIED_PIGLIN
 health: 150
 
-moving-radius: 15
+moving-radius: -1
 
 AI: true
 glow: false
 can-pickup-items: false
 isBaby: false
 
-spawn-location: 0;105;0;world
+spawn-location: rtp
 rtp:
   world: world
-  min: -20
-  max: 20
+  min: -2000
+  max: 2000
 
-  block-list-type: WHITELIST # BLACKLIST or WHITELIST
-  blocks:
-    - STONE
+  block-list-type: BLACKLIST
+  materials:
+    - WATER
+    - LAVA
+    - STICK
+    - CACTUS
 
 listeners:
   ON_DAMAGE:
@@ -29,12 +32,6 @@ listeners:
     - '[effect_near] HUNGER;3;15;15'
 
 bossBars:
-  info:
-    title: "&cНа сервере босс, координаты: &f0,100,0"
-    Color: BLUE
-    Style: SOLID
-    Progress: '1'
-    duration: 300
   boss:
     title: "&4&lEvil Boss &7[Health: %health_percentage%%]"
     Color: BLUE
@@ -80,16 +77,17 @@ tasks:
     delay: 0
     period: 350
     actions:
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
-      - '[lightning] 15;true'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
+      - '[lightning] RADIUS:15 VISUAL:true TARGET:%rand_player%'
   fireball:
     delay: 0
     period: 350
@@ -126,16 +124,6 @@ tasks:
       - '[delay] 5'
       - '[fireball] FROM:TOP[5.0,3,5.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
       - '[fireball] FROM:TOP[-5.0,3,-5.0] EXPLODE:false RADIUS:15 TARGET:%rand_player% SPEED:1.0'
-  damage_info:
-    delay: 0
-    period: 1200
-    actions:
-      - '[msg_all] &r'
-      - '[msg_all] <#FF394E>Топы по урону босса</#DE853C>'
-      - '[msg_all] &#FF394E#1 &f%emdamageaddon_top_evil_1_name% &7[%emdamageaddon_top_evil_1_damage%]'
-      - '[msg_all] &#FF394E#2 &f%emdamageaddon_top_evil_2_name% &7[%emdamageaddon_top_evil_2_damage%]'
-      - '[msg_all] &#FF394E#3 &f%emdamageaddon_top_evil_3_name% &7[%emdamageaddon_top_evil_3_damage%]'
-      - '[msg_all] &r'
 
 
 actions:
@@ -144,29 +132,18 @@ actions:
     - '[task_run] thor'
     - '[task_run] fireball'
     - '[task_run] main'
-    - '[task_run] damage_info'
-    - '[create_bossbar] info'
     - '[create_bossbar] boss'
-    - '[show_bossbar] info'
     - '[show_bossbar_near] boss 15'
-    - '[msg_all] &cБосс {prefix} &cпоявился'
-    - '[msg_all] &cна координатах &f{x} {y} {z}'
+    - '[msg_all] &cThe {prefix} &cmob spawned at coordinates: &f{x} {y} {z}'
   onDeath:
     - '[KILL_ALL_MINION] evil'
     - '[SEND_PARTICLE] died'
     - '[task_stop] thor'
     - '[task_stop] fireball'
     - '[task_stop] main'
-    - '[task_stop] damage_info'
     - '[DELETE_BOSSBAR] boss'
-    - '[DELETE_BOSSBAR] info'
     - '[msg_all] &r'
-    - '[msg_all] &cБосс {prefix} &cбыл уничтожен'
-    - '[msg_all] &r'
-    - '[msg_all] <#FF394E>Игроки которые получают рубины</#DE853C>'
-    - '[msg_all] &#FF394E#1 &f%emdamageaddon_top_evil_1_name% &7(%emdamageaddon_top_evil_1_damage%) &8- <#FF394E>+350 рубинов</#DE853C>'
-    - '[msg_all] &#FF394E#2 &f%emdamageaddon_top_evil_2_name% &7(%emdamageaddon_top_evil_2_damage%) &8- <#FF394E>+200 рубинов</#DE853C>'
-    - '[msg_all] &#FF394E#3 &f%emdamageaddon_top_evil_3_name% &7(%emdamageaddon_top_evil_3_damage%) &8- <#FF394E>+50 рубинов</#DE853C>'
+    - '[msg_all] &cMob {prefix} &chas been destroyed'
     - '[msg_all] &r'
     - '[DELAY] 50'
     - '[DROP] 1'

@@ -2,7 +2,9 @@ package me.jetby.evilmobs.configurations;
 
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
+import me.jetby.evilmobs.locale.Lang;
 import me.jetby.evilmobs.records.*;
+import me.jetby.evilmobs.tools.YamlCommentEditor;
 import me.jetby.treex.bukkit.LocationHandler;
 import me.jetby.treex.text.Colorize;
 import org.bukkit.*;
@@ -16,7 +18,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static me.jetby.evilmobs.EvilMobs.LOGGER;
 
@@ -35,32 +40,95 @@ public class Mobs {
     public void load() {
         Maps.mobs.clear();
 
-        File[] files = file.listFiles();
+        file.mkdirs();
 
         String[] defaults = {"example.yml", "example_minion.yml", "evil.yml"};
 
-        if (!file.exists()) {
-            for (String name : defaults) {
-                File target = new File(file, name);
+        File[] files = file.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (!f.getName().endsWith(".yml")) continue;
+                FileConfiguration config = YamlConfiguration.loadConfiguration(f);
+                loadMob(config);
+            }
+        }
 
-                if (!target.exists()) {
-                    plugin.saveResource("mobs/" + name, false);
-                    FileConfiguration configuration = YamlConfiguration.loadConfiguration(target);
-                    loadMob(configuration);
+        for (String name : defaults) {
+            File target = new File(file, name);
+            if (!target.exists()) {
+                plugin.saveResource("mobs/" + name, false);
+                if (name.equals("example.yml")) {
+                    addCommentsToExample(target);
+                }
+                FileConfiguration config = YamlConfiguration.loadConfiguration(target);
+                loadMob(config);
+            } else if (name.equals("example.yml")) {
+                if (isDefaultExample(target)) {
+                    addCommentsToExample(target);
                 }
             }
-            return;
-        }
-
-
-        if (files == null) return;
-
-        for (File file : files) {
-            if (!file.getName().endsWith(".yml")) continue;
-            FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-            loadMob(config);
         }
         LOGGER.success(Maps.mobs.size() + " mobs loaded");
+    }
+
+    private void addCommentsToExample(File target) {
+        Lang lang = plugin.getLang();
+        try {
+            YamlCommentEditor editor = new YamlCommentEditor(target);
+            editor.setComment("id", lang.getConfig().getStringList("comments.mobs.example.id"));
+            editor.setComment("name", lang.getConfig().getStringList("comments.mobs.example.name"));
+            editor.setComment("moving-radius", lang.getConfig().getStringList("comments.mobs.example.moving-radius"));
+            editor.setComment("spawn-location", lang.getConfig().getStringList("comments.mobs.example.spawn-location"));
+            editor.setComment("listeners", lang.getConfig().getStringList("comments.mobs.example.listeners"));
+            editor.setComment("bossBars.example_health.color", lang.getConfig().getStringList("comments.mobs.example.bossBars.example_health.color"));
+            editor.setComment("bossBars.example_health.style", lang.getConfig().getStringList("comments.mobs.example.bossBars.example_health.style"));
+            editor.setComment("bossBars.example_health.duration", lang.getConfig().getStringList("comments.mobs.example.bossBars.example_health.duration"));
+            editor.setComment("tasks.example.delay", lang.getConfig().getStringList("comments.mobs.example.tasks.example.delay"));
+            editor.setComment("tasks.example.period", lang.getConfig().getStringList("comments.mobs.example.tasks.example.period"));
+            editor.setComment("tasks.example.actions", lang.getConfig().getStringList("comments.mobs.example.tasks.example.actions"));
+            editor.setComment("tasks.example.amount", lang.getConfig().getStringList("comments.mobs.example.tasks.example.amount"));
+            editor.setComment("phases.example_placeholder", lang.getConfig().getStringList("comments.mobs.example.phases.example_placeholder"));
+            editor.setComment("drop-settings.lootAmount", lang.getConfig().getStringList("comments.mobs.example.drop-settings.lootAmount"));
+            editor.setComment("drop-settings.only-custom", lang.getConfig().getStringList("comments.mobs.example.drop-settings.only-custom"));
+            editor.setComment("drop-settings.flying-drop-particle", lang.getConfig().getStringList("comments.mobs.example.drop-settings.flying-drop-particle"));
+            editor.setComment("drop-settings.flying-drop-particle.pickup-delay", lang.getConfig().getStringList("comments.mobs.example.drop-settings.pickup-delay"));
+            editor.setComment("drop-settings.mask", lang.getConfig().getStringList("comments.mobs.example.mask.mask"));
+            editor.setComment("drop-settings.mask.items.m1", lang.getConfig().getStringList("comments.mobs.example.mask.items.m1"));
+            editor.save();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean isDefaultExample(File target) {
+        try {
+            java.io.InputStream defaultStream = plugin.getResource("mobs/example.yml");
+            if (defaultStream == null) return false;
+            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream, StandardCharsets.UTF_8));
+            YamlConfiguration currentConfig = YamlConfiguration.loadConfiguration(target);
+            return configsEqual(defaultConfig, currentConfig);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean configsEqual(ConfigurationSection def, ConfigurationSection curr) {
+        if (def == null && curr == null) return true;
+        if (def == null || curr == null) return false;
+        Set<String> defKeys = def.getKeys(false);
+        Set<String> currKeys = curr.getKeys(false);
+        if (!defKeys.equals(currKeys)) return false;
+        for (String key : defKeys) {
+            Object defVal = def.get(key);
+            Object currVal = curr.get(key);
+            if (defVal instanceof ConfigurationSection && currVal instanceof ConfigurationSection) {
+                if (!configsEqual((ConfigurationSection) defVal, (ConfigurationSection) currVal)) return false;
+            } else if (!Objects.equals(defVal, currVal)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void loadMob(FileConfiguration configuration) {

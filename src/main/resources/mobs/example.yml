@@ -1,76 +1,30 @@
-#################################################################
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ACTIONS LIST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-# [LIGHTNING] - strike lightning at target or radius. TARGET: %closest_player%/%rand_player%
-# [TELEPORT] - teleport mob to x;y;z;world or %closest_player%/%rand_player_near_<radius>%
-# [FIREBALL] - shoot fireball. TARGET:<target> EXPLODE:true/false FROM:MOB/TOP SPEED:<0.1-1.0>
-# [EFFECT_NEAR] - apply effect nearby. EFFECT_NAME;DURATION;LEVEL;RADIUS
-# [SPAWN_AS_MINION] - spawn a minion by id
-# [KILL_ALL_MINIONS] - kill all minions by id
-# [TASK_RUN] - run a predefined task by id
-# [TASK_STOP] - stop a predefined task by id
-# [SET_AI] - enable/disable mob AI (true/false)
-# [SET_AGE] - set mob age (baby/adult)
-# [SET_CAN_PICKUP_ITEMS] - allow/disallow item pickup (true/false)
-# [SET_GLOW] - enable/disable glow (true/false)
-# [SET_NAME] - set mob name, supports color codes (&)
-# [SET_HEALTH] - set mob health
-# [SET_MAX_HEALTH] - set mob max health
-# [TAKE_HEALTH] - reduce mob health by number
-# [ADD_HEALTH] - add health to mob
-# [SEND_PARTICLE] - spawn particles at mob. PARTICLE_ID
-# [CONSOLE] - execute console command
-# [MESSAGE] - send message to player
-# [DROP] - drop items, quantity
-# [SOUND] - play sound to player. SOUND_NAME;VOLUME;PITCH
-# [EFFECT] - apply effect to mob. EFFECT_NAME;DURATION;LEVEL
-# [SET_TARGET] - set mob target. %damager%/%closest_player%/%rand_player_near_<radius>%
-# [DELAY] - delay next action, in ticks (20 ticks = 1 second)
-# [CREATE_BOSSBAR] - create a bossbar by id
-# [SHOW_BOSSBAR] - show a bossbar by id
-# [SHOW_BOSSBAR_NEAR] - show a bossbar by id to players in radius
-# Example: [SHOW_BOSSBAR_NEAR] example 30
-# [REMOVE_BOSSBAR] - remove a bossbar by id
-# [REMOVE_BOSSBAR_NEAR] - remove a bossbar by id from players in radius
-# Example: [REMOVE_BOSSBAR_NEAR] example 30
-# [DELETE_BOSSBAR] - delete a bossbar by id
-#################################################################
-
 id: evil
 
-name: "&4Mister Evil" # Удалите эту линию если нужно скрыть имя
+name: "&4Mister Evil"
 type: ZOMBIE
 health: 1000
 
-# Удалите строку или поставьте -1 чтобы у моба не было ограничения в радиусе
-moving-radius: 15 # the mob cannot go beyond this radius
+moving-radius: 15
 
 AI: true
 glow: false
 can-pickup-items: false
 isBaby: false
 
-#
-# you can set coordinates like x;y;z;world
-# or use rtp, spawn in a random location
-#
 spawn-location: 0;100;0;world
 rtp:
   world: world
   min: -1000
   max: 1000
 
-  block-list-type: BLACKLIST # BLACKLIST or WHITELIST
-  blocks:
+  block-list-type: BLACKLIST
+  materials:
     - LAVA
     - WATER
     - CACTUS
     - FIRE
     - MAGMA_BLOCK
 
-armor: example
-# Actions that will execute on any listener
-# ON_DAMAGE
-# ON_MOVE
 listeners:
   ON_DAMAGE:
     - '[msg] You hit the boss!'
@@ -79,58 +33,32 @@ listeners:
 bossBars:
   example_health:
     title: "&4&lEvil Boss &7[Health: %health_percentage%%]"
-    # Доступно: PINK, BLUE, RED ,GREEN ,YELLOW ,PURPLE, WHITE
     Color: BLUE
-    # Доступно: PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
     Style: PROGRESS
     Progress: '%health_percentage%'
-    # Время спустя которое боссбар исчезнет
-    # Если оставить -1 то боссбар пропадёт когда ивент завершится
     duration: -1
 
 
 tasks:
   example:
-    # delay - задержка перед первым выполнением в тиках (20 тиков = 1 секунда)
-    # period - период между выполнениями в тиках (20 тиков = 1 секунда)
     delay: 0
     period: 20
-    amount: -1 # -1 бесконечное выполнение или количество выполнений если указать число
+    amount: -1
     actions:
       - '[message] &cTest action every second'
 
 phases:
-  # Types:
-  # HEALTH
-  # HEALTH_PERCENTAGE
-  # PLACEHOLDER
   example_placeholder:
-    type: %some_placeholder%
+    type: '%some_placeholder%'
     actions:
-      'true': #it can be boolean, number or string
+      'true':
         - '[message] &cPlaceholder is true!'
       'false':
         - '[message] &aPlaceholder is false!'
-  damage:
-    type: HEALTH
-    actions:
-      '100':
-        # %closest_player%
-        # %rand_player_near_<radius>%
-        - '[lightning] 15' # radius or --player:%closest_player%
-        - '[fireball] ' # --TARGET:%closest_player% --EXPLODE:false --FROM:MOB/TOP
-        - '[effect] BLINDNESS;3;1' # --radius:15
-        - '[create_minion] default'
-        - '[teleport] %rand_player_near_25%'
-        - '[task_run] example'
-        - '[task_stop] example'
-        - '[set_AI] true'
-        - '[set_Age] baby/adult'
-        - '[set_can_pickup_items] true'
-        - '[set_Glow] true'
-        - '[set_Name] &6Mister Evil'
-        - '[]'
-        - '[]'
+      '120':
+        - '[message] &ePlaceholder is 120!'
+      'hello':
+        - '[message] &bPlaceholder is hello!'
 
 
 actions:
@@ -138,45 +66,32 @@ actions:
   onHit: { }
   onDeath:
     - '[message_all] Boss died'
-    - '[drop] '
+    - '[drop] 1'
 
 
 drop-settings:
-  # Если true, то ванильный дроп не будут выпадать
   only-custom: true
-  # Если хотите чтобы ничего не выпадало, ставьте 0
-  # Если хотите чтобы всё из возможных выпадало игнорируя шансы и рандом, ставьте -1
   lootAmount: 2-5
-  # Партиклы дропа когда вызывается команда [drop]
   flying-drop-particle:
     enabled: true
-    pickup-delay: 40 # в тиках
-    sound: block_lava_extinguish # название звука
+    pickup-delay: 40
+    sound: block_lava_extinguish
     pitch: 1.0
     volume: 1.0
     particle: FLAME
-    #Количество частиц, создаваемых при выбросе ресурсов во время его полета
     amount: 1
     offset-x: 0.0
     offset-y: 2.0
     offset-z: 0.0
-    #Минимальная высота выбрасывания
     min-y: 5.0
-    #Максимальная высота выбрасывания
     max-y: 10.0
-    #Минимальная горизонтальная скорость
     min-speed: 0.5
-    #Максимальная горизонтальная скорость
     max-speed: 1.0
 
-  # Маскировка предметов для дропа вызванного командой [drop]
   mask:
-    # Включить маскировку предметов при дропе?
     enabled: true
     items:
-      # Тут настраивается маскировка.
-      # Для маскировки дропа будет выбрана случайная маска
-      m1: # название может быть любым
+      m1:
         material: COBWEB
         enchanted: true
         name: "&#0EC8E2&k|||||||||"
@@ -184,3 +99,33 @@ drop-settings:
         material: PHANTOM_MEMBRANE
         enchanted: true
         name: "&#0EC8E2&k|||||||||"
+
+armor:
+  helmet:
+    item: NETHERITE_HELMET
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  chestplate:
+    item: NETHERITE_CHESTPLATE
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  leggings:
+    item: NETHERITE_LEGGINGS
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  boots:
+    item: NETHERITE_BOOTS
+    enchants:
+      - 'PROTECTION;4'
+    drop-chance: 0
+  hand:
+    item: NETHERITE_SWORD
+    enchants:
+      - 'SHARPNESS;2'
+    drop-chance: 0
+  offhand:
+    item: SHIELD
+    drop-chance: 0

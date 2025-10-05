@@ -42,6 +42,99 @@ gui:
     title: 'Item Editor'
 
 comments:
+  mobs:
+    example:
+      id:
+        - '#################################################################'
+        - '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ACTIONS LIST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #'
+        - '[LIGHTNING] - strike lightning at target or radius. TARGET: %closest_player%/%rand_player%'
+        - '[TELEPORT] - teleport mob to x;y;z;world or %closest_player%/%rand_player_near_<radius>%'
+        - '[FIREBALL] - shoot fireball. TARGET:<target> EXPLODE:true/false FROM:MOB/TOP SPEED:<0.1-1.0>'
+        - '[EFFECT_NEAR] - apply effect nearby. EFFECT_NAME;DURATION;LEVEL;RADIUS'
+        - '[SPAWN_AS_MINION] - spawn a minion by id'
+        - '[KILL_ALL_MINIONS] - kill all minions by id'
+        - '[TASK_RUN] - run a predefined task by id'
+        - '[TASK_STOP] - stop a predefined task by id'
+        - '[SET_AI] - enable/disable mob AI (true/false)'
+        - '[SET_AGE] - set mob age (baby/adult)'
+        - '[SET_CAN_PICKUP_ITEMS] - allow/disallow item pickup (true/false)'
+        - '[SET_GLOW] - enable/disable glow (true/false)'
+        - '[SET_NAME] - set mob name, supports color codes (&)'
+        - '[SET_HEALTH] - set mob health'
+        - '[SET_MAX_HEALTH] - set mob max health'
+        - '[TAKE_HEALTH] - reduce mob health by number'
+        - '[ADD_HEALTH] - add health to mob'
+        - '[SEND_PARTICLE] - spawn particles at mob. PARTICLE_ID'
+        - '[CONSOLE] - execute console command'
+        - '[MESSAGE] - send message to player'
+        - '[DROP] - drop items, quantity'
+        - '[SOUND] - play sound to player. SOUND_NAME;VOLUME;PITCH'
+        - '[EFFECT] - apply effect to mob. EFFECT_NAME;DURATION;LEVEL'
+        - '[SET_TARGET] - set mob target. %damager%/%closest_player%/%rand_player_near_<radius>%'
+        - '[DELAY] - delay next action, in ticks (20 ticks = 1 second)'
+        - '[CREATE_BOSSBAR] - create a bossbar by id'
+        - '[SHOW_BOSSBAR] - show a bossbar by id'
+        - '[SHOW_BOSSBAR_NEAR] - show a bossbar by id to players in radius'
+        - 'Example: [SHOW_BOSSBAR_NEAR] example 30'
+        - '[REMOVE_BOSSBAR] - remove a bossbar by id'
+        - '[REMOVE_BOSSBAR_NEAR] - remove a bossbar by id from players in radius'
+        - 'Example: [REMOVE_BOSSBAR_NEAR] example 30'
+        - '[DELETE_BOSSBAR] - delete a bossbar by id'
+        - '#################################################################'
+      name:
+        - "If you remove this line, the mob's name will be hidden"
+      moving-radius:
+        - "Remove the line or set to -1 for no movement radius limit"
+        - "the mob cannot go beyond this radius"
+      spawn-location:
+        - ''
+        - "you can set coordinates like x;y;z;world"
+        - "or use rtp, spawn in a random location"
+        - ''
+      listeners:
+        - 'Actions that will execute on any listener'
+        - 'Available: ON_DAMAGE, ON_MOVE'
+      bossBars:
+        example_health:
+          color:
+            - 'PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE'
+          style:
+            - 'SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20'
+          duration:
+            - '-1 for infinite duration, or specify time in seconds after which the bossbar will disappear'
+      tasks:
+        example:
+          delay:
+            - 'Delay before the task starts, in ticks (20 ticks = 1 second)'
+          period:
+            - 'How often the task will repeat, in ticks (20 ticks = 1 second)'
+          actions:
+            - 'Actions that will execute when the task runs'
+          amount:
+            - 'Number of times the task will run. -1 for infinite'
+      phases:
+        example_placeholder:
+          - 'Types:'
+          - 'HEALTH'
+          - 'HEALTH_PERCENTAGE'
+          - 'PLACEHOLDER'
+      drop-settings:
+        lootAmount:
+          - "If you don't want anything to drop out, set it to 0."
+          - "If you want everything possible to drop, ignoring chance and randomness, set -1"
+        only-custom:
+          - 'If true, vanilla drops will not occur.'
+        flying-drop-particle:
+          - 'Drop particles when the [drop] command is called'
+        pickup-delay:
+          - 'in ticks (20 ticks = 1 second)'
+      mask:
+        mask:
+          - "Masking items for drops caused by the [drop] command"
+        items:
+          m1:
+            - 'This is where the camouflage is configured.'
+            - 'A random mask will be selected to mask the drop.'
   config:
     lang:
       - "Your preferred language"
