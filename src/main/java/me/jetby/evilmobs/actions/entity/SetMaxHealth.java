@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class SetMaxHealth implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Entity entity = ctx.get("entity", Entity.class);

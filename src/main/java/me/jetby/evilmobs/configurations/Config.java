@@ -67,7 +67,7 @@ public class Config {
             formattedTimeFormat = configuration.getString("formattedTime.show-format", "%weeks% %days% %hours% %minutes% %seconds%");
 
             editor.save();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
 

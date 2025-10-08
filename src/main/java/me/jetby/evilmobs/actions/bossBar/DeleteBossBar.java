@@ -6,6 +6,7 @@ import me.jetby.treex.actions.ActionContext;
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteBossBar implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         String context = ctx.get("message", String.class);

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Version implements Listener {
+
     private final EvilMobs plugin;
     private String LAST_VERSION = "error";
 

@@ -20,18 +20,16 @@ public class EvilMobsPlaceholderExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "";
+        return String.valueOf(plugin.getDescription().getAuthors());
     }
 
     @Override
     public @NotNull String getVersion() {
-        return "";
+        return plugin.getDescription().getVersion();
     }
 
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String identifier) {
-
-
         String[] args = identifier.split("_");
         if (args[0].equalsIgnoreCase("health")) {
             return String.valueOf((int) Maps.mobCreators.get(args[1]).getLivingEntity().getHealth());

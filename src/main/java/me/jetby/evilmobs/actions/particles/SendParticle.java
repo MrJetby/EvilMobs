@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 public class SendParticle implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         String context = ctx.get("message", String.class);
@@ -28,5 +29,4 @@ public class SendParticle implements Action {
         ParticleEffectManager.playEffect(args[0], entity.getLocation(), EvilMobs.getInstance().getParticles());
 
     }
-
 }

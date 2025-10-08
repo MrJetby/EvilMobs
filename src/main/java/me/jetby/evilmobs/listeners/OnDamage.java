@@ -36,7 +36,6 @@ public class OnDamage implements Listener {
         Mob mob = Maps.mobs.get(id);
         if (mob == null) return;
 
-
         double damage = e.getDamage();
         EntityDamageEvent.DamageCause damageCause = e.getCause();
 
@@ -49,7 +48,6 @@ public class OnDamage implements Listener {
             }
         }
 
-
         if (damager instanceof Player player) {
             if (!mob.listeners().isEmpty()) {
                 List<String> actions = mob.listeners().get("ON_DAMAGE");
@@ -61,6 +59,4 @@ public class OnDamage implements Listener {
             }
         }
     }
-
-
 }
