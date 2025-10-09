@@ -8,4 +8,5 @@ load: POSTWORLD
 softdepend:
   - PlaceholderAPI
 commands:
-  evilmobs: { }
+  evilmobs:
+    aliases: [ em ]

@@ -31,6 +31,10 @@ public class DropManager {
 
         String lootAmount = mob.lootAmount();
         List<Items.ItemsData> items = mob.items();
+        if (items==null || items.isEmpty()) {
+            LOGGER.warn("No items configured for mob: " + mob.id());
+            return;
+        }
         int minLoot, maxLoot;
         try {
             if (lootAmount.contains("-")) {
