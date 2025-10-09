@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class YamlCommentEditor {
+
     private final File file;
     private final List<String> lines;
     private boolean modified = false;

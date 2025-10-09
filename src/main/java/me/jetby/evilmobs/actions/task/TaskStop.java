@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class TaskStop implements Action {
 
-
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Entity entity = ctx.get("entity", Entity.class);
@@ -25,6 +24,5 @@ public class TaskStop implements Action {
         if (miniTask == null) return;
 
         miniTask.cancel();
-
     }
 }

@@ -6,7 +6,6 @@ import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.configurations.Items;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -55,10 +54,12 @@ public class ChanceEditor extends AdvancedGui {
                     event.setCancelled(true);
                     ClickType click = event.getClick();
 
-                    if (click == ClickType.LEFT) chance[0] += 1;
-                    else if (click == ClickType.RIGHT) chance[0] -= 1;
-                    else if (click == ClickType.SHIFT_LEFT) chance[0] += 10;
-                    else if (click == ClickType.SHIFT_RIGHT) chance[0] -= 10;
+                    switch (click) {
+                        case LEFT -> chance[0] += 1;
+                        case RIGHT -> chance[0] -= 1;
+                        case SHIFT_LEFT -> chance[0] += 10;
+                        case SHIFT_RIGHT -> chance[0] -= 10;
+                    }
 
                     chance[0] = Math.max(0, Math.min(100, chance[0]));
 
@@ -66,18 +67,17 @@ public class ChanceEditor extends AdvancedGui {
                     meta.getPersistentDataContainer().set(CHANCE, PersistentDataType.INTEGER, chance[0]);
                     item.setItemMeta(meta);
 
-                    controller.updateItems(wrapper -> {
-                        wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])));
-                    });
+                    controller.updateItems(wrapper ->
+                            wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name")
+                                    .replace("{chance}", String.valueOf(chance[0])))
+                    );
                 });
             });
         }
 
         onClose(event -> {
             saveChanges();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                new InvEditor(plugin, player, Maps.mobs.get(type)).open(player);
-            }, 1L);
+            runTask(() -> new InvEditor(plugin, player, Maps.mobs.get(type)).open(player), 1L);
         });
     }
 

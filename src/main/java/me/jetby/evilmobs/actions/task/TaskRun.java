@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class TaskRun implements Action {
 
-
     @Override
     public void execute(@NotNull ActionContext ctx) {
         LivingEntity entity = ctx.get("entity", LivingEntity.class);
@@ -37,7 +36,5 @@ public class TaskRun implements Action {
 
         tasks.put(context, miniTask);
         Maps.tasks.put(entity.getUniqueId(), tasks);
-
-
     }
 }

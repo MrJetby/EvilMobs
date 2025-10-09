@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SetTarget implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Player player = ctx.getPlayer();

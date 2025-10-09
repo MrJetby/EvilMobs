@@ -25,6 +25,7 @@ import static me.jetby.evilmobs.gui.MainMenu.CHANCE;
 
 @UtilityClass
 public class DropManager {
+
     private final Random RANDOM = new Random();
 
     public void dropRandomItems(Location location, Mob mob) {

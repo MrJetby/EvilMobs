@@ -44,12 +44,8 @@ public class InvEditor extends AdvancedGui {
                     event.setCancelled(true);
 
                     switch (event.getClick()) {
-                        case LEFT -> {
-                            new ItemEditor(player, inv, id, plugin).open(player);
-                        }
-                        case RIGHT -> {
-                            new ChanceEditor(player, id, inv, plugin).open(player);
-                        }
+                        case LEFT -> new ItemEditor(player, inv, id, plugin).open(player);
+                        case RIGHT -> new ChanceEditor(player, id, inv, plugin).open(player);
                     }
                 });
             });
