@@ -31,7 +31,6 @@ import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 @RequiredArgsConstructor
 public class MobCreator {
 
-
     final Mob mainMob;
     int taskId = -1;
     final Map<UUID, Integer> tasks = new HashMap<>();
@@ -290,11 +289,9 @@ public class MobCreator {
         }
     }
 
-
     public void end() {
         Bukkit.getScheduler().cancelTask(taskId);
         killAllMinions();
         Maps.mobCreators.remove(mainMob.id());
     }
-
 }

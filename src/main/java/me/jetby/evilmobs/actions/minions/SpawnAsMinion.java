@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 public class SpawnAsMinion implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Entity entity = ctx.get("entity", Entity.class);
@@ -18,7 +19,5 @@ public class SpawnAsMinion implements Action {
         if (entity == null || mob == null || context == null) return;
 
         Maps.mobCreators.get(mob.id()).spawnMinion(context, entity.getLocation());
-
-
     }
 }

@@ -95,7 +95,7 @@
         <dependency>
             <groupId>com.jodexindustries.jguiwrapper</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.0.7</version>
+            <version>1.0.0.8</version>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>

@@ -26,29 +26,22 @@ public class ItemEditor extends AdvancedGui {
 
 
         setCancelEmptySlots(false);
-        onDrag(inventoryDragEvent -> {
-            inventoryDragEvent.setCancelled(false);
-        });
+        onDrag(event -> event.setCancelled(false));
 
         List<Items.ItemsData> map = items.getData().get(type);
         for (Items.ItemsData itemData : map) {
-            if (!itemData.inv().equals(inv)) continue;
-            if (itemData.itemStack() == null) continue;
+            if (!itemData.inv().equals(inv) || itemData.itemStack() == null) continue;
             registerItem(itemData.slot().toString() + "-" + itemData.inv(), builder -> {
                 builder.slots(itemData.slot());
                 builder.defaultItem(new ItemWrapper(itemData.itemStack()));
-                builder.defaultClickHandler((event, controller) -> {
-                    event.setCancelled(false);
-                });
+                builder.defaultClickHandler((event, controller) -> event.setCancelled(false));
             });
         }
 
         onClose(event -> {
             saveInv(event.getInventory(), type, inv);
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                new InvEditor(plugin, player, Maps.mobs.get(type)).open(player);
-            }, 1L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> new InvEditor(plugin, player, Maps.mobs.get(type)).open(player), 1L);
         });
     }
 

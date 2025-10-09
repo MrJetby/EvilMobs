@@ -10,6 +10,7 @@ import java.util.List;
 
 @UtilityClass
 public class Placeholders {
+
     public @NotNull List<String> list(List<String> list, Mob mob, LivingEntity boss) {
         List<String> actions = new ArrayList<>();
         for (String action : list) {

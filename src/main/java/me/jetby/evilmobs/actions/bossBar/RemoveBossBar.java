@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveBossBar implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         Mob mob = ctx.get("mob", Mob.class);

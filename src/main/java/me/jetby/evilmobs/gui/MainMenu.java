@@ -11,6 +11,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
 public class MainMenu extends AdvancedGui {
+
     public static final NamespacedKey CHANCE = new NamespacedKey("evilmobs", "chance");
 
     public MainMenu(EvilMobs plugin) {

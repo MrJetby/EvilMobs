@@ -7,8 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-
 public class Drop implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         String context = ctx.get("message", String.class);
@@ -19,7 +19,5 @@ public class Drop implements Action {
         Location location = entity.getLocation().clone();
         location.add(mob.dropParticle().offsetX(), mob.dropParticle().offsetY(), mob.dropParticle().offsetZ());
         DropManager.dropItem(Integer.parseInt(context), mob, location);
-
     }
-
 }

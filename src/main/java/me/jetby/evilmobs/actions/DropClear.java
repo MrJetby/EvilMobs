@@ -9,6 +9,7 @@ import org.bukkit.entity.Item;
 import org.jetbrains.annotations.NotNull;
 
 public class DropClear implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         for (World world : Bukkit.getWorlds()) {

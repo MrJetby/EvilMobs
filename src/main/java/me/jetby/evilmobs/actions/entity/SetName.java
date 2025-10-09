@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class SetName implements Action {
+
     @Override
     public void execute(@NotNull ActionContext ctx) {
         LivingEntity entity = ctx.get("entity", LivingEntity.class);

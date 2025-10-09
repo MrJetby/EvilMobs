@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FormatTime {
+
     private final Config config;
     private final Map<String, String[]> cachedFormats;
 
