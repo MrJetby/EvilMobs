@@ -23,15 +23,14 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -88,7 +87,6 @@ public final class EvilMobs extends JavaPlugin {
         MiniBar.init(this);
         JGuiInitializer.init(this, false);
 
-
         items = new Items(FileLoader.getFile("items.yml"));
         items.load();
 
@@ -106,7 +104,6 @@ public final class EvilMobs extends JavaPlugin {
             mainMenu = new MainMenu(this, false);
         }
 
-
         new bStats(this, 27388);
 
         setupPlaceholders();
@@ -122,7 +119,6 @@ public final class EvilMobs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnDamage(), this);
         getServer().getPluginManager().registerEvents(new OnMove(), this);
         getServer().getPluginManager().registerEvents(new ItemPickup(), this);
-
 
         PluginCommand evilmobs = getCommand("evilmobs");
         if (evilmobs != null)
@@ -143,8 +139,10 @@ public final class EvilMobs extends JavaPlugin {
 
         for (World world : Bukkit.getWorlds()) {
             for (LivingEntity e : world.getLivingEntities()) {
-                if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) continue;
                 String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+                if (id == null) {
+                    continue;
+                }
 
                 if (!Maps.mobs.containsKey(id)) continue;
 
@@ -173,8 +171,8 @@ public final class EvilMobs extends JavaPlugin {
 
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity instanceof Item item && item.hasMetadata("evilmobs_originalItem")) {
-                    item.remove();
+                if (entity.getType() == EntityType.DROPPED_ITEM && entity.hasMetadata("evilmobs_originalItem")) {
+                    entity.remove();
                 }
             }
         }
@@ -183,7 +181,7 @@ public final class EvilMobs extends JavaPlugin {
                 miniTask.cancel();
             }
         }
-        List<UUID> uuids = new ArrayList<>(MiniBar.datas.keySet());
+        Set<UUID> uuids = MiniBar.datas.keySet();
         for (UUID uuid : uuids) {
             MiniBar.deleteBossBar(uuid);
         }

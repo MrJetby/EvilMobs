@@ -13,9 +13,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Fireball implements Action {
+
+    private static final Pattern PATTERN = Pattern.compile("\\s+");
 
     @Override
     public void execute(@NotNull ActionContext ctx) {
@@ -66,7 +69,7 @@ public class Fireball implements Action {
 
     private Map<String, String> parseContext(String context) {
 
-        return Arrays.stream(context.split("\\s+"))
+        return Arrays.stream(PATTERN.split(context))
                 .filter(s -> s.contains(":"))
                 .map(s -> s.split(":"))
                 .collect(Collectors.toMap(
@@ -83,7 +86,7 @@ public class Fireball implements Action {
 
         if (fromParam.contains("[")) {
             try {
-                String offsetPart = fromParam.substring(fromParam.indexOf("[") + 1, fromParam.indexOf("]"));
+                String offsetPart = fromParam.substring(fromParam.indexOf('[') + 1, fromParam.indexOf(']'));
                 String[] parts = offsetPart.split(",");
                 if (parts.length == 3) {
                     double x = Double.parseDouble(parts[0]);
@@ -91,7 +94,7 @@ public class Fireball implements Action {
                     double z = Double.parseDouble(parts[2]);
                     offset = new Vector(x, y, z);
                 }
-                base = fromParam.substring(0, fromParam.indexOf("[")).toUpperCase();
+                base = fromParam.substring(0, fromParam.indexOf('[')).toUpperCase();
             } catch (Exception ignored) {
             }
         }

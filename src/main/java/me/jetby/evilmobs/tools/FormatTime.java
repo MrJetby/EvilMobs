@@ -3,15 +3,17 @@ package me.jetby.evilmobs.tools;
 
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.configurations.Config;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FormatTime {
 
     private final Config config;
-    private final Map<String, String[]> cachedFormats;
+    private final Map<String, List<String>> cachedFormats;
 
     public FormatTime(EvilMobs plugin) {
         this.config = plugin.getCfg();
@@ -19,11 +21,13 @@ public class FormatTime {
 
         FileConfiguration configuration = plugin.getLang().getConfig();
 
-        cachedFormats.put("weeks", configuration.getStringList("formattedTime.weeks").toArray(new String[0]));
-        cachedFormats.put("days", configuration.getStringList("formattedTime.days").toArray(new String[0]));
-        cachedFormats.put("hours", configuration.getStringList("formattedTime.hours").toArray(new String[0]));
-        cachedFormats.put("minutes", configuration.getStringList("formattedTime.minutes").toArray(new String[0]));
-        cachedFormats.put("seconds", configuration.getStringList("formattedTime.seconds").toArray(new String[0]));
+        ConfigurationSection formattedTime = configuration.getConfigurationSection("formattedTime");
+
+        cachedFormats.put("weeks", formattedTime.getStringList("weeks"));
+        cachedFormats.put("days", formattedTime.getStringList("days"));
+        cachedFormats.put("hours", formattedTime.getStringList("hours"));
+        cachedFormats.put("minutes", formattedTime.getStringList("minutes"));
+        cachedFormats.put("seconds", formattedTime.getStringList("seconds"));
     }
 
     public String stringFormat(int totalSeconds) {
@@ -33,7 +37,7 @@ public class FormatTime {
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
 
-        Map<String, String> timeUnits = new HashMap<>(8);
+        Map<String, String> timeUnits = new HashMap<>(6, 100);
 
         timeUnits.put("%weeks%", formatUnit(weeks, cachedFormats.get("weeks")));
         timeUnits.put("%days%", formatUnit(days, cachedFormats.get("days")));
@@ -54,8 +58,8 @@ public class FormatTime {
         return format;
     }
 
-    private String formatUnit(int value, String[] forms) {
-        if (value == 0 || forms == null || forms.length < 3) {
+    private String formatUnit(int value, List<String> forms) {
+        if (value == 0 || forms == null || forms.size() < 3) {
             return "";
         }
 
@@ -63,12 +67,15 @@ public class FormatTime {
         int remainder10 = value % 10;
         int remainder100 = value % 100;
 
+        String result;
+
         if (remainder10 == 1 && remainder100 != 11) {
-            return String.format("%d %s", value, forms[0]);
+            result = value + " " + forms.get(0);
         } else if (remainder10 >= 2 && remainder10 <= 4 && (remainder100 < 10 || remainder100 >= 20)) {
-            return String.format("%d %s", value, forms[1]);
+            result = value + " " + forms.get(1);
         } else {
-            return String.format("%d %s", value, forms[2]);
+            result = value + " " + forms.get(2);
         }
+        return result;
     }
 }

@@ -32,7 +32,7 @@ import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 public class MobCreator {
 
     final Mob mainMob;
-    int taskId = -1;
+    final int taskId = -1;
 
     @Getter
     private Location spawnedLocation = null;
@@ -104,8 +104,9 @@ public class MobCreator {
             miniTask.run();
 
             Map<String, MiniTask> tasks = new HashMap<>();
-            if (Maps.tasks.get(entity.getUniqueId()) != null) {
-                tasks.putAll(Maps.tasks.get(entity.getUniqueId()));
+            var oldTasks = Maps.tasks.get(entity.getUniqueId());
+            if (oldTasks != null) {
+                tasks.putAll(oldTasks);
             }
 
             tasks.put(taskId, miniTask);

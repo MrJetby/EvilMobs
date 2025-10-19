@@ -147,8 +147,6 @@ public class AutoStart {
                     mobCreator.spawn();
 
                     Maps.mobCreators.put(id, mobCreator);
-
-
                 }
 
                 if (!isTargetTime) {
@@ -207,8 +205,9 @@ public class AutoStart {
     }
 
     private String getRandomMob() {
-        List<Mob> mobs = new ArrayList<>(Maps.mobs.values());
+        Collection<Mob> mobs = Maps.mobs.values();
         if (mobs.isEmpty()) return null;
-        return mobs.get(Randomizer.rand(mobs.size())).id();
+        List<Mob> mobsList = new ArrayList<>(mobs);
+        return mobsList.get(Randomizer.rand(mobs.size())).id();
     }
 }

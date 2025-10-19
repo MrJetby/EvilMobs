@@ -53,17 +53,15 @@ public class MiniBar {
         );
 
         UUID entityId = entity.getUniqueId();
-        if (datas.containsKey(entityId)) {
-            var getData = datas.get(entityId);
+        Data getData = datas.get(entityId);
+        if (getData != null) {
             deleteBossBar(entityId);
             if (getData.durationTask != 0) Bukkit.getScheduler().cancelTask(getData.durationTask);
         }
 
         int taskId = 0;
         if (bossBarConfig.duration() != -1) {
-            taskId = Bukkit.getScheduler().runTaskLater(EvilMobs.getInstance(), () -> {
-                deleteBossBar(entityId);
-            }, bossBarConfig.duration() * 20L).getTaskId();
+            taskId = Bukkit.getScheduler().runTaskLater(EvilMobs.getInstance(), () -> deleteBossBar(entityId), bossBarConfig.duration() * 20L).getTaskId();
         }
 
         var data = new Data();
@@ -114,7 +112,7 @@ public class MiniBar {
         });
     }
 
-    public void show(@NonNull String id, @NonNull List<Player> targets) {
+    public void show(@NonNull String id, @NonNull Collection<Player> targets) {
         datas.values().stream()
                 .filter(data -> data.id.equalsIgnoreCase(id))
                 .forEach(data -> {
@@ -201,7 +199,7 @@ public class MiniBar {
                 });
     }
 
-    public void remove(@NonNull String id, @NonNull List<Player> targets) {
+    public void remove(@NonNull String id, @NonNull Collection<Player> targets) {
         datas.values().stream()
                 .filter(data -> data.id.equals(id))
                 .forEach(data -> {
@@ -235,7 +233,7 @@ public class MiniBar {
         Data data = datas.get(entityId);
         if (data == null) return;
 
-        remove(data.id, new ArrayList<>(data.players));
+        remove(data.id, data.players);
         if (data.nearTask != 0) {
             Bukkit.getScheduler().cancelTask(data.nearTask);
         }
@@ -255,7 +253,7 @@ public class MiniBar {
         Data data = datas.get(entityId);
         if (data == null || !data.id.equals(id)) return;
 
-        remove(data.id, new ArrayList<>(data.players));
+        remove(data.id, data.players);
         if (data.nearTask != 0) {
             Bukkit.getScheduler().cancelTask(data.nearTask);
         }
@@ -270,7 +268,7 @@ public class MiniBar {
         List<UUID> toRemove = new ArrayList<>();
         datas.forEach((entityId, data) -> {
             if (data.id.equals(id)) {
-                remove(id, new ArrayList<>(data.players));
+                remove(id, data.players);
                 if (data.nearTask != 0) {
                     Bukkit.getScheduler().cancelTask(data.nearTask);
                 }

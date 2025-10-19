@@ -45,7 +45,7 @@ public class Version implements Listener {
 
 
     public List<String> getAlert() {
-        List<String> oldVersion = new ArrayList<>(List.of(
+        List<String> oldVersion = List.of(
                 "",
                 "§7-------- " + COLOR + NAME + " §7--------",
                 COLOR + "● §fAttention, update available, please update the plugin.",
@@ -54,8 +54,8 @@ public class Version implements Listener {
                 COLOR + "● §fDownload here: §b" + DOWNLOAD_LINK,
                 "§7------------------------",
                 ""
-        ));
-        List<String> lastVersion = new ArrayList<>(List.of(
+        );
+        List<String> lastVersion = List.of(
                 "",
                 "§7-------- " + COLOR + NAME + " §7--------",
                 COLOR + "● §7Plugin version: §a" + getVersion(),
@@ -64,7 +64,7 @@ public class Version implements Listener {
                 "",
                 "§7------------------------",
                 ""
-        ));
+        );
 
         if (!isLastVersion()) {
             return oldVersion;

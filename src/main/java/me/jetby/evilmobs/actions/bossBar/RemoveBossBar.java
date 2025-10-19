@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class RemoveBossBar implements Action {
@@ -20,7 +21,7 @@ public class RemoveBossBar implements Action {
 
         if (mob == null || context == null) return;
 
-        List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+        Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
         MiniBar.remove(context, players);
 
     }

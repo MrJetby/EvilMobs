@@ -19,7 +19,7 @@ public class YamlCommentEditor {
     }
 
     private void clearAllComments() {
-        lines.removeIf(line -> line.trim().startsWith("#"));
+        lines.removeIf(line -> !line.trim().isEmpty() && line.trim().charAt(0) == '#');
         modified = true;
     }
 

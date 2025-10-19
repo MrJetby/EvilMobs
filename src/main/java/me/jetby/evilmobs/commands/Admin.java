@@ -78,15 +78,19 @@ public class Admin implements CommandExecutor, TabCompleter {
                     break;
                 }
 
-                if (mobCreators.containsKey(args[1])) {
+                MobCreator mobCreator = mobCreators.get(args[1]);
+                if (mobCreator != null) {
                     if (sender instanceof Player player) {
                         Location location = null;
                         for (World world : Bukkit.getWorlds()) {
                             for (Entity e : world.getEntities()) {
-                                if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING))
+                                String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+                                if (id == null) {
                                     continue;
-                                if (!e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING).equalsIgnoreCase(args[1]))
+                                }
+                                if (!id.equalsIgnoreCase(args[1])) {
                                     continue;
+                                }
 
                                 if (e instanceof LivingEntity l) {
                                     location = l.getLocation();
@@ -100,7 +104,7 @@ public class Admin implements CommandExecutor, TabCompleter {
                         } else {
                             sender.sendMessage("No mobs found");
                         }
-                        player.teleport(mobCreators.get(args[1]).getLivingEntity().getLocation());
+                        player.teleport(mobCreator.getLivingEntity().getLocation());
                         sender.sendMessage("Teleported to mob");
                     }
                 }
@@ -111,9 +115,10 @@ public class Admin implements CommandExecutor, TabCompleter {
                     sender.sendMessage("Usage: /em kill <id>");
                     break;
                 }
-                if (mobCreators.containsKey(args[1])) {
-                    mobCreators.get(args[1]).killAllMinions();
-                    mobCreators.get(args[1]).getLivingEntity().setHealth(0);
+                MobCreator mobCreator = mobCreators.get(args[1]);
+                if (mobCreator != null) {
+                    mobCreator.killAllMinions();
+                    mobCreator.getLivingEntity().setHealth(0);
                     mobCreators.remove(args[1]);
                 }
                 break;
@@ -137,9 +142,10 @@ public class Admin implements CommandExecutor, TabCompleter {
                     sender.sendMessage("Usage: /em despawn <id>");
                     break;
                 }
-                if (mobCreators.containsKey(args[1])) {
-                    mobCreators.get(args[1]).getLivingEntity().remove();
-                    mobCreators.get(args[1]).end();
+                MobCreator mobCreator = mobCreators.get(args[1]);
+                if (mobCreator != null) {
+                    mobCreator.getLivingEntity().remove();
+                    mobCreator.end();
                     sender.sendMessage("Mob with ID " + args[1] + " despawned.");
                 } else {
                     sender.sendMessage("Mob with ID " + args[1] + " not found.");
@@ -155,8 +161,10 @@ public class Admin implements CommandExecutor, TabCompleter {
                 int num = 1;
                 for (World world : Bukkit.getWorlds()) {
                     for (LivingEntity e : world.getLivingEntities()) {
-                        if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) continue;
                         String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+                        if (id == null) {
+                            continue;
+                        }
                         sender.sendMessage("§7#" + num + " §e" + id + " (" + Maps.mobs.get(id).name() + "§r) [" + e.getHealth() + "]");
                         num++;
                     }

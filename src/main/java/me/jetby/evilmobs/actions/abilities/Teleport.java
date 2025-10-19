@@ -11,11 +11,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class Teleport implements Action {
 
+    private static final Pattern PATTERN = Pattern.compile("%rand_player_near_(\\d+)%");
     private final Random random = new Random();
-
 
     private Location parseContext(@NotNull String context, @NotNull Entity entity, @Nullable Player player) {
 
@@ -24,7 +25,7 @@ public class Teleport implements Action {
         }
         if (context.startsWith("%rand_player_near_")) {
             try {
-                int radius = Integer.parseInt(context.replaceAll("%rand_player_near_(\\d+)%", "$1"));
+                int radius = Integer.parseInt(PATTERN.matcher(context).replaceAll("$1"));
                 return getRandomPlayerNearby(entity, radius);
             } catch (NumberFormatException ignored) {
             }

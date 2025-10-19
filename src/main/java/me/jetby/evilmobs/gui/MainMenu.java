@@ -10,6 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
+
 public class MainMenu extends AdvancedGui {
 
     public static final NamespacedKey CHANCE = new NamespacedKey("evilmobs", "chance");
@@ -29,8 +31,9 @@ public class MainMenu extends AdvancedGui {
         }
 
         int slot = 0;
-        for (String type : Maps.mobs.keySet()) {
-            Mob mob = Maps.mobs.get(type);
+        for (Map.Entry<String, Mob> entry : Maps.mobs.entrySet()) {
+            String type = entry.getKey();
+            Mob mob = entry.getValue();
             int finalSlot = slot;
             registerItem(type, builder -> {
                 builder.slots(finalSlot);
