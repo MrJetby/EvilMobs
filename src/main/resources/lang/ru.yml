@@ -14,37 +14,72 @@ formattedTime:
 gui:
   main:
     title: "EvilMobs"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Моб: <yellow>{type}"
-    lore:
-      - "<!i><#FB430A><st>=                                   ="
-      - ""
-      - "<!i><#FB430A><b>▶</b> <white>Нажмите, чтобы настроить предметы"
-      - ""
-      - "<!i><#FB430A><st>=                                   ="
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Моб: <yellow>{type}"
+      lore:
+        - "<!i><#FB430A><st>=                                   ="
+        - ""
+        - "<!i><#FB430A><b>▶</b> <white>Нажмите, чтобы настроить предметы"
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fМоб: &e{type}"
+      lore:
+        - "&6&m=                                   ="
+        - ""
+        - "&6&l▶ &fНажмите, чтобы настроить предметы"
+        - ""
+        - "&6&m=                                   ="
+
   chanceeditor:
     title: "Настроить шансы"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Шанс: <orange>{chance}%"
-    lore:
-      - - "<!i><#FB430A><st>=                                   ="
-      - " <!i><#FB430A><bold>ЛКМ</bold> <gray>+<white>1% "
-      - " <!i><#FB430A><bold>ПКМ</bold> <gray>-<white>1% "
-      - " <!i><#FB430A><bold>SHIFT+ЛКМ</bold> <gray>+<white>10% "
-      - " <!i><#FB430A><bold>SHIFT+ПКМ</bold> <gray>-<white>10% "
-      - ""
-      - "<!i><#FB430A><st>=                                   ="
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Шанс: <orange>{chance}%"
+      lore:
+        - - "<!i><#FB430A><st>=                                   ="
+        - " <!i><#FB430A><bold>ЛКМ</bold> <gray>+<white>1% "
+        - " <!i><#FB430A><bold>ПКМ</bold> <gray>-<white>1% "
+        - " <!i><#FB430A><bold>SHIFT+ЛКМ</bold> <gray>+<white>10% "
+        - " <!i><#FB430A><bold>SHIFT+ПКМ</bold> <gray>-<white>10% "
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fШанс: &e{chance}%"
+      lore:
+        - "&6&m=                                   ="
+        - " &6&lЛКМ &7+&f1% "
+        - " &6&lЛКМПКМ &7-&f1% "
+        - " &6&lЛКМSHIFT+ЛКМ &7+&f10% "
+        - " &6&lЛКМSHIFT+ПКМ &7-&f10% "
+        - ""
+        - "&6&m=                                   ="
+
   inveditor:
     title: "Выбор инвентаря"
     inventory:
-      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Инвентарь: <yellow>{inv}"
-      lore:
-        - - "<!i><#FB430A><st>=                                   ="
-        - ""
-        - " <!i><#FB430A><bold>ЛКМ</bold> <gray>+<white>Настроить предметы "
-        - " <!i><#FB430A><bold>ПКМ</bold> <gray>-<white>Настроить шансы предметов "
-        - ""
-        - - "<!i><#FB430A><st>=                                   ="
+      miniMessage:
+        display_name: "<!i><#FB430A><bold>⭐</bold> <white>Инвентарь: <yellow>{inv}"
+        lore:
+          - "<!i><#FB430A><st>=                                   ="
+          - ""
+          - " <!i><#FB430A><bold>ЛКМ</bold> <gray>+<white> Настроить предметы "
+          - " <!i><#FB430A><bold>ПКМ</bold> <gray>-<white> Настроить шансы предметов "
+          - ""
+          - "<!i><#FB430A><st>=                                   ="
+      legacy:
+        display_name: "&6&l⭐ &fИнвентарь: &e{inv}"
+        lore:
+          - "&6&m=                                   ="
+          - ""
+          - " &6&lЛКМ &7+ &fНастроить предметы "
+          - " &6&lПКМ &7- &fНастроить шансы предметов "
+          - ""
+          - "&6&m>=                                   ="
     new_inventory:
-      display_name: "<green>[+] Добавить новый инвентарь"
+      miniMessage:
+        display_name: "<green>[+] Добавить новый инвентарь"
+      legacy:
+        display_name: "&a[+] Добавить новый инвентарь"
       lore: [ ]
   itemeditor:
     title: 'Редактор предметов'

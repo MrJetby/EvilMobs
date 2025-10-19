@@ -77,7 +77,7 @@
         <dependency>
             <groupId>com.github.MrJetby</groupId>
             <artifactId>Treex</artifactId>
-            <version>0.1.2</version>
+            <version>169bf507</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

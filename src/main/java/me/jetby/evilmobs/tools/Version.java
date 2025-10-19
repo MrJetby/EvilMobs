@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,9 +72,12 @@ public class Version implements Listener {
         return lastVersion;
     }
 
-    private String getRaw(String link) {
+    public static String getRaw(String link) {
         try {
             URL url = new URL(link);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
             StringBuilder builder = new StringBuilder();
             String inputLine;
@@ -100,13 +104,17 @@ public class Version implements Listener {
 
     private String getLastVersion() {
         String result = getRaw(VERSION_LINK);
-        assert result != null;
+        if (result==null) {
+            return "error";
+        }
         return result;
     }
 
     private String getDownloadLink() {
         String result = getRaw(DOWNLOAD_LINK);
-        assert result != null;
+        if (result==null) {
+            return "error";
+        }
         return result;
     }
 }

@@ -34,7 +34,7 @@ bossBars:
   example_health:
     title: "&4&lEvil Boss &7[Health: %health_percentage%%]"
     Color: BLUE
-    Style: PROGRESS
+    Style: SOLID
     Progress: '%health_percentage%'
     duration: -1
 

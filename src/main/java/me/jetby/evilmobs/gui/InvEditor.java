@@ -17,9 +17,18 @@ import java.util.Set;
 public class InvEditor extends AdvancedGui {
 
 
-    public InvEditor(EvilMobs plugin, Player player, Mob mob) {
+    public InvEditor(EvilMobs plugin, Player player, Mob mob, boolean isMiniMessage) {
         super(plugin.getLang().getConfig().getString("gui.inveditor.title", "gui.inveditor.title"));
 
+        SerializerType serializerType;
+        String serializerKey;
+        if (isMiniMessage) {
+            serializerType = SerializerType.MINI_MESSAGE;
+            serializerKey = "miniMessage";
+        } else {
+            serializerType = SerializerType.LEGACY_AMPERSAND;
+            serializerKey = "legacy";
+        }
         String id = mob.id();
 
         Set<String> invs = new HashSet<>();
@@ -35,17 +44,17 @@ public class InvEditor extends AdvancedGui {
             int currentSlot = slot;
             registerItem(inv + "_" + slot, builder -> {
                 builder.slots(currentSlot);
-                builder.defaultItem(ItemWrapper.builder(Material.CHEST, SerializerType.MINI_MESSAGE)
-                        .displayName(plugin.getLang().getConfig().getString("gui.inveditor.inventory.display_name", "gui.inveditor.inventory.display_name").replace("{inv}", inv))
-                        .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.inventory.lore"))
+                builder.defaultItem(ItemWrapper.builder(Material.CHEST, serializerType)
+                        .displayName(plugin.getLang().getConfig().getString("gui.inveditor.inventory."+serializerKey+".display_name", "gui.inveditor.inventory."+serializerKey+".display_name").replace("{inv}", inv))
+                        .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.inventory."+serializerKey+".lore"))
                         .build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
 
                     switch (event.getClick()) {
-                        case LEFT -> new ItemEditor(player, inv, id, plugin).open(player);
-                        case RIGHT -> new ChanceEditor(player, id, inv, plugin).open(player);
+                        case LEFT -> new ItemEditor(player, inv, id, plugin, isMiniMessage).open(player);
+                        case RIGHT -> new ChanceEditor(player, id, inv, plugin, isMiniMessage).open(player);
                     }
                 });
             });
@@ -54,9 +63,9 @@ public class InvEditor extends AdvancedGui {
 
         registerItem("add_button", builder -> {
             builder.slots(53);
-            builder.defaultItem(ItemWrapper.builder(Material.EMERALD, SerializerType.MINI_MESSAGE)
-                    .displayName(plugin.getLang().getConfig().getString("gui.inveditor.new_inventory.display_name", "gui.inveditor.new_inventory.display_name"))
-                    .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.new_inventory.lore"))
+            builder.defaultItem(ItemWrapper.builder(Material.EMERALD, serializerType)
+                    .displayName(plugin.getLang().getConfig().getString("gui.inveditor.new_inventory."+serializerKey+".display_name", "gui.inveditor.new_inventory."+serializerKey+".display_name"))
+                    .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.new_inventory."+serializerKey+".lore"))
                     .build());
 
             builder.defaultClickHandler((event, controller) -> {
@@ -65,7 +74,7 @@ public class InvEditor extends AdvancedGui {
                 ItemStack dirt = new ItemStack(Material.DIRT);
                 plugin.getItems().saveItem(id, newInvName, dirt, 0, 100);
 
-                InvEditor newGui = new InvEditor(plugin, player, mob);
+                InvEditor newGui = new InvEditor(plugin, player, mob, isMiniMessage);
                 newGui.open(player);
             });
         });

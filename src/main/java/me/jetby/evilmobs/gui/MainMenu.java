@@ -14,10 +14,19 @@ public class MainMenu extends AdvancedGui {
 
     public static final NamespacedKey CHANCE = new NamespacedKey("evilmobs", "chance");
 
-    public MainMenu(EvilMobs plugin) {
+    public MainMenu(EvilMobs plugin, boolean isMiniMessage) {
 
         super(plugin.getLang().getConfig().getString("gui.main.title", "gui.main.title"));
 
+        SerializerType serializerType;
+        String serializerKey;
+        if (isMiniMessage) {
+            serializerType = SerializerType.MINI_MESSAGE;
+            serializerKey = "miniMessage";
+        } else {
+            serializerType = SerializerType.LEGACY_AMPERSAND;
+            serializerKey = "legacy";
+        }
 
         int slot = 0;
         for (String type : Maps.mobs.keySet()) {
@@ -25,16 +34,16 @@ public class MainMenu extends AdvancedGui {
             int finalSlot = slot;
             registerItem(type, builder -> {
                 builder.slots(finalSlot);
-                builder.defaultItem(ItemWrapper.builder(Material.valueOf(mob.entityType().name() + "_SPAWN_EGG"), SerializerType.MINI_MESSAGE)
-                        .displayName(plugin.getLang().getConfig().getString("gui.main.display_name", "gui.main.display_name").replace("{type}", type))
-                        .lore(plugin.getLang().getConfig().getStringList("gui.main.lore"))
+                builder.defaultItem(ItemWrapper.builder(Material.valueOf(mob.entityType().name() + "_SPAWN_EGG"), serializerType)
+                        .displayName(plugin.getLang().getConfig().getString("gui.main."+serializerKey+".display_name", "gui.main."+serializerKey+".display_name").replace("{type}", type))
+                        .lore(plugin.getLang().getConfig().getStringList("gui.main."+serializerKey+".lore"))
                         .build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
 
                     if (event.getWhoClicked() instanceof Player player) {
-                        new InvEditor(plugin, player, mob).open(player);
+                        new InvEditor(plugin, player, mob, isMiniMessage).open(player);
                     }
                 });
             });

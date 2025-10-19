@@ -1,6 +1,7 @@
 package me.jetby.evilmobs.gui;
 
 import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
+import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
@@ -20,10 +21,15 @@ public class ItemEditor extends AdvancedGui {
 
     private final Items items;
 
-    public ItemEditor(Player player, String inv, String type, EvilMobs plugin) {
+    public ItemEditor(Player player, String inv, String type, EvilMobs plugin, boolean isMiniMessage) {
         super(plugin.getLang().getConfig().getString("gui.itemeditor.title", "gui.itemeditor.title"));
         this.items = plugin.getItems();
-
+        SerializerType serializerType;
+        if (isMiniMessage) {
+            serializerType = SerializerType.MINI_MESSAGE;
+        } else {
+            serializerType = SerializerType.LEGACY_AMPERSAND;
+        }
 
         setCancelEmptySlots(false);
         onDrag(event -> event.setCancelled(false));
@@ -33,7 +39,7 @@ public class ItemEditor extends AdvancedGui {
             if (!itemData.inv().equals(inv) || itemData.itemStack() == null) continue;
             registerItem(itemData.slot().toString() + "-" + itemData.inv(), builder -> {
                 builder.slots(itemData.slot());
-                builder.defaultItem(new ItemWrapper(itemData.itemStack()));
+                builder.defaultItem(new ItemWrapper(itemData.itemStack(), serializerType));
                 builder.defaultClickHandler((event, controller) -> event.setCancelled(false));
             });
         }
@@ -41,7 +47,7 @@ public class ItemEditor extends AdvancedGui {
         onClose(event -> {
             saveInv(event.getInventory(), type, inv);
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> new InvEditor(plugin, player, Maps.mobs.get(type)).open(player), 1L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> new InvEditor(plugin, player, Maps.mobs.get(type), isMiniMessage).open(player), 1L);
         });
     }
 

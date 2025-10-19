@@ -1,42 +1,84 @@
 lang: en
 
-reload: "&aAll configurations was successfully reloaded by {time} ms"
-mob-creator-not-found: "No MobCreator found for context: {context}"
+reload: "&aAll configurations have been successfully reloaded in {time} ms"
+mob-creator-not-found: "MobCreator not found for context: {context}"
+
+formattedTime:
+  weeks: [ "week", "weeks", "weeks" ]
+  days: [ "day", "days", "days" ]
+  hours: [ "hour", "hours", "hours" ]
+  minutes: [ "minute", "minutes", "minutes" ]
+  seconds: [ "second", "seconds", "seconds" ]
 
 gui:
   main:
     title: "EvilMobs"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Mob: <yellow>{type}"
-    lore:
-      - "<!i><#FB430A><st>=                                   ="
-      - ""
-      - "<!i><#FB430A><b>▶</b> <white>Click to configure items"
-      - ""
-      - "<!i><#FB430A><st>=                                   ="
-  chanceeditor:
-    title: "Configure Chances"
-    display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <gold>{chance}%"
-    lore:
-      - "<!i><#FB430A><st>=                                   ="
-      - " <!i><#FB430A><bold>Left click</bold> <gray>+<white>1% "
-      - " <!i><#FB430A><bold>Right click</bold> <gray>-<white>1% "
-      - " <!i><#FB430A><bold>SHIFT+Left click</bold> <gray>+<white>10% "
-      - " <!i><#FB430A><bold>SHIFT+Right click</bold> <gray>-<white>10% "
-      - ""
-      - "<!i><#FB430A><st>=                                   ="
-  inveditor:
-    title: "Inventory Selection"
-    inventory:
-      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventory: <yellow>{inv}"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Mob: <yellow>{type}"
       lore:
         - "<!i><#FB430A><st>=                                   ="
         - ""
-        - " <!i><#FB430A><bold>Left click</bold> <gray>- <white>Configure items "
-        - " <!i><#FB430A><bold>Right click</bold> <gray>- <white>Configure item chances "
+        - "<!i><#FB430A><b>▶</b> <white>Click to configure items"
         - ""
         - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fMob: &e{type}"
+      lore:
+        - "&6&m=                                   ="
+        - ""
+        - "&6&l▶ &fClick to configure items"
+        - ""
+        - "&6&m=                                   ="
+
+  chanceeditor:
+    title: "Configure Chances"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <orange>{chance}%"
+      lore:
+        - - "<!i><#FB430A><st>=                                   ="
+        - " <!i><#FB430A><bold>LMB</bold> <gray>+<white>1% "
+        - " <!i><#FB430A><bold>RMB</bold> <gray>-<white>1% "
+        - " <!i><#FB430A><bold>SHIFT+LMB</bold> <gray>+<white>10% "
+        - " <!i><#FB430A><bold>SHIFT+RMB</bold> <gray>-<white>10% "
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fChance: &e{chance}%"
+      lore:
+        - "&6&m=                                   ="
+        - " &6&lLMB &7+&f1% "
+        - " &6&lRMB &7-&f1% "
+        - " &6&lSHIFT+LMB &7+&f10% "
+        - " &6&lSHIFT+RMB &7-&f10% "
+        - ""
+        - "&6&m=                                   ="
+
+  inveditor:
+    title: "Inventory Selection"
+    inventory:
+      miniMessage:
+        display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventory: <yellow>{inv}"
+        lore:
+          - "<!i><#FB430A><st>=                                   ="
+          - ""
+          - " <!i><#FB430A><bold>LMB</bold> <gray>+<white> Configure items "
+          - " <!i><#FB430A><bold>RMB</bold> <gray>-<white> Configure item chances "
+          - ""
+          - "<!i><#FB430A><st>=                                   ="
+      legacy:
+        display_name: "&6&l⭐ &fInventory: &e{inv}"
+        lore:
+          - "&6&m=                                   ="
+          - ""
+          - " &6&lLMB &7+ &fConfigure items "
+          - " &6&lRMB &7- &fConfigure item chances "
+          - ""
+          - "&6&m>=                                   ="
     new_inventory:
-      display_name: "<green>[+] Add new inventory"
+      miniMessage:
+        display_name: "<green>[+] Add new inventory"
+      legacy:
+        display_name: "&a[+] Add new inventory"
       lore: [ ]
   itemeditor:
     title: 'Item Editor'
@@ -47,14 +89,14 @@ comments:
       id:
         - '#################################################################'
         - '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ACTIONS LIST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #'
-        - '[LIGHTNING] - strike lightning at target or radius. TARGET: %closest_player%/%rand_player%'
-        - '[TELEPORT] - teleport mob to x;y;z;world or %closest_player%/%rand_player_near_<radius>%'
-        - '[FIREBALL] - shoot fireball. TARGET:<target> EXPLODE:true/false FROM:MOB/TOP SPEED:<0.1-1.0>'
+        - '[LIGHTNING] - strike with lightning at target or in radius. TARGET: %closest_player%/%rand_player%'
+        - '[TELEPORT] - teleport the mob to x;y;z;world or %closest_player%/%rand_player_near_<radius>%'
+        - '[FIREBALL] - shoot a fireball. TARGET:<target> EXPLOSION:true/false FROM:MOB/TOP SPEED:<0.1-1.0>'
         - '[EFFECT_NEAR] - apply effect nearby. EFFECT_NAME;DURATION;LEVEL;RADIUS'
         - '[SPAWN_AS_MINION] - spawn a minion by id'
         - '[KILL_ALL_MINIONS] - kill all minions by id'
-        - '[TASK_RUN] - run a predefined task by id'
-        - '[TASK_STOP] - stop a predefined task by id'
+        - '[TASK_RUN] - run predefined task by id'
+        - '[TASK_STOP] - stop predefined task by id'
         - '[SET_AI] - enable/disable mob AI (true/false)'
         - '[SET_AGE] - set mob age (baby/adult)'
         - '[SET_CAN_PICKUP_ITEMS] - allow/disallow item pickup (true/false)'
@@ -72,27 +114,27 @@ comments:
         - '[EFFECT] - apply effect to mob. EFFECT_NAME;DURATION;LEVEL'
         - '[SET_TARGET] - set mob target. %damager%/%closest_player%/%rand_player_near_<radius>%'
         - '[DELAY] - delay next action, in ticks (20 ticks = 1 second)'
-        - '[CREATE_BOSSBAR] - create a bossbar by id'
-        - '[SHOW_BOSSBAR] - show a bossbar by id'
-        - '[SHOW_BOSSBAR_NEAR] - show a bossbar by id to players in radius'
+        - '[CREATE_BOSSBAR] - create bossbar by id'
+        - '[SHOW_BOSSBAR] - show bossbar by id'
+        - '[SHOW_BOSSBAR_NEAR] - show bossbar by id to players in radius'
         - 'Example: [SHOW_BOSSBAR_NEAR] example 30'
-        - '[REMOVE_BOSSBAR] - remove a bossbar by id'
-        - '[REMOVE_BOSSBAR_NEAR] - remove a bossbar by id from players in radius'
+        - '[REMOVE_BOSSBAR] - remove bossbar by id'
+        - '[REMOVE_BOSSBAR_NEAR] - remove bossbar by id for players in radius'
         - 'Example: [REMOVE_BOSSBAR_NEAR] example 30'
-        - '[DELETE_BOSSBAR] - delete a bossbar by id'
+        - '[DELETE_BOSSBAR] - delete bossbar by id'
         - '#################################################################'
       name:
-        - "If you remove this line, the mob's name will be hidden"
+        - "If you delete this line, the mob name will be hidden"
       moving-radius:
-        - "Remove the line or set to -1 for no movement radius limit"
-        - "the mob cannot go beyond this radius"
+        - "Delete the line or set -1 for no movement radius limit"
+        - "Mob cannot move beyond this radius"
       spawn-location:
         - ''
-        - "you can set coordinates like x;y;z;world"
-        - "or use rtp, spawn in a random location"
+        - "You can set coordinates as x;y;z;world"
+        - "Or use rtp to spawn in a random location"
         - ''
       listeners:
-        - 'Actions that will execute on any listener'
+        - 'Actions that will be executed on any listener'
         - 'Available: ON_DAMAGE, ON_MOVE'
       bossBars:
         example_health:
@@ -101,17 +143,17 @@ comments:
           style:
             - 'SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20'
           duration:
-            - '-1 for infinite duration, or specify time in seconds after which the bossbar will disappear'
+            - '-1 for infinite duration, or set seconds after which the bossbar disappears'
       tasks:
         example:
           delay:
-            - 'Delay before the task starts, in ticks (20 ticks = 1 second)'
+            - 'Delay before task starts, in ticks (20 ticks = 1 second)'
           period:
-            - 'How often the task will repeat, in ticks (20 ticks = 1 second)'
+            - 'How often the task repeats, in ticks (20 ticks = 1 second)'
           actions:
-            - 'Actions that will execute when the task runs'
+            - 'Actions to execute when the task runs'
           amount:
-            - 'Number of times the task will run. -1 for infinite'
+            - 'Number of task executions. -1 for infinite'
       phases:
         example_placeholder:
           - 'Types:'
@@ -120,41 +162,41 @@ comments:
           - 'PLACEHOLDER'
       drop-settings:
         lootAmount:
-          - "If you don't want anything to drop out, set it to 0."
-          - "If you want everything possible to drop, ignoring chance and randomness, set -1"
+          - "Set 0 if you don't want anything to drop."
+          - "Set -1 to drop everything possible, ignoring chance and randomness."
         only-custom:
           - 'If true, vanilla drops will not occur.'
         flying-drop-particle:
-          - 'Drop particles when the [drop] command is called'
+          - 'Particle drop when [drop] command is executed'
         pickup-delay:
-          - 'in ticks (20 ticks = 1 second)'
+          - 'In ticks (20 ticks = 1 second)'
       mask:
         mask:
-          - "Masking items for drops caused by the [drop] command"
+          - "Item disguises for drops triggered by [drop] command"
         items:
           m1:
-            - 'This is where the camouflage is configured.'
-            - 'A random mask will be selected to mask the drop.'
+            - 'Customize camouflage here.'
+            - 'A random disguiser will be chosen to mask the drop.'
   config:
     lang:
       - "Your preferred language"
     auto-start:
       min-online:
-        - "Minimum number of online players required to spawn a mob; if Freeze is enabled, the timer will be paused if the online count is below this"
+        - "Minimum online players required to spawn mobs; if Freeze is enabled, the timer pauses when online is below this."
       freeze:
-        - "If true, the timer will pause if there are not enough players online."
-        - "If false, the timer will continue running regardless of the online count"
+        - "If true, the timer freezes when not enough players."
+        - "If false, the timer continues regardless of online players."
       zone:
         - "Time zone"
       time:
-        - "If you specify time: <number>, a mob will attempt to spawn every <number> seconds"
-        - "Alternatively, you can specify exact times when mobs should spawn"
-        - "Time is specified in 24-hour format, e.g., 17:30 means 5:30 PM"
-        - "You can specify multiple times, and a mob will spawn at each of those times"
-        - "If multiple times are specified, they must be indented with 2 spaces"
+        - "If you write time: <number>, mobs will attempt to spawn every <number> seconds"
+        - "Or you can schedule exact times for mobs to spawn"
+        - "Time format is 24-hour, e.g., 17:30 is 5:30 PM"
+        - "You can specify multiple times; mobs spawn at each specified time"
+        - "If multiple times are specified, they must be indented by 2 spaces"
         - "Example:"
         - " time:"
-        - "   - '10:00;id' # if you add \";mob_id\", this specific event will occur at this time"
-        - "   - '21:00' # if nothing is added, a random mob will spawn"
+        - "   - '10:00;id' # adding \";mob_id\" spawns this event at this time"
+        - "   - '21:00' # spawns random mob if no id is added"
         - "   - '23:00'"
-        - "   - '17:00:SUNDAY' # you can even specify days of the week"
+        - "   - '17:00:SUNDAY' # you can even set specific weekdays"

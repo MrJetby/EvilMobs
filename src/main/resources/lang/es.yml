@@ -1,0 +1,202 @@
+lang: es
+
+reload: "&aTodas las configuraciones se han recargado correctamente en {time} ms"
+mob-creator-not-found: "MobCreator no encontrado para el contexto: {context}"
+
+formattedTime:
+  weeks: [ "semana", "semanas", "semanas" ]
+  days: [ "día", "días", "días" ]
+  hours: [ "hora", "horas", "horas" ]
+  minutes: [ "minuto", "minutos", "minutos" ]
+  seconds: [ "segundo", "segundos", "segundos" ]
+
+gui:
+  main:
+    title: "EvilMobs"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Móvil: <yellow>{type}"
+      lore:
+        - "<!i><#FB430A><st>=                                   ="
+        - ""
+        - "<!i><#FB430A><b>▶</b> <white>Haz clic para configurar objetos"
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fMóvil: &e{type}"
+      lore:
+        - "&6&m=                                   ="
+        - ""
+        - "&6&l▶ &fHaz clic para configurar objetos"
+        - ""
+        - "&6&m=                                   ="
+
+  chanceeditor:
+    title: "Configurar Probabilidades"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Probabilidad: <orange>{chance}%"
+      lore:
+        - - "<!i><#FB430A><st>=                                   ="
+        - " <!i><#FB430A><bold>LMB</bold> <gray>+<white>1% "
+        - " <!i><#FB430A><bold>RMB</bold> <gray>-<white>1% "
+        - " <!i><#FB430A><bold>SHIFT+LMB</bold> <gray>+<white>10% "
+        - " <!i><#FB430A><bold>SHIFT+RMB</bold> <gray>-<white>10% "
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fProbabilidad: &e{chance}%"
+      lore:
+        - "&6&m=                                   ="
+        - " &6&lLMB &7+&f1% "
+        - " &6&lRMB &7-&f1% "
+        - " &6&lSHIFT+LMB &7+&f10% "
+        - " &6&lSHIFT+RMB &7-&f10% "
+        - ""
+        - "&6&m=                                   ="
+
+  inveditor:
+    title: "Selección de Inventario"
+    inventory:
+      miniMessage:
+        display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventario: <yellow>{inv}"
+        lore:
+          - "<!i><#FB430A><st>=                                   ="
+          - ""
+          - " <!i><#FB430A><bold>LMB</bold> <gray>+<white> Configurar objetos "
+          - " <!i><#FB430A><bold>RMB</bold> <gray>-<white> Configurar probabilidades de objetos "
+          - ""
+          - "<!i><#FB430A><st>=                                   ="
+      legacy:
+        display_name: "&6&l⭐ &fInventario: &e{inv}"
+        lore:
+          - "&6&m=                                   ="
+          - ""
+          - " &6&lLMB &7+ &fConfigurar objetos "
+          - " &6&lRMB &7- &fConfigurar probabilidades de objetos "
+          - ""
+          - "&6&m>=                                   ="
+    new_inventory:
+      miniMessage:
+        display_name: "<green>[+] Añadir nuevo inventario"
+      legacy:
+        display_name: "&a[+] Añadir nuevo inventario"
+      lore: [ ]
+  itemeditor:
+    title: 'Editor de Objetos'
+
+comments:
+  mobs:
+    example:
+      id:
+        - '#################################################################'
+        - '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~LISTA DE ACCIONES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #'
+        - '[LIGHTNING] - golpear con rayo al objetivo o en un radio. OBJETIVO: %closest_player%/%rand_player%'
+        - '[TELEPORT] - teletransportar al mob a x;y;z;mundo o %closest_player%/%rand_player_near_<radius>%'
+        - '[FIREBALL] - disparar una bola de fuego. OBJETIVO:<target> EXPLOSIÓN:true/false DESDE:MOB/TOP VELOCIDAD:<0.1-1.0>'
+        - '[EFFECT_NEAR] - aplicar efecto cerca. NOMBRE_EFECTO;DURACIÓN;NIVEL;RADIO'
+        - '[SPAWN_AS_MINION] - invocar un esbirro por id'
+        - '[KILL_ALL_MINIONS] - matar todos los esbirros por id'
+        - '[TASK_RUN] - ejecutar tarea predefinida por id'
+        - '[TASK_STOP] - detener tarea predefinida por id'
+        - '[SET_AI] - activar/desactivar IA del mob (true/false)'
+        - '[SET_AGE] - establecer edad del mob (baby/adult)'
+        - '[SET_CAN_PICKUP_ITEMS] - permitir/no permitir recoger objetos (true/false)'
+        - '[SET_GLOW] - activar/desactivar resplandor (true/false)'
+        - '[SET_NAME] - establecer nombre del mob, soporta códigos de color (&)'
+        - '[SET_HEALTH] - establecer salud del mob'
+        - '[SET_MAX_HEALTH] - establecer salud máxima del mob'
+        - '[TAKE_HEALTH] - reducir salud del mob en un número'
+        - '[ADD_HEALTH] - añadir salud al mob'
+        - '[SEND_PARTICLE] - generar partículas en el mob. ID_PARTÍCULA'
+        - '[CONSOLE] - ejecutar comando de consola'
+        - '[MESSAGE] - enviar mensaje al jugador'
+        - '[DROP] - soltar objetos, cantidad'
+        - '[SOUND] - reproducir sonido al jugador. NOMBRE_SONIDO;VOLUMEN;TONO'
+        - '[EFFECT] - aplicar efecto al mob. NOMBRE_EFECTO;DURACIÓN;NIVEL'
+        - '[SET_TARGET] - establecer objetivo del mob. %damager%/%closest_player%/%rand_player_near_<radius>%'
+        - '[DELAY] - retraso de la siguiente acción, en ticks (20 ticks = 1 segundo)'
+        - '[CREATE_BOSSBAR] - crear bossbar por id'
+        - '[SHOW_BOSSBAR] - mostrar bossbar por id'
+        - '[SHOW_BOSSBAR_NEAR] - mostrar bossbar por id a jugadores en radio'
+        - 'Ejemplo: [SHOW_BOSSBAR_NEAR] example 30'
+        - '[REMOVE_BOSSBAR] - eliminar bossbar por id'
+        - '[REMOVE_BOSSBAR_NEAR] - eliminar bossbar por id para jugadores en radio'
+        - 'Ejemplo: [REMOVE_BOSSBAR_NEAR] example 30'
+        - '[DELETE_BOSSBAR] - borrar bossbar por id'
+        - '#################################################################'
+      name:
+        - "Si borras esta línea, el nombre del mob se ocultará"
+      moving-radius:
+        - "Borra la línea o establece -1 para no limitar el radio de movimiento"
+        - "El mob no puede salir de este radio"
+      spawn-location:
+        - ''
+        - "Puedes establecer coordenadas como x;y;z;mundo"
+        - "O usar rtp para spawn aleatorio"
+        - ''
+      listeners:
+        - 'Acciones que se ejecutan en cualquier listener'
+        - 'Disponible: ON_DAMAGE, ON_MOVE'
+      bossBars:
+        example_health:
+          color:
+            - 'PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE'
+          style:
+            - 'SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20'
+          duration:
+            - '-1 para duración infinita, o especifica los segundos después de los cuales el bossbar desaparece'
+      tasks:
+        example:
+          delay:
+            - 'Retraso antes de ejecutar la tarea, en ticks (20 ticks = 1 segundo)'
+          period:
+            - 'Cada cuánto se repite la tarea, en ticks (20 ticks = 1 segundo)'
+          actions:
+            - 'Acciones que se ejecutan al iniciar la tarea'
+          amount:
+            - 'Cantidad de ejecuciones de la tarea. -1 para infinito'
+      phases:
+        example_placeholder:
+          - 'Tipos:'
+          - 'HEALTH'
+          - 'HEALTH_PERCENTAGE'
+          - 'PLACEHOLDER'
+      drop-settings:
+        lootAmount:
+          - "Establece 0 si no quieres que nada se suelte."
+          - "Establece -1 para soltar todo posible, ignorando probabilidades y aleatoriedad."
+        only-custom:
+          - 'Si true, los drops de vanilla no ocurrirán.'
+        flying-drop-particle:
+          - 'Partículas al ejecutar el comando [drop]'
+        pickup-delay:
+          - 'En ticks (20 ticks = 1 segundo)'
+      mask:
+        mask:
+          - "Disfraces de objetos para drops generados por el comando [drop]"
+        items:
+          m1:
+            - 'Personaliza el camuflaje aquí.'
+            - 'Se elegirá un disfraz aleatorio para ocultar el drop.'
+  config:
+    lang:
+      - "Tu idioma preferido"
+    auto-start:
+      min-online:
+        - "Mínimo de jugadores en línea para que los mobs aparezcan; si Freeze está activado, el temporizador se pausará si hay menos jugadores."
+      freeze:
+        - "Si true, el temporizador se congela si no hay suficientes jugadores."
+        - "Si false, el temporizador continúa sin importar el número de jugadores."
+      zone:
+        - "Zona horaria"
+      time:
+        - "Si escribes time: <número>, los mobs intentarán aparecer cada <número> segundos"
+        - "O puedes programar horas exactas para el spawn de mobs"
+        - "Formato de hora de 24h, por ejemplo, 17:30 = 5:30 PM"
+        - "Puedes especificar varias horas; los mobs aparecerán en cada hora especificada"
+        - "Si hay varias horas, deben tener una sangría de 2 espacios"
+        - "Ejemplo:"
+        - " time:"
+        - "   - '10:00;id' # agregando \";mob_id\" spawnea este evento en esta hora"
+        - "   - '21:00' # spawnea un mob aleatorio si no se agrega id"
+        - "   - '23:00'"
+        - "   - '17:00:SUNDAY' # incluso puedes establecer días específicos"

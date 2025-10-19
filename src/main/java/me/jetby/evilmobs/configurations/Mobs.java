@@ -172,7 +172,7 @@ public class Mobs {
                     ItemStack item = new ItemStack(Material.valueOf(section.getString("item")));
                     for (String str : section.getStringList("enchants")) {
                         String[] parts = str.split(";");
-                        Enchantment enchantment = Enchantment.getByName(parts[0]);
+                        Enchantment enchantment = Enchantment.getByName(getEnchant(parts[0]));
                         if (enchantment == null) {
                             LOGGER.warn("Enchantment " + parts[0] + " was not found");
                             continue;
@@ -270,7 +270,6 @@ public class Mobs {
             }
             DropParticle dropParticle = new DropParticle(sound, soundVolume, soundPitch, particle, paritcleAmount, offsetX, offsetY, offsetZ, particleMinY, particleMaxY, minSpeed, maxSpeed, pickupDelay);
 
-
             Map<String, List<String>> listeners = new HashMap<>();
             ConfigurationSection listenerSection = configuration.getConfigurationSection("listeners");
             if (listenerSection != null) {
@@ -279,7 +278,6 @@ public class Mobs {
                     listeners.put(listenerId, actions);
                 }
             }
-
 
             List<Phases> phases = new ArrayList<>();
             ConfigurationSection phasesSection = configuration.getConfigurationSection("phases");
@@ -310,7 +308,7 @@ public class Mobs {
                     int bossBarDuration = bossBar.getInt("duration", -1);
 
                     BarColor bossBarColor = BarColor.valueOf(bossBar.getString("Color", "BLUE"));
-                    BarStyle bossBarStyle = BarStyle.valueOf(bossBar.getString("Style", "PROGRESS"));
+                    BarStyle bossBarStyle = BarStyle.valueOf(bossBar.getString("Style", "SOLID"));
 
                     String bossBarProgress = bossBar.getString("Progress", "1.0");
 
@@ -376,7 +374,14 @@ public class Mobs {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
+
+    private String getEnchant(String enchant) {
+        return switch (enchant) {
+            case "SHARPNESS" -> "DAMAGE_ALL";
+            case "PROTECTION" -> "PROTECTION_ENVIRONMENTAL";
+            default -> enchant;
+        };
+    }
+
 }

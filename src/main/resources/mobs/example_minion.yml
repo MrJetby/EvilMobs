@@ -11,8 +11,6 @@ glow: false
 can-pickup-items: false
 isBaby: true
 
-spawn-location: 0;101;0;world
-
 listeners:
   ON_MOVE:
     - '[SEND_PARTICLE] move'
@@ -21,3 +19,9 @@ listeners:
 drop-settings:
   only-custom: true
   lootAmount: 0
+
+
+armor:
+  helmet:
+    item: GOLDEN_HELMET
+    drop-chance: 0

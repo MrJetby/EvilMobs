@@ -38,7 +38,7 @@ public class Particles {
 
                 Particle particle;
                 try {
-                    particle = Particle.valueOf(section.getString("particle", "FLAME").toUpperCase());
+                    particle = Particle.valueOf(getParticle(section.getString("particle", "FLAME").toUpperCase()));
                 } catch (IllegalArgumentException e) {
                     LOGGER.warn("Invalid particle type for " + id + ": " + section.getString("particle"));
                     continue;
@@ -175,5 +175,11 @@ public class Particles {
             keyframes.add(new ParticleEffectConfig.Keyframe(tick, opcodes));
         }
         return keyframes;
+    }
+    private String getParticle(String particle) {
+        return switch (particle) {
+            case "DUST" -> "REDSTONE";
+            default -> particle;
+        };
     }
 }

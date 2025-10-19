@@ -1,0 +1,202 @@
+lang: zh
+
+reload: "&a所有配置已成功在 {time} 毫秒内重新加载"
+mob-creator-not-found: "未找到上下文的 MobCreator: {context}"
+
+formattedTime:
+  weeks: [ "周", "周", "周" ]
+  days: [ "天", "天", "天" ]
+  hours: [ "小时", "小时", "小时" ]
+  minutes: [ "分钟", "分钟", "分钟" ]
+  seconds: [ "秒", "秒", "秒" ]
+
+gui:
+  main:
+    title: "EvilMobs"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>怪物: <yellow>{type}"
+      lore:
+        - "<!i><#FB430A><st>=                                   ="
+        - ""
+        - "<!i><#FB430A><b>▶</b> <white>点击配置物品"
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &f怪物: &e{type}"
+      lore:
+        - "&6&m=                                   ="
+        - ""
+        - "&6&l▶ &f点击配置物品"
+        - ""
+        - "&6&m=                                   ="
+
+  chanceeditor:
+    title: "配置几率"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>几率: <orange>{chance}%"
+      lore:
+        - - "<!i><#FB430A><st>=                                   ="
+        - " <!i><#FB430A><bold>左键</bold> <gray>+<white>1% "
+        - " <!i><#FB430A><bold>右键</bold> <gray>-<white>1% "
+        - " <!i><#FB430A><bold>Shift+左键</bold> <gray>+<white>10% "
+        - " <!i><#FB430A><bold>Shift+右键</bold> <gray>-<white>10% "
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &f几率: &e{chance}%"
+      lore:
+        - "&6&m=                                   ="
+        - " &6&l左键 &7+&f1% "
+        - " &6&l右键 &7-&f1% "
+        - " &6&lShift+左键 &7+&f10% "
+        - " &6&lShift+右键 &7-&f10% "
+        - ""
+        - "&6&m=                                   ="
+
+  inveditor:
+    title: "选择背包"
+    inventory:
+      miniMessage:
+        display_name: "<!i><#FB430A><bold>⭐</bold> <white>背包: <yellow>{inv}"
+        lore:
+          - "<!i><#FB430A><st>=                                   ="
+          - ""
+          - " <!i><#FB430A><bold>左键</bold> <gray>+<white> 配置物品 "
+          - " <!i><#FB430A><bold>右键</bold> <gray>-<white> 配置物品几率 "
+          - ""
+          - "<!i><#FB430A><st>=                                   ="
+      legacy:
+        display_name: "&6&l⭐ &f背包: &e{inv}"
+        lore:
+          - "&6&m=                                   ="
+          - ""
+          - " &6&l左键 &7+ &f配置物品 "
+          - " &6&l右键 &7- &f配置物品几率 "
+          - ""
+          - "&6&m>=                                   ="
+    new_inventory:
+      miniMessage:
+        display_name: "<green>[+] 添加新背包"
+      legacy:
+        display_name: "&a[+] 添加新背包"
+      lore: [ ]
+  itemeditor:
+    title: '物品编辑器'
+
+comments:
+  mobs:
+    example:
+      id:
+        - '#################################################################'
+        - '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~动作列表~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #'
+        - '[LIGHTNING] - 对目标或范围内造成闪电. 目标: %closest_player%/%rand_player%'
+        - '[TELEPORT] - 将怪物传送到 x;y;z;世界 或 %closest_player%/%rand_player_near_<radius>%'
+        - '[FIREBALL] - 发射火球. 目标:<target> 爆炸:true/false 来源:怪物/顶部 速度:<0.1-1.0>'
+        - '[EFFECT_NEAR] - 对附近生物施加效果. 效果名;持续时间;等级;范围'
+        - '[SPAWN_AS_MINION] - 根据 ID 召唤小兵'
+        - '[KILL_ALL_MINIONS] - 杀死所有 ID 对应的小兵'
+        - '[TASK_RUN] - 执行预定义任务 ID'
+        - '[TASK_STOP] - 停止预定义任务 ID'
+        - '[SET_AI] - 启用/禁用怪物 AI (true/false)'
+        - '[SET_AGE] - 设置怪物年龄 (baby/adult)'
+        - '[SET_CAN_PICKUP_ITEMS] - 允许/禁止捡取物品 (true/false)'
+        - '[SET_GLOW] - 启用/禁用发光 (true/false)'
+        - '[SET_NAME] - 设置怪物名称，支持颜色代码 (&)'
+        - '[SET_HEALTH] - 设置怪物生命值'
+        - '[SET_MAX_HEALTH] - 设置怪物最大生命值'
+        - '[TAKE_HEALTH] - 减少怪物生命值'
+        - '[ADD_HEALTH] - 增加怪物生命值'
+        - '[SEND_PARTICLE] - 在怪物处生成粒子. 粒子ID'
+        - '[CONSOLE] - 执行控制台命令'
+        - '[MESSAGE] - 发送消息给玩家'
+        - '[DROP] - 掉落物品, 数量'
+        - '[SOUND] - 播放声音给玩家. 声音名;音量;音调'
+        - '[EFFECT] - 给怪物施加效果. 效果名;持续时间;等级'
+        - '[SET_TARGET] - 设置怪物目标. %damager%/%closest_player%/%rand_player_near_<radius>%'
+        - '[DELAY] - 下一动作延迟, 单位: tick (20 tick = 1 秒)'
+        - '[CREATE_BOSSBAR] - 创建 bossbar ID'
+        - '[SHOW_BOSSBAR] - 显示 bossbar ID'
+        - '[SHOW_BOSSBAR_NEAR] - 在半径内显示 bossbar 给玩家'
+        - '示例: [SHOW_BOSSBAR_NEAR] example 30'
+        - '[REMOVE_BOSSBAR] - 移除 bossbar ID'
+        - '[REMOVE_BOSSBAR_NEAR] - 在半径内移除 bossbar ID 给玩家'
+        - '示例: [REMOVE_BOSSBAR_NEAR] example 30'
+        - '[DELETE_BOSSBAR] - 删除 bossbar ID'
+        - '#################################################################'
+      name:
+        - "删除此行将隐藏怪物名称"
+      moving-radius:
+        - "删除此行或设为 -1 表示无限移动范围"
+        - "怪物不能超出此范围"
+      spawn-location:
+        - ''
+        - "可设置坐标 x;y;z;世界"
+        - "或使用 rtp 随机生成"
+        - ''
+      listeners:
+        - '在任何监听器触发的动作'
+        - '可用: ON_DAMAGE, ON_MOVE'
+      bossBars:
+        example_health:
+          color:
+            - 'PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE'
+          style:
+            - 'SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20'
+          duration:
+            - '-1 表示无限持续时间，或设定秒数后消失'
+      tasks:
+        example:
+          delay:
+            - '任务开始前延迟, 单位 tick (20 tick = 1 秒)'
+          period:
+            - '任务重复周期, 单位 tick (20 tick = 1 秒)'
+          actions:
+            - '任务执行时的动作'
+          amount:
+            - '任务执行次数, -1 为无限'
+      phases:
+        example_placeholder:
+          - '类型:'
+          - 'HEALTH'
+          - 'HEALTH_PERCENTAGE'
+          - 'PLACEHOLDER'
+      drop-settings:
+        lootAmount:
+          - "设置 0 表示不掉落任何物品."
+          - "设置 -1 表示掉落所有可能物品，忽略概率与随机性."
+        only-custom:
+          - 'true 时，不会生成原版掉落.'
+        flying-drop-particle:
+          - '[drop] 命令触发时的粒子掉落'
+        pickup-delay:
+          - '单位 tick (20 tick = 1 秒)'
+      mask:
+        mask:
+          - "[drop] 命令生成掉落物的物品伪装"
+        items:
+          m1:
+            - '在这里自定义伪装.'
+            - '将随机选择一个伪装用于掉落物品.'
+  config:
+    lang:
+      - "你偏好的语言"
+    auto-start:
+      min-online:
+        - "生成怪物所需的最少在线玩家；若启用 Freeze，当在线不足时计时器会暂停。"
+      freeze:
+        - "true 时，当玩家不足时计时器会冻结。"
+        - "false 时，不论在线人数多少计时器继续。"
+      zone:
+        - "时区"
+      time:
+        - "如果写 time: <数字>，怪物将每 <数字> 秒尝试生成一次"
+        - "或者你可以设定怪物生成的具体时间"
+        - "时间格式为24小时，例如 17:30 表示下午5:30"
+        - "可以设置多个时间点；怪物会在每个时间点生成"
+        - "如果有多个时间点，需要缩进2个空格"
+        - "示例:"
+        - " time:"
+        - "   - '10:00;id' # 添加 \";mob_id\" 会在该时间生成指定事件"
+        - "   - '21:00' # 未添加 id 时生成随机怪物"
+        - "   - '23:00'"
+        - "   - '17:00:SUNDAY' # 可设置特定星期几"

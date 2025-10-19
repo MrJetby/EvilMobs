@@ -138,9 +138,8 @@ public class Admin implements CommandExecutor, TabCompleter {
                     break;
                 }
                 if (mobCreators.containsKey(args[1])) {
-                    mobCreators.get(args[1]).end();
                     mobCreators.get(args[1]).getLivingEntity().remove();
-                    mobCreators.remove(args[1]);
+                    mobCreators.get(args[1]).end();
                     sender.sendMessage("Mob with ID " + args[1] + " despawned.");
                 } else {
                     sender.sendMessage("Mob with ID " + args[1] + " not found.");

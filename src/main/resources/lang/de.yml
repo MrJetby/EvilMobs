@@ -1,0 +1,202 @@
+lang: de
+
+reload: "&aAlle Konfigurationen wurden erfolgreich in {time} ms neu geladen"
+mob-creator-not-found: "MobCreator für Kontext nicht gefunden: {context}"
+
+formattedTime:
+  weeks: [ "Woche", "Wochen", "Wochen" ]
+  days: [ "Tag", "Tage", "Tage" ]
+  hours: [ "Stunde", "Stunden", "Stunden" ]
+  minutes: [ "Minute", "Minuten", "Minuten" ]
+  seconds: [ "Sekunde", "Sekunden", "Sekunden" ]
+
+gui:
+  main:
+    title: "EvilMobs"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Mob: <yellow>{type}"
+      lore:
+        - "<!i><#FB430A><st>=                                   ="
+        - ""
+        - "<!i><#FB430A><b>▶</b> <white>Klicke, um Items zu konfigurieren"
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fMob: &e{type}"
+      lore:
+        - "&6&m=                                   ="
+        - ""
+        - "&6&l▶ &fKlicke, um Items zu konfigurieren"
+        - ""
+        - "&6&m=                                   ="
+
+  chanceeditor:
+    title: "Wahrscheinlichkeiten bearbeiten"
+    miniMessage:
+      display_name: "<!i><#FB430A><bold>⭐</bold> <white>Chance: <orange>{chance}%"
+      lore:
+        - - "<!i><#FB430A><st>=                                   ="
+        - " <!i><#FB430A><bold>LMB</bold> <gray>+<white>1% "
+        - " <!i><#FB430A><bold>RMB</bold> <gray>-<white>1% "
+        - " <!i><#FB430A><bold>SHIFT+LMB</bold> <gray>+<white>10% "
+        - " <!i><#FB430A><bold>SHIFT+RMB</bold> <gray>-<white>10% "
+        - ""
+        - "<!i><#FB430A><st>=                                   ="
+    legacy:
+      display_name: "&6&l⭐ &fChance: &e{chance}%"
+      lore:
+        - "&6&m=                                   ="
+        - " &6&lLMB &7+&f1% "
+        - " &6&lRMB &7-&f1% "
+        - " &6&lSHIFT+LMB &7+&f10% "
+        - " &6&lSHIFT+RMB &7-&f10% "
+        - ""
+        - "&6&m=                                   ="
+
+  inveditor:
+    title: "Inventar auswählen"
+    inventory:
+      miniMessage:
+        display_name: "<!i><#FB430A><bold>⭐</bold> <white>Inventar: <yellow>{inv}"
+        lore:
+          - "<!i><#FB430A><st>=                                   ="
+          - ""
+          - " <!i><#FB430A><bold>LMB</bold> <gray>+<white> Items konfigurieren "
+          - " <!i><#FB430A><bold>RMB</bold> <gray>-<white> Item-Wahrscheinlichkeiten konfigurieren "
+          - ""
+          - "<!i><#FB430A><st>=                                   ="
+      legacy:
+        display_name: "&6&l⭐ &fInventar: &e{inv}"
+        lore:
+          - "&6&m=                                   ="
+          - ""
+          - " &6&lLMB &7+ &fItems konfigurieren "
+          - " &6&lRMB &7- &fItem-Wahrscheinlichkeiten konfigurieren "
+          - ""
+          - "&6&m>=                                   ="
+    new_inventory:
+      miniMessage:
+        display_name: "<green>[+] Neues Inventar hinzufügen"
+      legacy:
+        display_name: "&a[+] Neues Inventar hinzufügen"
+      lore: [ ]
+  itemeditor:
+    title: 'Item-Editor'
+
+comments:
+  mobs:
+    example:
+      id:
+        - '#################################################################'
+        - '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~AKTIONSLISTE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #'
+        - '[LIGHTNING] - Blitz auf Ziel oder in Radius. ZIEL: %closest_player%/%rand_player%'
+        - '[TELEPORT] - Mob teleportieren zu x;y;z;Welt oder %closest_player%/%rand_player_near_<radius>%'
+        - '[FIREBALL] - Feuerball abschießen. ZIEL:<target> EXPLOSION:true/false VON:MOB/OBEN GESCHW:<0.1-1.0>'
+        - '[EFFECT_NEAR] - Effekt in Nähe anwenden. EFFEKTNAME;DAUER;LEVEL;RADIUS'
+        - '[SPAWN_AS_MINION] - Minion nach ID spawnen'
+        - '[KILL_ALL_MINIONS] - Alle Minions nach ID töten'
+        - '[TASK_RUN] - Vorgefertigte Aufgabe nach ID starten'
+        - '[TASK_STOP] - Vorgefertigte Aufgabe nach ID stoppen'
+        - '[SET_AI] - KI ein/aus für Mob (true/false)'
+        - '[SET_AGE] - Alter des Mobs einstellen (baby/adult)'
+        - '[SET_CAN_PICKUP_ITEMS] - Items aufheben erlauben/nicht erlauben (true/false)'
+        - '[SET_GLOW] - Leuchten ein/aus (true/false)'
+        - '[SET_NAME] - Namen des Mobs setzen, unterstützt Farbcode (&)'
+        - '[SET_HEALTH] - Mob-Leben setzen'
+        - '[SET_MAX_HEALTH] - Maximales Mob-Leben setzen'
+        - '[TAKE_HEALTH] - Mob-Leben um Zahl verringern'
+        - '[ADD_HEALTH] - Mob-Leben hinzufügen'
+        - '[SEND_PARTICLE] - Partikel beim Mob erzeugen. PARTIKEL-ID'
+        - '[CONSOLE] - Konsolenbefehl ausführen'
+        - '[MESSAGE] - Nachricht an Spieler senden'
+        - '[DROP] - Items droppen, Menge'
+        - '[SOUND] - Sound abspielen. NAME;Lautstärke;Tonhöhe'
+        - '[EFFECT] - Effekt auf Mob anwenden. EFFEKTNAME;DAUER;LEVEL'
+        - '[SET_TARGET] - Mob-Ziel setzen. %damager%/%closest_player%/%rand_player_near_<radius>%'
+        - '[DELAY] - Verzögerung der nächsten Aktion in Ticks (20 Ticks = 1 Sekunde)'
+        - '[CREATE_BOSSBAR] - Bossbar nach ID erstellen'
+        - '[SHOW_BOSSBAR] - Bossbar nach ID anzeigen'
+        - '[SHOW_BOSSBAR_NEAR] - Bossbar ID im Radius für Spieler anzeigen'
+        - 'Beispiel: [SHOW_BOSSBAR_NEAR] example 30'
+        - '[REMOVE_BOSSBAR] - Bossbar nach ID entfernen'
+        - '[REMOVE_BOSSBAR_NEAR] - Bossbar nach ID im Radius für Spieler entfernen'
+        - 'Beispiel: [REMOVE_BOSSBAR_NEAR] example 30'
+        - '[DELETE_BOSSBAR] - Bossbar löschen nach ID'
+        - '#################################################################'
+      name:
+        - "Wenn diese Zeile gelöscht wird, wird der Mobname verborgen"
+      moving-radius:
+        - "Zeile löschen oder -1 setzen für unbegrenzte Bewegungsreichweite"
+        - "Mob kann diesen Radius nicht verlassen"
+      spawn-location:
+        - ''
+        - "Koordinaten wie x;y;z;Welt setzen"
+        - "Oder rtp für zufälligen Spawn verwenden"
+        - ''
+      listeners:
+        - 'Aktionen, die in jedem Listener ausgeführt werden'
+        - 'Verfügbar: ON_DAMAGE, ON_MOVE'
+      bossBars:
+        example_health:
+          color:
+            - 'PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE'
+          style:
+            - 'SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20'
+          duration:
+            - '-1 für unendliche Dauer oder Sekunden angeben, nach denen die Bossbar verschwindet'
+      tasks:
+        example:
+          delay:
+            - 'Verzögerung vor Task-Ausführung in Ticks (20 Ticks = 1 Sekunde)'
+          period:
+            - 'Wie oft Task wiederholt wird in Ticks (20 Ticks = 1 Sekunde)'
+          actions:
+            - 'Aktionen, die beim Start des Tasks ausgeführt werden'
+          amount:
+            - 'Anzahl der Task-Ausführungen. -1 für unendlich'
+      phases:
+        example_placeholder:
+          - 'Typen:'
+          - 'HEALTH'
+          - 'HEALTH_PERCENTAGE'
+          - 'PLACEHOLDER'
+      drop-settings:
+        lootAmount:
+          - "0 setzen, wenn nichts droppen soll."
+          - "-1 setzen, um alles zu droppen, Wahrscheinlichkeiten werden ignoriert."
+        only-custom:
+          - 'true: keine Vanilla-Drops.'
+        flying-drop-particle:
+          - 'Partikel beim Ausführen von [drop]'
+        pickup-delay:
+          - 'In Ticks (20 Ticks = 1 Sekunde)'
+      mask:
+        mask:
+          - "Maskierung von Items für [drop]-Drops"
+        items:
+          m1:
+            - 'Hier Tarnung anpassen.'
+            - 'Zufällige Tarnung für Drop wählen.'
+  config:
+    lang:
+      - "Bevorzugte Sprache"
+    auto-start:
+      min-online:
+        - "Mindestanzahl Spieler online für Mob-Spawns; wenn Freeze aktiviert, wird Timer bei zu wenig Spielern pausiert."
+      freeze:
+        - "true: Timer friert bei zu wenigen Spielern ein."
+        - "false: Timer läuft unabhängig von Spielerzahl weiter."
+      zone:
+        - "Zeitzone"
+      time:
+        - "Wenn time: <Nummer> angegeben, wird alle <Nummer> Sekunden ein Spawn-Versuch unternommen"
+        - "Oder genaue Zeiten für Mob-Spawns eintragen"
+        - "24h-Format, z.B. 17:30 = 17:30 Uhr"
+        - "Mehrere Zeiten möglich; Mob spawnt zu jeder angegebenen Zeit"
+        - "Bei mehreren Zeiten 2 Leerzeichen einrücken"
+        - "Beispiel:"
+        - " time:"
+        - "   - '10:00;id' # Mit \";mob_id\" wird dieses Event zu dieser Zeit gespawnt"
+        - "   - '21:00' # Ohne ID wird ein zufälliger Mob gespawnt"
+        - "   - '23:00'"
+        - "   - '17:00:SUNDAY' # Auch Wochentage möglich"

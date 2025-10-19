@@ -25,12 +25,20 @@ public class ChanceEditor extends AdvancedGui {
     private final String inv;
     private final Map<Integer, ItemStack> originalItems = new HashMap<>();
 
-    public ChanceEditor(Player player, String type, String inv, EvilMobs plugin) {
+    public ChanceEditor(Player player, String type, String inv, EvilMobs plugin, boolean isMiniMessage) {
         super(plugin.getLang().getConfig().getString("gui.chanceeditor.title", "gui.chanceeditor.title"));
         this.type = type;
         this.inv = inv;
         this.items = plugin.getItems();
-
+        SerializerType serializerType;
+        String serializerKey;
+        if (isMiniMessage) {
+            serializerType = SerializerType.MINI_MESSAGE;
+            serializerKey = "miniMessage";
+        } else {
+            serializerType = SerializerType.LEGACY_AMPERSAND;
+            serializerKey = "legacy";
+        }
 
         List<Items.ItemsData> itemMap = items.getData().get(type);
         for (Items.ItemsData itemData : itemMap) {
@@ -45,10 +53,10 @@ public class ChanceEditor extends AdvancedGui {
 
             registerItem("slot_" + itemData.slot(), builder -> {
                 builder.slots(itemData.slot())
-                        .defaultItem(ItemWrapper.builder(item.getType(), SerializerType.MINI_MESSAGE)
+                        .defaultItem(ItemWrapper.builder(item.getType(), serializerType)
                                 .amount(item.getAmount())
-                                .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name").replace("{chance}", String.valueOf(chance[0])))
-                                .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor.lore")).build());
+                                .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor."+serializerKey+".display_name", "gui.chanceeditor."+serializerKey+".display_name").replace("{chance}", String.valueOf(chance[0])))
+                                .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor."+serializerKey+".lore")).build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
@@ -68,7 +76,7 @@ public class ChanceEditor extends AdvancedGui {
                     item.setItemMeta(meta);
 
                     controller.updateItems(wrapper ->
-                            wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor.display_name", "gui.chanceeditor.display_name")
+                            wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor."+serializerKey+".display_name", "gui.chanceeditor."+serializerKey+".display_name")
                                     .replace("{chance}", String.valueOf(chance[0])))
                     );
                 });
@@ -77,7 +85,7 @@ public class ChanceEditor extends AdvancedGui {
 
         onClose(event -> {
             saveChanges();
-            runTask(() -> new InvEditor(plugin, player, Maps.mobs.get(type)).open(player), 1L);
+            runTask(() -> new InvEditor(plugin, player, Maps.mobs.get(type), isMiniMessage).open(player), 1L);
         });
     }
 
