@@ -104,7 +104,7 @@ public class Version implements Listener {
 
     private String getLastVersion() {
         String result = getRaw(VERSION_LINK);
-        if (result==null) {
+        if (result == null) {
             return "error";
         }
         return result;
@@ -112,7 +112,7 @@ public class Version implements Listener {
 
     private String getDownloadLink() {
         String result = getRaw(DOWNLOAD_LINK);
-        if (result==null) {
+        if (result == null) {
             return "error";
         }
         return result;

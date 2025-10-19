@@ -176,6 +176,7 @@ public class Particles {
         }
         return keyframes;
     }
+
     private String getParticle(String particle) {
         return switch (particle) {
             case "DUST" -> "REDSTONE";

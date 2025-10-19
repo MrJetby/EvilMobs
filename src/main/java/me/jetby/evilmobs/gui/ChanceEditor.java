@@ -55,8 +55,8 @@ public class ChanceEditor extends AdvancedGui {
                 builder.slots(itemData.slot())
                         .defaultItem(ItemWrapper.builder(item.getType(), serializerType)
                                 .amount(item.getAmount())
-                                .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor."+serializerKey+".display_name", "gui.chanceeditor."+serializerKey+".display_name").replace("{chance}", String.valueOf(chance[0])))
-                                .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor."+serializerKey+".lore")).build());
+                                .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor." + serializerKey + ".display_name", "gui.chanceeditor." + serializerKey + ".display_name").replace("{chance}", String.valueOf(chance[0])))
+                                .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor." + serializerKey + ".lore")).build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
@@ -76,7 +76,7 @@ public class ChanceEditor extends AdvancedGui {
                     item.setItemMeta(meta);
 
                     controller.updateItems(wrapper ->
-                            wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor."+serializerKey+".display_name", "gui.chanceeditor."+serializerKey+".display_name")
+                            wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor." + serializerKey + ".display_name", "gui.chanceeditor." + serializerKey + ".display_name")
                                     .replace("{chance}", String.valueOf(chance[0])))
                     );
                 });

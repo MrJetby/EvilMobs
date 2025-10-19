@@ -18,7 +18,7 @@ public class TakeHealth implements Action {
         if (entity == null || mob == null || context == null) return;
 
         if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.setHealth(livingEntity.getHealth()-Double.parseDouble(context));
+            livingEntity.setHealth(livingEntity.getHealth() - Double.parseDouble(context));
         }
     }
 }

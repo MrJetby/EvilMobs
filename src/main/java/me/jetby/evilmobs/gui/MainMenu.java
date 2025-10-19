@@ -35,8 +35,8 @@ public class MainMenu extends AdvancedGui {
             registerItem(type, builder -> {
                 builder.slots(finalSlot);
                 builder.defaultItem(ItemWrapper.builder(Material.valueOf(mob.entityType().name() + "_SPAWN_EGG"), serializerType)
-                        .displayName(plugin.getLang().getConfig().getString("gui.main."+serializerKey+".display_name", "gui.main."+serializerKey+".display_name").replace("{type}", type))
-                        .lore(plugin.getLang().getConfig().getStringList("gui.main."+serializerKey+".lore"))
+                        .displayName(plugin.getLang().getConfig().getString("gui.main." + serializerKey + ".display_name", "gui.main." + serializerKey + ".display_name").replace("{type}", type))
+                        .lore(plugin.getLang().getConfig().getStringList("gui.main." + serializerKey + ".lore"))
                         .build());
 
                 builder.defaultClickHandler((event, controller) -> {

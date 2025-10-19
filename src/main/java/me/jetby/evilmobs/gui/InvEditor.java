@@ -45,8 +45,8 @@ public class InvEditor extends AdvancedGui {
             registerItem(inv + "_" + slot, builder -> {
                 builder.slots(currentSlot);
                 builder.defaultItem(ItemWrapper.builder(Material.CHEST, serializerType)
-                        .displayName(plugin.getLang().getConfig().getString("gui.inveditor.inventory."+serializerKey+".display_name", "gui.inveditor.inventory."+serializerKey+".display_name").replace("{inv}", inv))
-                        .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.inventory."+serializerKey+".lore"))
+                        .displayName(plugin.getLang().getConfig().getString("gui.inveditor.inventory." + serializerKey + ".display_name", "gui.inveditor.inventory." + serializerKey + ".display_name").replace("{inv}", inv))
+                        .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.inventory." + serializerKey + ".lore"))
                         .build());
 
                 builder.defaultClickHandler((event, controller) -> {
@@ -64,8 +64,8 @@ public class InvEditor extends AdvancedGui {
         registerItem("add_button", builder -> {
             builder.slots(53);
             builder.defaultItem(ItemWrapper.builder(Material.EMERALD, serializerType)
-                    .displayName(plugin.getLang().getConfig().getString("gui.inveditor.new_inventory."+serializerKey+".display_name", "gui.inveditor.new_inventory."+serializerKey+".display_name"))
-                    .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.new_inventory."+serializerKey+".lore"))
+                    .displayName(plugin.getLang().getConfig().getString("gui.inveditor.new_inventory." + serializerKey + ".display_name", "gui.inveditor.new_inventory." + serializerKey + ".display_name"))
+                    .lore(plugin.getLang().getConfig().getStringList("gui.inveditor.new_inventory." + serializerKey + ".lore"))
                     .build());
 
             builder.defaultClickHandler((event, controller) -> {
