@@ -1,6 +1,6 @@
 ### Requirements
 - Paper 1.16.5+
-- [Treex](https://github.com/MrJetby/Treex/releases "Treex") 0.1.2+
+- [Treex](https://github.com/MrJetby/Treex/releases "Treex") 0.1.3+
 - Java 17
 
 ------------
