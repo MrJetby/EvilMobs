@@ -1,7 +1,7 @@
 lang: ru
 
 auto-start:
-  enabled: true
+  enabled: false
 
   min-online: 3
 
