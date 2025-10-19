@@ -63,7 +63,6 @@ phases:
 
 actions:
   onSpawn: { }
-  onHit: { }
   onDeath:
     - '[message_all] Boss died'
     - '[drop] 1'
