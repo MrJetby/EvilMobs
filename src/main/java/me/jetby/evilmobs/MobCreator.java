@@ -33,7 +33,6 @@ public class MobCreator {
 
     final Mob mainMob;
     int taskId = -1;
-    final Map<UUID, Integer> tasks = new HashMap<>();
 
     @Getter
     private Location spawnedLocation = null;
@@ -113,8 +112,7 @@ public class MobCreator {
             Maps.tasks.put(entity.getUniqueId(), tasks);
         }
 
-
-        tasks.put(entity.getUniqueId(), Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
 
             if (entity.isDead()) {
                 Bukkit.getScheduler().cancelTask(taskId);
@@ -128,7 +126,7 @@ public class MobCreator {
                     LOGGER.warn(e.getMessage());
                 }
             }
-        }, 0L, 5L).getTaskId());
+        }, 0L, 5L);
     }
 
     private LivingEntity spawn(Mob mob, Location location) {
@@ -203,11 +201,10 @@ public class MobCreator {
         ctx.put("entity", boss);
         ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(mob.onSpawnActions(), mob, boss)));
 
-
         phasesCopy.addAll(mob.phases());
         phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
 
-        tasks.put(boss.getUniqueId(), Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
 
             if (boss.isDead()) {
                 Bukkit.getScheduler().cancelTask(taskId);
@@ -221,7 +218,7 @@ public class MobCreator {
                     LOGGER.warn(e.getMessage());
                 }
             }
-        }, 0L, 5L).getTaskId());
+        }, 0L, 5L);
 
 
         livingEntity = boss;
