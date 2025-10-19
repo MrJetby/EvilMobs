@@ -32,8 +32,7 @@ import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
 public class MobCreator {
 
     final Mob mainMob;
-    int taskId = -1;
-    final Map<UUID, Integer> tasks = new HashMap<>();
+    final int taskId = -1;
 
     @Getter
     private Location spawnedLocation = null;
@@ -105,16 +104,16 @@ public class MobCreator {
             miniTask.run();
 
             Map<String, MiniTask> tasks = new HashMap<>();
-            if (Maps.tasks.get(entity.getUniqueId()) != null) {
-                tasks.putAll(Maps.tasks.get(entity.getUniqueId()));
+            var oldTasks = Maps.tasks.get(entity.getUniqueId());
+            if (oldTasks != null) {
+                tasks.putAll(oldTasks);
             }
 
             tasks.put(taskId, miniTask);
             Maps.tasks.put(entity.getUniqueId(), tasks);
         }
 
-
-        tasks.put(entity.getUniqueId(), Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
 
             if (entity.isDead()) {
                 Bukkit.getScheduler().cancelTask(taskId);
@@ -128,7 +127,7 @@ public class MobCreator {
                     LOGGER.warn(e.getMessage());
                 }
             }
-        }, 0L, 5L).getTaskId());
+        }, 0L, 5L);
     }
 
     private LivingEntity spawn(Mob mob, Location location) {
@@ -203,11 +202,10 @@ public class MobCreator {
         ctx.put("entity", boss);
         ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(mob.onSpawnActions(), mob, boss)));
 
-
         phasesCopy.addAll(mob.phases());
         phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
 
-        tasks.put(boss.getUniqueId(), Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
 
             if (boss.isDead()) {
                 Bukkit.getScheduler().cancelTask(taskId);
@@ -221,7 +219,7 @@ public class MobCreator {
                     LOGGER.warn(e.getMessage());
                 }
             }
-        }, 0L, 5L).getTaskId());
+        }, 0L, 5L);
 
 
         livingEntity = boss;
@@ -247,13 +245,14 @@ public class MobCreator {
         switch (type) {
             case "health": {
                 double health = entity.getHealth();
-                for (var phaseId : new ArrayList<>(phases.keySet())) {
+                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
+                    var phaseId = entry.getKey();
                     double trigger = Double.parseDouble(phaseId);
                     if (health <= trigger) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("entity", entity);
 
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
 
                         phases.remove(phaseId);
                     }
@@ -262,13 +261,14 @@ public class MobCreator {
             }
             case "health_percentage": {
                 int healthPercent = (int) (entity.getHealth() / entity.getMaxHealth()) * 100;
-                for (String phaseId : new ArrayList<>(phases.keySet())) {
+                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
+                    String phaseId = entry.getKey();
                     int trigger = Integer.parseInt(phaseId);
                     if (healthPercent <= trigger) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("mob", mob);
                         ctx.put("entity", entity);
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
                         phases.remove(phaseId);
                     }
                 }
@@ -276,12 +276,13 @@ public class MobCreator {
             }
             default: {
                 var t = Papi.setPapi(null, type);
-                for (var phaseId : new ArrayList<>(phases.keySet())) {
+                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
+                    var phaseId = entry.getKey();
                     if (t.equals(phaseId)) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("mob", mob);
                         ctx.put("entity", entity);
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
                         phases.remove(phaseId);
                     }
                 }

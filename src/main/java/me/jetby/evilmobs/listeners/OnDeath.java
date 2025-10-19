@@ -37,8 +37,10 @@ public class OnDeath implements Listener {
 
     @EventHandler
     public void onDeath(EntityDeathEvent e) {
+        if (Maps.mobCreators.isEmpty()) {
+            return;
+        }
         LivingEntity entity = e.getEntity();
-        if (!entity.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) return;
 
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
         if (id == null) return;

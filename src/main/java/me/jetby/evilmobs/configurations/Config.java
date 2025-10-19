@@ -16,7 +16,7 @@ public class Config {
     final FileConfiguration configuration;
     final File file;
 
-    String lang;
+    final String lang;
 
     boolean autoStartEnabled;
     boolean freeze;

@@ -5,7 +5,7 @@ import me.jetby.treex.actions.ActionContext;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 public class DropClear implements Action {
@@ -14,8 +14,8 @@ public class DropClear implements Action {
     public void execute(@NotNull ActionContext ctx) {
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity instanceof Item item && item.hasMetadata("evilmobs_originalItem")) {
-                    item.remove();
+                if (entity.getType() == EntityType.DROPPED_ITEM && entity.hasMetadata("evilmobs_originalItem")) {
+                    entity.remove();
                 }
             }
         }

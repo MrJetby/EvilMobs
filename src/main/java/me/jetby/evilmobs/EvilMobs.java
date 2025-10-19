@@ -4,19 +4,6 @@ import com.jodexindustries.jguiwrapper.common.JGuiInitializer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import me.jetby.evilmobs.actions.Drop;
-import me.jetby.evilmobs.actions.DropClear;
-import me.jetby.evilmobs.actions.abilities.EffectNear;
-import me.jetby.evilmobs.actions.abilities.Fireball;
-import me.jetby.evilmobs.actions.abilities.Lightning;
-import me.jetby.evilmobs.actions.abilities.Teleport;
-import me.jetby.evilmobs.actions.bossBar.*;
-import me.jetby.evilmobs.actions.entity.*;
-import me.jetby.evilmobs.actions.minions.KillAllMinions;
-import me.jetby.evilmobs.actions.minions.SpawnAsMinion;
-import me.jetby.evilmobs.actions.particles.SendParticle;
-import me.jetby.evilmobs.actions.task.TaskRun;
-import me.jetby.evilmobs.actions.task.TaskStop;
 import me.jetby.evilmobs.commands.Admin;
 import me.jetby.evilmobs.configurations.Config;
 import me.jetby.evilmobs.configurations.Items;
@@ -29,8 +16,6 @@ import me.jetby.evilmobs.listeners.OnDeath;
 import me.jetby.evilmobs.listeners.OnMove;
 import me.jetby.evilmobs.locale.Lang;
 import me.jetby.evilmobs.tools.*;
-import me.jetby.treex.actions.ActionEntry;
-import me.jetby.treex.actions.ActionTypeRegistry;
 import me.jetby.treex.tools.LogInitialize;
 import me.jetby.treex.tools.log.Logger;
 import org.bukkit.Bukkit;
@@ -38,13 +23,15 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 public final class EvilMobs extends JavaPlugin {
@@ -100,7 +87,6 @@ public final class EvilMobs extends JavaPlugin {
         MiniBar.init(this);
         JGuiInitializer.init(this, false);
 
-
         items = new Items(FileLoader.getFile("items.yml"));
         items.load();
 
@@ -118,7 +104,6 @@ public final class EvilMobs extends JavaPlugin {
             mainMenu = new MainMenu(this, false);
         }
 
-
         new bStats(this, 27388);
 
         setupPlaceholders();
@@ -134,7 +119,6 @@ public final class EvilMobs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnDamage(), this);
         getServer().getPluginManager().registerEvents(new OnMove(), this);
         getServer().getPluginManager().registerEvents(new ItemPickup(), this);
-
 
         PluginCommand evilmobs = getCommand("evilmobs");
         if (evilmobs != null)
@@ -155,8 +139,10 @@ public final class EvilMobs extends JavaPlugin {
 
         for (World world : Bukkit.getWorlds()) {
             for (LivingEntity e : world.getLivingEntities()) {
-                if (!e.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) continue;
                 String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+                if (id == null) {
+                    continue;
+                }
 
                 if (!Maps.mobs.containsKey(id)) continue;
 
@@ -185,8 +171,8 @@ public final class EvilMobs extends JavaPlugin {
 
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity instanceof Item item && item.hasMetadata("evilmobs_originalItem")) {
-                    item.remove();
+                if (entity.getType() == EntityType.DROPPED_ITEM && entity.hasMetadata("evilmobs_originalItem")) {
+                    entity.remove();
                 }
             }
         }
@@ -195,7 +181,7 @@ public final class EvilMobs extends JavaPlugin {
                 miniTask.cancel();
             }
         }
-        List<UUID> uuids = new ArrayList<>(MiniBar.datas.keySet());
+        Set<UUID> uuids = MiniBar.datas.keySet();
         for (UUID uuid : uuids) {
             MiniBar.deleteBossBar(uuid);
         }

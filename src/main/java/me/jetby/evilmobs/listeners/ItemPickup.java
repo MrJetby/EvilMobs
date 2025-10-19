@@ -22,17 +22,16 @@ public class ItemPickup implements Listener {
         if (!(entity instanceof Player player)) return;
 
         Item item = event.getItem();
-        if (item.hasMetadata("evilmobs_originalItem")) {
-            List<MetadataValue> metaValues = item.getMetadata("evilmobs_originalItem");
-            if (!metaValues.isEmpty()) {
-                ItemStack originalItem = (ItemStack) metaValues.get(0).value();
-                event.setCancelled(true);
-                item.remove();
-                ItemStack cleanItem = originalItem.clone();
-                cleanItem.getItemMeta().getPersistentDataContainer().remove(CHANCE);
-                player.getInventory().addItem(cleanItem);
-                player.updateInventory();
-            }
+
+        List<MetadataValue> metaValues = item.getMetadata("evilmobs_originalItem");
+        if (!metaValues.isEmpty()) {
+            ItemStack originalItem = (ItemStack) metaValues.get(0).value();
+            event.setCancelled(true);
+            item.remove();
+            ItemStack cleanItem = originalItem.clone();
+            cleanItem.getItemMeta().getPersistentDataContainer().remove(CHANCE);
+            player.getInventory().addItem(cleanItem);
+            player.updateInventory();
         }
     }
 }

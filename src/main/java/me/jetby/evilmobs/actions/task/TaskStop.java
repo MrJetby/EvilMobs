@@ -18,9 +18,10 @@ public class TaskStop implements Action {
 
         if (entity == null || mob == null || context == null) return;
 
-        if (Maps.tasks.get(entity.getUniqueId()) == null) return;
+        var oldTasks = Maps.tasks.get(entity.getUniqueId());
+        if (oldTasks == null) return;
 
-        MiniTask miniTask = Maps.tasks.get(entity.getUniqueId()).get(context);
+        MiniTask miniTask = oldTasks.get(context);
         if (miniTask == null) return;
 
         miniTask.cancel();

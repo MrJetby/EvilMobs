@@ -10,6 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
+
 public class MainMenu extends AdvancedGui {
 
     public static final NamespacedKey CHANCE = new NamespacedKey("evilmobs", "chance");
@@ -29,14 +31,15 @@ public class MainMenu extends AdvancedGui {
         }
 
         int slot = 0;
-        for (String type : Maps.mobs.keySet()) {
-            Mob mob = Maps.mobs.get(type);
+        for (Map.Entry<String, Mob> entry : Maps.mobs.entrySet()) {
+            String type = entry.getKey();
+            Mob mob = entry.getValue();
             int finalSlot = slot;
             registerItem(type, builder -> {
                 builder.slots(finalSlot);
                 builder.defaultItem(ItemWrapper.builder(Material.valueOf(mob.entityType().name() + "_SPAWN_EGG"), serializerType)
-                        .displayName(plugin.getLang().getConfig().getString("gui.main."+serializerKey+".display_name", "gui.main."+serializerKey+".display_name").replace("{type}", type))
-                        .lore(plugin.getLang().getConfig().getStringList("gui.main."+serializerKey+".lore"))
+                        .displayName(plugin.getLang().getConfig().getString("gui.main." + serializerKey + ".display_name", "gui.main." + serializerKey + ".display_name").replace("{type}", type))
+                        .lore(plugin.getLang().getConfig().getStringList("gui.main." + serializerKey + ".lore"))
                         .build());
 
                 builder.defaultClickHandler((event, controller) -> {

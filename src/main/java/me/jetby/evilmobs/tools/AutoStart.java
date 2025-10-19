@@ -1,6 +1,8 @@
 package me.jetby.evilmobs.tools;
 
 
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import lombok.Getter;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
@@ -69,7 +71,7 @@ public class AutoStart {
     private void run(List<String> list) {
 
         Set<Times> times = new HashSet<>();
-        Map<Times, Boolean> executes = new HashMap<>();
+        Object2BooleanMap<Times> executes = new Object2BooleanOpenHashMap<>();
         for (String s : list) {
             try {
                 String[] globalArgs = s.split(";");
@@ -145,8 +147,6 @@ public class AutoStart {
                     mobCreator.spawn();
 
                     Maps.mobCreators.put(id, mobCreator);
-
-
                 }
 
                 if (!isTargetTime) {
@@ -205,8 +205,9 @@ public class AutoStart {
     }
 
     private String getRandomMob() {
-        List<Mob> mobs = new ArrayList<>(Maps.mobs.values());
+        Collection<Mob> mobs = Maps.mobs.values();
         if (mobs.isEmpty()) return null;
-        return mobs.get(Randomizer.rand(mobs.size())).id();
+        List<Mob> mobsList = new ArrayList<>(mobs);
+        return mobsList.get(Randomizer.rand(mobs.size())).id();
     }
 }

@@ -3,6 +3,8 @@ package me.jetby.evilmobs.gui;
 import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
 import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.configurations.Items;
@@ -12,9 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static me.jetby.evilmobs.gui.MainMenu.CHANCE;
 
@@ -23,7 +23,7 @@ public class ChanceEditor extends AdvancedGui {
     private final Items items;
     private final String type;
     private final String inv;
-    private final Map<Integer, ItemStack> originalItems = new HashMap<>();
+    private final Int2ObjectMap<ItemStack> originalItems = new Int2ObjectOpenHashMap<>();
 
     public ChanceEditor(Player player, String type, String inv, EvilMobs plugin, boolean isMiniMessage) {
         super(plugin.getLang().getConfig().getString("gui.chanceeditor.title", "gui.chanceeditor.title"));
@@ -55,8 +55,8 @@ public class ChanceEditor extends AdvancedGui {
                 builder.slots(itemData.slot())
                         .defaultItem(ItemWrapper.builder(item.getType(), serializerType)
                                 .amount(item.getAmount())
-                                .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor."+serializerKey+".display_name", "gui.chanceeditor."+serializerKey+".display_name").replace("{chance}", String.valueOf(chance[0])))
-                                .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor."+serializerKey+".lore")).build());
+                                .displayName(plugin.getLang().getConfig().getString("gui.chanceeditor." + serializerKey + ".display_name", "gui.chanceeditor." + serializerKey + ".display_name").replace("{chance}", String.valueOf(chance[0])))
+                                .lore(plugin.getLang().getConfig().getStringList("gui.chanceeditor." + serializerKey + ".lore")).build());
 
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
@@ -76,7 +76,7 @@ public class ChanceEditor extends AdvancedGui {
                     item.setItemMeta(meta);
 
                     controller.updateItems(wrapper ->
-                            wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor."+serializerKey+".display_name", "gui.chanceeditor."+serializerKey+".display_name")
+                            wrapper.displayName(plugin.getLang().getConfig().getString("gui.chanceeditor." + serializerKey + ".display_name", "gui.chanceeditor." + serializerKey + ".display_name")
                                     .replace("{chance}", String.valueOf(chance[0])))
                     );
                 });
@@ -90,8 +90,8 @@ public class ChanceEditor extends AdvancedGui {
     }
 
     private void saveChanges() {
-        for (Map.Entry<Integer, ItemStack> entry : originalItems.entrySet()) {
-            int slot = entry.getKey();
+        for (Int2ObjectMap.Entry<ItemStack> entry : originalItems.int2ObjectEntrySet()) {
+            int slot = entry.getIntKey();
             ItemStack item = entry.getValue();
             int chance = item.getItemMeta().getPersistentDataContainer().getOrDefault(CHANCE, PersistentDataType.INTEGER, 100);
             items.saveItem(type, inv, item, slot, chance);

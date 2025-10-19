@@ -14,7 +14,7 @@ import static me.jetby.evilmobs.EvilMobs.LOGGER;
 
 public class Items {
 
-    public record ItemsData(String inv, Integer slot, ItemStack itemStack, Integer chance) {
+    public record ItemsData(String inv, int slot, ItemStack itemStack, int chance) {
     }
 
     private final File file;
@@ -79,11 +79,12 @@ public class Items {
 
     public void save() {
 
-        for (String type : data.keySet()) {
-            List<ItemsData> items = data.get(type);
+        for (Map.Entry<String, List<ItemsData>> entry : data.entrySet()) {
+            String type = entry.getKey();
+            List<ItemsData> items = entry.getValue();
             configuration.set("Items." + type, null);
             for (ItemsData itemData : items) {
-                Integer slot = itemData.slot();
+                int slot = itemData.slot();
                 ItemStack item = itemData.itemStack();
                 Integer chance = itemData.chance();
 

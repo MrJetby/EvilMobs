@@ -12,11 +12,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Lightning implements Action {
 
-    Random random = new Random();
+    private static final Pattern PATTERN = Pattern.compile("\\s+");
+    final Random random = new Random();
 
     @Override
     public void execute(@NotNull ActionContext ctx) {
@@ -63,7 +65,7 @@ public class Lightning implements Action {
     }
 
     private Map<String, String> parseContext(String context) {
-        return Arrays.stream(context.split("\\s+"))
+        return Arrays.stream(PATTERN.split(context))
                 .filter(s -> s.contains(":"))
                 .map(s -> s.split(":"))
                 .collect(Collectors.toMap(

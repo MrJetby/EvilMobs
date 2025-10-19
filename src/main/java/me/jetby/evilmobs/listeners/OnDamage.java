@@ -25,10 +25,11 @@ public class OnDamage implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
+        if (Maps.mobCreators.isEmpty()) {
+            return;
+        }
         Entity entity = e.getEntity();
         Entity damager = e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK && e instanceof EntityDamageByEntityEvent edbee ? edbee.getDamager() : null;
-
-        if (!entity.getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) return;
 
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
         if (id == null) return;

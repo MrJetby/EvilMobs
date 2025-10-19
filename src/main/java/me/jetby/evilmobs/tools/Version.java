@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Version implements Listener {
@@ -45,7 +44,7 @@ public class Version implements Listener {
 
 
     public List<String> getAlert() {
-        List<String> oldVersion = new ArrayList<>(List.of(
+        List<String> oldVersion = List.of(
                 "",
                 "§7-------- " + COLOR + NAME + " §7--------",
                 COLOR + "● §fAttention, update available, please update the plugin.",
@@ -54,8 +53,8 @@ public class Version implements Listener {
                 COLOR + "● §fDownload here: §b" + DOWNLOAD_LINK,
                 "§7------------------------",
                 ""
-        ));
-        List<String> lastVersion = new ArrayList<>(List.of(
+        );
+        List<String> lastVersion = List.of(
                 "",
                 "§7-------- " + COLOR + NAME + " §7--------",
                 COLOR + "● §7Plugin version: §a" + getVersion(),
@@ -64,7 +63,7 @@ public class Version implements Listener {
                 "",
                 "§7------------------------",
                 ""
-        ));
+        );
 
         if (!isLastVersion()) {
             return oldVersion;
@@ -104,7 +103,7 @@ public class Version implements Listener {
 
     private String getLastVersion() {
         String result = getRaw(VERSION_LINK);
-        if (result==null) {
+        if (result == null) {
             return "error";
         }
         return result;
@@ -112,7 +111,7 @@ public class Version implements Listener {
 
     private String getDownloadLink() {
         String result = getRaw(DOWNLOAD_LINK);
-        if (result==null) {
+        if (result == null) {
             return "error";
         }
         return result;

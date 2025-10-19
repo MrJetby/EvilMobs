@@ -32,7 +32,7 @@ public class DropManager {
 
         String lootAmount = mob.lootAmount();
         List<Items.ItemsData> items = mob.items();
-        if (items==null || items.isEmpty()) {
+        if (items == null || items.isEmpty()) {
             LOGGER.warn("No items configured for mob: " + mob.id());
             return;
         }
@@ -93,7 +93,6 @@ public class DropManager {
             String randomMaskKey = maskKeys.get(RANDOM.nextInt(maskKeys.size()));
             Mask randomMask = masks.get(randomMaskKey);
 
-
             ItemStack maskedItem = new ItemStack(randomMask.material());
             ItemMeta meta = maskedItem.getItemMeta();
             if (meta != null) {
@@ -113,9 +112,7 @@ public class DropManager {
                 droppedItem.setCustomName(itemToDrop.getItemMeta().getDisplayName());
                 droppedItem.setCustomNameVisible(true);
             }
-            Bukkit.getScheduler().runTask(EvilMobs.getInstance(), () -> {
-                droppedItem.setMetadata("evilmobs_originalItem", new FixedMetadataValue(EvilMobs.getInstance(), originalItem));
-            });
+            Bukkit.getScheduler().runTask(EvilMobs.getInstance(), () -> droppedItem.setMetadata("evilmobs_originalItem", new FixedMetadataValue(EvilMobs.getInstance(), originalItem)));
         }
 
         double targetY = location.getY() + RANDOM.nextInt((int) (RANDOM.nextInt((int) (mob.dropParticle().maxY() - mob.dropParticle().minY() + 1)) + mob.dropParticle().minY()));
@@ -154,9 +151,7 @@ public class DropManager {
     public void dropItem(Integer amount, Mob mob, Location location) {
         long time = 1L;
         for (int i = 0; i < amount; i++) {
-            Bukkit.getScheduler().runTaskLater(EvilMobs.getInstance(), () -> {
-                dropItem(mob, getRandomItem(mob.id()), location);
-            }, time);
+            Bukkit.getScheduler().runTaskLater(EvilMobs.getInstance(), () -> dropItem(mob, getRandomItem(mob.id()), location), time);
             time = time + 1L;
         }
     }
