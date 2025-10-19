@@ -179,7 +179,7 @@ comments:
             - 'Zufällige Tarnung für Drop wählen.'
   config:
     lang:
-      - "Bevorzugte Sprache (de, en, es, ru, zh)"
+      - "Bevorzugte Sprache (de, en, es, ru, zh, uk)"
     auto-start:
       min-online:
         - "Mindestanzahl Spieler online für Mob-Spawns; wenn Freeze aktiviert, wird Timer bei zu wenig Spielern pausiert."

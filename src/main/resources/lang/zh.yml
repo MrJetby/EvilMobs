@@ -179,7 +179,7 @@ comments:
             - '将随机选择一个伪装用于掉落物品.'
   config:
     lang:
-      - "你偏好的语言 (de, en, es, ru, zh)"
+      - "你偏好的语言 (de, en, es, ru, zh, uk)"
     auto-start:
       min-online:
         - "生成怪物所需的最少在线玩家；若启用 Freeze，当在线不足时计时器会暂停。"

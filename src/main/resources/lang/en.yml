@@ -179,7 +179,7 @@ comments:
             - 'A random disguiser will be chosen to mask the drop.'
   config:
     lang:
-      - "Your preferred language (de, en, es, ru, zh)"
+      - "Your preferred language (de, en, es, ru, zh, uk)"
     auto-start:
       min-online:
         - "Minimum online players required to spawn mobs; if Freeze is enabled, the timer pauses when online is below this."

@@ -179,7 +179,7 @@ comments:
             - 'Se elegirá un disfraz aleatorio para ocultar el drop.'
   config:
     lang:
-      - "Tu idioma preferido (de, en, es, ru, zh)"
+      - "Tu idioma preferido (de, en, es, ru, zh, uk)"
     auto-start:
       min-online:
         - "Mínimo de jugadores en línea para que los mobs aparezcan; si Freeze está activado, el temporizador se pausará si hay menos jugadores."
