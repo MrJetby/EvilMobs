@@ -14,7 +14,7 @@ public class YamlCommentEditor {
 
     public YamlCommentEditor(File file) throws IOException {
         this.file = file;
-        this.lines = new ArrayList<>(Files.readAllLines(file.toPath()));
+        this.lines = Files.readAllLines(file.toPath());
         clearAllComments();
     }
 

@@ -93,7 +93,6 @@ public class DropManager {
             String randomMaskKey = maskKeys.get(RANDOM.nextInt(maskKeys.size()));
             Mask randomMask = masks.get(randomMaskKey);
 
-
             ItemStack maskedItem = new ItemStack(randomMask.material());
             ItemMeta meta = maskedItem.getItemMeta();
             if (meta != null) {

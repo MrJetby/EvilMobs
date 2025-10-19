@@ -245,13 +245,14 @@ public class MobCreator {
         switch (type) {
             case "health": {
                 double health = entity.getHealth();
-                for (var phaseId : new ArrayList<>(phases.keySet())) {
+                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
+                    var phaseId = entry.getKey();
                     double trigger = Double.parseDouble(phaseId);
                     if (health <= trigger) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("entity", entity);
 
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
 
                         phases.remove(phaseId);
                     }
@@ -260,13 +261,14 @@ public class MobCreator {
             }
             case "health_percentage": {
                 int healthPercent = (int) (entity.getHealth() / entity.getMaxHealth()) * 100;
-                for (String phaseId : new ArrayList<>(phases.keySet())) {
+                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
+                    String phaseId = entry.getKey();
                     int trigger = Integer.parseInt(phaseId);
                     if (healthPercent <= trigger) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("mob", mob);
                         ctx.put("entity", entity);
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
                         phases.remove(phaseId);
                     }
                 }
@@ -274,12 +276,13 @@ public class MobCreator {
             }
             default: {
                 var t = Papi.setPapi(null, type);
-                for (var phaseId : new ArrayList<>(phases.keySet())) {
+                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
+                    var phaseId = entry.getKey();
                     if (t.equals(phaseId)) {
                         ActionContext ctx = new ActionContext(null);
                         ctx.put("mob", mob);
                         ctx.put("entity", entity);
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(phases.get(phaseId)));
+                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
                         phases.remove(phaseId);
                     }
                 }
