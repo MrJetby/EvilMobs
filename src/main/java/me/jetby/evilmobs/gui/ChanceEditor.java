@@ -3,6 +3,8 @@ package me.jetby.evilmobs.gui;
 import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
 import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.configurations.Items;
@@ -23,7 +25,7 @@ public class ChanceEditor extends AdvancedGui {
     private final Items items;
     private final String type;
     private final String inv;
-    private final Map<Integer, ItemStack> originalItems = new HashMap<>();
+    private final Int2ObjectMap<ItemStack> originalItems = new Int2ObjectOpenHashMap<>();
 
     public ChanceEditor(Player player, String type, String inv, EvilMobs plugin, boolean isMiniMessage) {
         super(plugin.getLang().getConfig().getString("gui.chanceeditor.title", "gui.chanceeditor.title"));
@@ -90,8 +92,8 @@ public class ChanceEditor extends AdvancedGui {
     }
 
     private void saveChanges() {
-        for (Map.Entry<Integer, ItemStack> entry : originalItems.entrySet()) {
-            int slot = entry.getKey();
+        for (Int2ObjectMap.Entry<ItemStack> entry : originalItems.int2ObjectEntrySet()) {
+            int slot = entry.getIntKey();
             ItemStack item = entry.getValue();
             int chance = item.getItemMeta().getPersistentDataContainer().getOrDefault(CHANCE, PersistentDataType.INTEGER, 100);
             items.saveItem(type, inv, item, slot, chance);

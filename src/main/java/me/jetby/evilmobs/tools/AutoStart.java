@@ -1,6 +1,8 @@
 package me.jetby.evilmobs.tools;
 
 
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import lombok.Getter;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
@@ -69,7 +71,7 @@ public class AutoStart {
     private void run(List<String> list) {
 
         Set<Times> times = new HashSet<>();
-        Map<Times, Boolean> executes = new HashMap<>();
+        Object2BooleanMap<Times> executes = new Object2BooleanOpenHashMap<>();
         for (String s : list) {
             try {
                 String[] globalArgs = s.split(";");
