@@ -29,7 +29,6 @@ public class OnMove implements Listener {
         LivingEntity entity = e.getEntity();
 
         String id = entity.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-        if (id == null) return;
         Mob mob = Maps.mobs.get(id);
         if (mob == null) return;
 
@@ -42,6 +41,9 @@ public class OnMove implements Listener {
             if (mc != null) {
                 if (mc.getSpawnedLocation().distanceSquared(e.getTo()) > mob.movingRadius() * mob.movingRadius()) {
                     e.setCancelled(true);
+                    if (mob.teleportOnRadius()) {
+                        entity.teleport(mc.getSpawnedLocation());
+                    }
                     return;
                 }
             }
@@ -53,7 +55,7 @@ public class OnMove implements Listener {
             ActionContext ctx = new ActionContext(null);
             ctx.put("mob", mob);
             ctx.put("entity", entity);
-            ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(actions, mob, entity)));
+            ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(actions, mob, entity)));
         }
     }
 }

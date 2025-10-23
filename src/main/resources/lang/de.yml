@@ -128,6 +128,8 @@ comments:
       moving-radius:
         - "Zeile löschen oder -1 setzen für unbegrenzte Bewegungsreichweite"
         - "Mob kann diesen Radius nicht verlassen"
+      teleport-on-radius:
+        - "Wenn true, wird sich der Mob zurück in den Radius teleportieren, wenn er diesen verlässt"
       spawn-location:
         - ''
         - "Koordinaten wie x;y;z;Welt setzen"

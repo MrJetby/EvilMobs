@@ -10,6 +10,7 @@ import java.util.Map;
 public record Mob(
         String id,
         int movingRadius,
+        boolean teleportOnRadius,
         String locationType,
         Location location,
         boolean nameVisible,
@@ -31,7 +32,6 @@ public record Mob(
         Map<String, Task> tasks,
         Map<String, Bar> bossBars,
         List<String> onSpawnActions,
-        List<String> onHitActions,
         List<String> onDeathActions,
         Rtp rtp,
         String lootAmount,

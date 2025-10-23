@@ -27,12 +27,17 @@ public class EffectNear implements Action {
         PotionEffectType potionEffectType;
         try {
             if (args.length >= 1) {
-                potionEffectType = PotionEffectType.getByName(args[0].toUpperCase());
+                potionEffectType = PotionEffectType.getByName(getPotionEffect(args[0].toUpperCase()));
             } else {
                 logger.warn("PotionEffectType is null");
                 return;
             }
         } catch (IllegalArgumentException e) {
+            logger.warn("PotionEffectType " + args[0] + " is not available");
+            return;
+        }
+
+        if (potionEffectType==null) {
             logger.warn("PotionEffectType " + args[0] + " is not available");
             return;
         }
@@ -52,5 +57,13 @@ public class EffectNear implements Action {
         } catch (NumberFormatException e) {
             logger.warn("Duration, strength and radius must be numbers");
         }
+    }
+
+    private String getPotionEffect(String effect) {
+        return switch (effect) {
+            case "DARKNESS" -> "BLINDNESS";
+            case "SLOWNESS" -> "SLOW";
+            default -> effect;
+        };
     }
 }

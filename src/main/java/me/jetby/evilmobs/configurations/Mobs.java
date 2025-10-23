@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -77,6 +78,7 @@ public class Mobs {
             editor.setComment("id", lang.getConfig().getStringList("comments.mobs.example.id"));
             editor.setComment("name", lang.getConfig().getStringList("comments.mobs.example.name"));
             editor.setComment("moving-radius", lang.getConfig().getStringList("comments.mobs.example.moving-radius"));
+            editor.setComment("teleport-on-radius", lang.getConfig().getStringList("comments.mobs.example.teleport-on-radius"));
             editor.setComment("spawn-location", lang.getConfig().getStringList("comments.mobs.example.spawn-location"));
             editor.setComment("listeners", lang.getConfig().getStringList("comments.mobs.example.listeners"));
             editor.setComment("bossBars.example_health.color", lang.getConfig().getStringList("comments.mobs.example.bossBars.example_health.color"));
@@ -135,6 +137,7 @@ public class Mobs {
 
             String id = configuration.getString("id");
             int movingRadius = configuration.getInt("moving-radius", -1);
+            boolean teleportOnRadius = configuration.getBoolean("teleport-on-radius", false);
 
             World world = Bukkit.getWorld(configuration.getString("rtp.world", "world"));
             int min, max;
@@ -293,7 +296,7 @@ public class Mobs {
                     for (String actionId : actionSection.getKeys(false)) {
                         phase.put(actionId, actionSection.getStringList(actionId));
                     }
-                    phases.add(new Phases(phaseId, phaseType, phase));
+                    phases.add(new Phases(phaseType, phase));
                 }
             }
 
@@ -333,7 +336,6 @@ public class Mobs {
             }
 
             List<String> onSpawnActions = configuration.getStringList("actions.onSpawn");
-            List<String> onHitActions = configuration.getStringList("actions.onHit");
             List<String> onDeathActions = configuration.getStringList("actions.onDeath");
 
             List<Items.ItemsData> items = plugin.getItems().getData().get(id);
@@ -342,6 +344,7 @@ public class Mobs {
             Mob mob = new Mob(
                     id,
                     movingRadius,
+                    teleportOnRadius,
                     locationType,
                     location,
                     nameVisible,
@@ -363,7 +366,6 @@ public class Mobs {
                     tasks,
                     bossBarsMap,
                     onSpawnActions,
-                    onHitActions,
                     onDeathActions,
                     rtp,
                     lootAmount,
@@ -383,5 +385,6 @@ public class Mobs {
             default -> enchant;
         };
     }
+
 
 }

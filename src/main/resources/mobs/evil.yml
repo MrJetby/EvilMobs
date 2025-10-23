@@ -5,6 +5,7 @@ type: ZOMBIFIED_PIGLIN
 health: 150
 
 moving-radius: -1
+teleport-on-radius: true
 
 AI: true
 glow: false
@@ -48,7 +49,7 @@ phases:
         - '[BROADCAST_SOUND] entity_enderman_teleport'
       '50':
         - '[msg_all] &r'
-        - '[msg_all] &fУ &4Evil Master &fосталось 50% здаровья'
+        - '[msg_all] &4Evil Master &fhas {health_percentage}% health left!'
         - '[msg_all] &r'
 
 tasks:

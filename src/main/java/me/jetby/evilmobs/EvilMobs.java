@@ -36,6 +36,7 @@ import java.util.UUID;
 @Getter
 public final class EvilMobs extends JavaPlugin {
 
+    @Setter
     public Config cfg;
     public FormatTime formatTime;
     public Mobs mobs;
@@ -137,21 +138,24 @@ public final class EvilMobs extends JavaPlugin {
 
     private void rollbackMobTasks() {
 
-        for (World world : Bukkit.getWorlds()) {
-            for (LivingEntity e : world.getLivingEntities()) {
-                String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-                if (id == null) {
-                    continue;
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            for (World world : Bukkit.getWorlds()) {
+                for (LivingEntity e : world.getLivingEntities()) {
+                    String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+                    if (id == null) {
+                        continue;
+                    }
+
+                    if (!Maps.mobs.containsKey(id)) continue;
+
+                    MobCreator mobCreator = new MobCreator(Maps.mobs.get(id));
+                    mobCreator.runTasks(e);
+                    Maps.mobCreators.put(id, mobCreator);
+
                 }
-
-                if (!Maps.mobs.containsKey(id)) continue;
-
-                MobCreator mobCreator = new MobCreator(Maps.mobs.get(id));
-                mobCreator.runTasks(e);
-                Maps.mobCreators.put(id, mobCreator);
-
             }
-        }
+        });
+
     }
 
 

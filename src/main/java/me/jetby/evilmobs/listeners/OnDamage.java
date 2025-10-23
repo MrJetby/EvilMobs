@@ -56,7 +56,7 @@ public class OnDamage implements Listener {
                 ActionContext ctx = new ActionContext(player);
                 ctx.put("mob", mob);
                 ctx.put("entity", entity);
-                ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(actions, mob, (LivingEntity) entity)));
+                ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(actions, mob, (LivingEntity) entity)));
             }
         }
     }

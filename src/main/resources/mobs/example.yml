@@ -5,6 +5,9 @@ type: ZOMBIE
 health: 1000
 
 moving-radius: 15
+teleport-on-radius: true
+
+max-minions: 6
 
 AI: true
 glow: false

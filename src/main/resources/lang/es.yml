@@ -128,6 +128,8 @@ comments:
       moving-radius:
         - "Borra la línea o establece -1 para no limitar el radio de movimiento"
         - "El mob no puede salir de este radio"
+      teleport-on-radius:
+        - "Si es true, el mob se teletransportará de nuevo al radio si sale de él"
       spawn-location:
         - ''
         - "Puedes establecer coordenadas como x;y;z;mundo"

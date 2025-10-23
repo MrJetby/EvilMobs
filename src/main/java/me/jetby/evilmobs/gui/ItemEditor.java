@@ -37,7 +37,7 @@ public class ItemEditor extends AdvancedGui {
         List<Items.ItemsData> map = items.getData().get(type);
         for (Items.ItemsData itemData : map) {
             if (!itemData.inv().equals(inv) || itemData.itemStack() == null) continue;
-            registerItem(itemData.slot().toString() + "-" + itemData.inv(), builder -> {
+            registerItem(itemData.slot() + "-" + itemData.inv(), builder -> {
                 builder.slots(itemData.slot());
                 builder.defaultItem(new ItemWrapper(itemData.itemStack(), serializerType));
                 builder.defaultClickHandler((event, controller) -> event.setCancelled(false));

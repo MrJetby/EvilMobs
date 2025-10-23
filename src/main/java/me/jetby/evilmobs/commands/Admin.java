@@ -3,7 +3,7 @@ package me.jetby.evilmobs.commands;
 import me.jetby.evilmobs.EvilMobs;
 import me.jetby.evilmobs.Maps;
 import me.jetby.evilmobs.MobCreator;
-import me.jetby.evilmobs.tools.ParticleEffectManager;
+import me.jetby.evilmobs.configurations.Config;
 import me.jetby.treex.text.Colorize;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -65,11 +65,6 @@ public class Admin implements CommandExecutor, TabCompleter {
                 mobCreator.spawn();
 
                 mobCreators.put(args[1], mobCreator);
-                break;
-            }
-            case "test": {
-                if (sender instanceof Player player)
-                    ParticleEffectManager.playEffect(args[1], player.getLocation(), plugin.getParticles());
                 break;
             }
             case "tp": {
@@ -158,23 +153,28 @@ public class Admin implements CommandExecutor, TabCompleter {
             case "list": {
                 sender.sendMessage("Mobs list:");
                 sender.sendMessage("");
-                int num = 1;
-                for (World world : Bukkit.getWorlds()) {
-                    for (LivingEntity e : world.getLivingEntities()) {
-                        String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
-                        if (id == null) {
-                            continue;
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                    int num = 1;
+                    for (World world : Bukkit.getWorlds()) {
+                        for (LivingEntity e : world.getLivingEntities()) {
+                            String id = e.getPersistentDataContainer().get(NAMESPACED_KEY, PersistentDataType.STRING);
+                            if (id == null) {
+                                continue;
+                            }
+
+                            sender.sendMessage("§7#" + num + " §e" + id + " (" + Maps.mobs.get(id).name() + "§r) [" + (int) e.getHealth() + "]");
+                            num++;
                         }
-                        sender.sendMessage("§7#" + num + " §e" + id + " (" + Maps.mobs.get(id).name() + "§r) [" + e.getHealth() + "]");
-                        num++;
                     }
-                }
+                });
                 break;
             }
             case "reload": {
                 try {
                     long startTime = System.currentTimeMillis();
-                    plugin.getCfg().load();
+                    Config cfg = new Config(plugin);
+                    cfg.load();
+                    plugin.setCfg(cfg);
                     plugin.getItems().load();
                     plugin.getMobs().load();
                     plugin.getParticles().load();

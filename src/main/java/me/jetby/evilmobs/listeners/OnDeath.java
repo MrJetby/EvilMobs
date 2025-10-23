@@ -54,7 +54,7 @@ public class OnDeath implements Listener {
         ActionContext ctx = new ActionContext(player);
         ctx.put("mob", mob);
         ctx.put("entity", entity);
-        ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(mob.onDeathActions(), mob, entity)));
+        ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(mob.onDeathActions(), mob, entity)));
 
         if (mob.onlyCustom()) {
             e.getDrops().clear();

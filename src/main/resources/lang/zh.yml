@@ -128,6 +128,8 @@ comments:
       moving-radius:
         - "删除此行或设为 -1 表示无限移动范围"
         - "怪物不能超出此范围"
+      teleport-on-radius:
+        - "如果为 true，当怪物超出半径范围时，它会被传送回去"
       spawn-location:
         - ''
         - "可设置坐标 x;y;z;世界"

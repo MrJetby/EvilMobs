@@ -23,7 +23,10 @@ import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static me.jetby.evilmobs.EvilMobs.LOGGER;
 import static me.jetby.evilmobs.EvilMobs.NAMESPACED_KEY;
@@ -35,7 +38,7 @@ public class MobCreator {
     final int taskId = -1;
 
     @Getter
-    private Location spawnedLocation = null;
+    private Location spawnedLocation;
 
     @Getter
     private LivingEntity livingEntity;
@@ -63,7 +66,7 @@ public class MobCreator {
 
         Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), task -> {
             if (chunk.isLoaded()) {
-                spawn(mainMob, spawnedLocation);
+                spawn(mainMob, spawnedLocation, false);
                 task.cancel();
             }
         }, 0L, 20L);
@@ -79,7 +82,7 @@ public class MobCreator {
 
         Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), task -> {
             if (chunk.isLoaded()) {
-                spawn(mainMob, location);
+                spawn(mainMob, location, false);
                 task.cancel();
             }
         }, 0L, 20L);
@@ -92,8 +95,7 @@ public class MobCreator {
     public void runTasks(LivingEntity entity) {
 
         spawnedLocation = entity.getLocation();
-        phasesCopy.addAll(mainMob.phases());
-        phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
+
 
         for (String taskId : mainMob.tasks().keySet()) {
             Task task = mainMob.tasks().get(taskId);
@@ -113,26 +115,49 @@ public class MobCreator {
             Maps.tasks.put(entity.getUniqueId(), tasks);
         }
 
-        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
-
-            if (entity.isDead()) {
-                Bukkit.getScheduler().cancelTask(taskId);
-                return;
-            }
-
-            for (Phases phase : phasesCopy) {
-                try {
-                    sendPhasesCommand(phase.type(), entity, mainMob);
-                } catch (NumberFormatException e) {
-                    LOGGER.warn(e.getMessage());
-                }
-            }
-        }, 0L, 5L);
+        startPhases(entity);
     }
+    private void startPhases(LivingEntity entity) {
+        if (!mainMob.phases().isEmpty() && phases.isEmpty()) {
+            for (Phases p : mainMob.phases()) {
+                phases.put(p.type(), new HashMap<>(p.actions()));  // Deep copy to avoid mutating original
+            }
 
-    private LivingEntity spawn(Mob mob, Location location) {
+            Bukkit.getScheduler().runTaskTimerAsynchronously(EvilMobs.getInstance(), (t) -> {
 
-        LivingEntity boss = (LivingEntity) location.getWorld().spawnEntity(spawnedLocation, mob.entityType());
+                if (entity.isDead()) {
+                    t.cancel();
+                    return;
+                }
+
+                for (String phaseType : new ArrayList<>(phases.keySet())) {
+                    Map<String, List<String>> phase = phases.get(phaseType);
+                    if (phase.isEmpty()) {
+                        phases.remove(phaseType);
+                        continue;
+                    }
+
+                    for (String trigger : new ArrayList<>(phase.keySet())) {
+                        try {
+                            boolean executed = sendPhasesCommand(phaseType, trigger, phase.get(trigger), entity, mainMob);
+                            if (executed) {
+                                phase.remove(trigger);
+                                if (phase.isEmpty()) {
+                                    phases.remove(phaseType);
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            LOGGER.warn(e.getMessage());
+                        }
+                    }
+                }
+
+            }, 0L, 5L);
+        }
+    }
+    private LivingEntity spawn(Mob mob, Location location, boolean isMinion) {
+
+        LivingEntity boss = (LivingEntity) location.getWorld().spawnEntity(location, mob.entityType());
         boss.setGlowing(mob.glow());
         boss.setMaxHealth(mob.health());
         boss.setHealth(mob.health());
@@ -200,34 +225,18 @@ public class MobCreator {
         ActionContext ctx = new ActionContext(null);
         ctx.put("mob", mob);
         ctx.put("entity", boss);
-        ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.list(mob.onSpawnActions(), mob, boss)));
+        ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(mob.onSpawnActions(), mob, boss)));
 
-        phasesCopy.addAll(mob.phases());
-        phasesCopy.forEach(phase -> phases.putAll(phase.actions()));
+        if (!isMinion) {
+            startPhases(boss);
+            livingEntity = boss;
+        }
 
-        Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
-
-            if (boss.isDead()) {
-                Bukkit.getScheduler().cancelTask(taskId);
-                return;
-            }
-
-            for (Phases phase : phasesCopy) {
-                try {
-                    sendPhasesCommand(phase.type(), boss, mob);
-                } catch (NumberFormatException e) {
-                    LOGGER.warn(e.getMessage());
-                }
-            }
-        }, 0L, 5L);
-
-
-        livingEntity = boss;
         return boss;
     }
 
     public void spawnMinion(String id, Location location) {
-        LivingEntity entity = spawn(Maps.mobs.get(id), location);
+        LivingEntity entity = spawn(Maps.mobs.get(id), location, true);
         minions.add(entity);
     }
 
@@ -238,56 +247,54 @@ public class MobCreator {
         minions.clear();
     }
 
-    final List<Phases> phasesCopy = new ArrayList<>();
-    final Map<String, List<String>> phases = new HashMap<>();
+    final Map<String, Map<String, List<String>>> phases = new HashMap<>(); // phaseType, phaseTrigger, actions
 
-    private void sendPhasesCommand(String type, LivingEntity entity, Mob mob) {
+    private boolean sendPhasesCommand(String type, String trigger, List<String> actions, LivingEntity entity, Mob mob) {
+        boolean status = false;
         switch (type) {
             case "health": {
                 double health = entity.getHealth();
-                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
-                    var phaseId = entry.getKey();
-                    double trigger = Double.parseDouble(phaseId);
-                    if (health <= trigger) {
-                        ActionContext ctx = new ActionContext(null);
-                        ctx.put("entity", entity);
 
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
+                double t = Double.parseDouble(trigger);
+                if (health <= t) {
+                    ActionContext ctx = new ActionContext(null);
+                    ctx.put("entity", entity);
+                    ctx.put("mob", mob);
+                    ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(actions, mob, entity)));
 
-                        phases.remove(phaseId);
-                    }
                 }
+
+                status = true;
                 break;
             }
             case "health_percentage": {
-                int healthPercent = (int) (entity.getHealth() / entity.getMaxHealth()) * 100;
-                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
-                    String phaseId = entry.getKey();
-                    int trigger = Integer.parseInt(phaseId);
-                    if (healthPercent <= trigger) {
-                        ActionContext ctx = new ActionContext(null);
-                        ctx.put("mob", mob);
-                        ctx.put("entity", entity);
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
-                        phases.remove(phaseId);
-                    }
+                int healthPercent = (int) ((entity.getHealth() / entity.getMaxHealth()) * 100);
+
+                int t = Integer.parseInt(trigger);
+                if (healthPercent <= t) {
+                    ActionContext ctx = new ActionContext(null);
+                    ctx.put("mob", mob);
+                    ctx.put("entity", entity);
+                    ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(actions, mob, entity)));
+
                 }
+
+                status = true;
                 break;
             }
             default: {
                 var t = Papi.setPapi(null, type);
-                for (Map.Entry<String, List<String>> entry : phases.entrySet()) {
-                    var phaseId = entry.getKey();
-                    if (t.equals(phaseId)) {
-                        ActionContext ctx = new ActionContext(null);
-                        ctx.put("mob", mob);
-                        ctx.put("entity", entity);
-                        ActionExecutor.execute(ctx, ActionRegistry.transform(entry.getValue()));
-                        phases.remove(phaseId);
-                    }
+                if (t.equals(trigger)) {
+                    ActionContext ctx = new ActionContext(null);
+                    ctx.put("mob", mob);
+                    ctx.put("entity", entity);
+                    ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(actions, mob, entity)));
                 }
+
+                status = true;
             }
         }
+        return status;
     }
 
     public void end() {

@@ -98,9 +98,10 @@ public class MiniBar {
 
                 if (data.progress.equalsIgnoreCase("%health_percentage%")) {
                     bossBar.setProgress(healthPercent);
+                } else if (Placeholders.containsAtLeastOne(data.progress)) {
+                    bossBar.setProgress(parseProgress(data.progress));
                 } else {
-                    bossBar.setProgress(Double.parseDouble(data.progress));
-
+                    bossBar.setProgress(parseProgress(Papi.setPapi(null, data.progress)));
                 }
 
                 String raw = data.originalTitle.replace("%health_percentage%", String.format("%.1f", healthPercent * 100));
@@ -110,6 +111,17 @@ public class MiniBar {
                 data.setBossBar(bossBar);
             }
         });
+    }
+    private double parseProgress(String input) {
+        try {
+            double value = Double.parseDouble(input.trim());
+
+            if (value > 1) value /= 100.0;
+
+            return Math.max(0.0, Math.min(1.0, value));
+        } catch (NumberFormatException e) {
+            return 1.0;
+        }
     }
 
     public void show(@NonNull String id, @NonNull Collection<Player> targets) {
@@ -126,7 +138,7 @@ public class MiniBar {
                 });
     }
 
-    public void show(@NonNull String id, @NonNull Entity entity, int radius) {
+    public void show(@NonNull String id, @NonNull LivingEntity entity, int radius) {
         UUID entityId = entity.getUniqueId();
         Data data = datas.get(entityId);
         if (data == null || data.bossBar == null || !data.id.equals(id)) return;

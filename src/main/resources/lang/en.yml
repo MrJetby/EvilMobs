@@ -128,6 +128,8 @@ comments:
       moving-radius:
         - "Delete the line or set -1 for no movement radius limit"
         - "Mob cannot move beyond this radius"
+      teleport-on-radius:
+        - "If true, the mob will teleport back into the radius if it goes beyond it"
       spawn-location:
         - ''
         - "You can set coordinates as x;y;z;world"
