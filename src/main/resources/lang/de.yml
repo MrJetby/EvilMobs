@@ -3,6 +3,7 @@ lang: de
 reload: "&aAlle Konfigurationen wurden erfolgreich in {time} ms neu geladen"
 mob-creator-not-found: "MobCreator für Kontext nicht gefunden: {context}"
 
+
 formattedTime:
   weeks: [ "Woche", "Wochen", "Wochen" ]
   days: [ "Tag", "Tage", "Tage" ]
