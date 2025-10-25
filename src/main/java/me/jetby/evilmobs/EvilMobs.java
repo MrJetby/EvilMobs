@@ -147,9 +147,13 @@ public final class EvilMobs extends JavaPlugin {
                     }
 
                     if (!Maps.mobs.containsKey(id)) continue;
-
+                    if (id.contains("minion")) {
+                        e.remove();
+                        continue;
+                    }
                     MobCreator mobCreator = new MobCreator(Maps.mobs.get(id));
                     mobCreator.runTasks(e);
+                    mobCreator.setLivingEntity(e);
                     Maps.mobCreators.put(id, mobCreator);
 
                 }

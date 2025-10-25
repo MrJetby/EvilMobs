@@ -147,13 +147,12 @@ public class MiniBar {
             Bukkit.getScheduler().cancelTask(data.nearTask);
         }
 
-        int taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(EvilMobs.getInstance(), () -> {
+        int taskId = Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), () -> {
             Set<Player> viewers = data.players;
             BossBar bar = data.bossBar;
-            Location location = entity.getLocation();
 
-            for (Player player : location.getWorld().getPlayers()) {
-                boolean inRange = player.getLocation().distance(location) <= radius;
+            for (Player player : entity.getLocation().getWorld().getPlayers()) {
+                boolean inRange = player.getLocation().distance(entity.getLocation()) <= radius;
 
                 if (inRange && !viewers.contains(player)) {
                     bar.addPlayer(player);

@@ -15,6 +15,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -139,8 +140,8 @@ public class Admin implements CommandExecutor, TabCompleter {
                 }
                 MobCreator mobCreator = mobCreators.get(args[1]);
                 if (mobCreator != null) {
-                    mobCreator.getLivingEntity().remove();
                     mobCreator.end();
+                    mobCreator.getLivingEntity().remove();
                     sender.sendMessage("Mob with ID " + args[1] + " despawned.");
                 } else {
                     sender.sendMessage("Mob with ID " + args[1] + " not found.");

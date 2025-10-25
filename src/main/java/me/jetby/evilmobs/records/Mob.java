@@ -10,6 +10,7 @@ import java.util.Map;
 public record Mob(
         String id,
         int movingRadius,
+        int maxAliveMinions,
         boolean teleportOnRadius,
         String locationType,
         Location location,

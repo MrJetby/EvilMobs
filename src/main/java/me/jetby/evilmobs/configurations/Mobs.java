@@ -137,6 +137,7 @@ public class Mobs {
 
             String id = configuration.getString("id");
             int movingRadius = configuration.getInt("moving-radius", -1);
+            int maxAliveMinions = configuration.getInt("max-alive-minions", 10);
             boolean teleportOnRadius = configuration.getBoolean("teleport-on-radius", false);
 
             World world = Bukkit.getWorld(configuration.getString("rtp.world", "world"));
@@ -344,6 +345,7 @@ public class Mobs {
             Mob mob = new Mob(
                     id,
                     movingRadius,
+                    maxAliveMinions,
                     teleportOnRadius,
                     locationType,
                     location,

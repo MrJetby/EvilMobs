@@ -6,6 +6,7 @@ health: 150
 
 moving-radius: -1
 teleport-on-radius: true
+max-alive-minions: 10
 
 AI: true
 glow: false

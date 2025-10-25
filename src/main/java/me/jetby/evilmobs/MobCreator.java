@@ -3,11 +3,13 @@ package me.jetby.evilmobs;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import me.jetby.evilmobs.api.event.MobSpawnEvent;
 import me.jetby.evilmobs.records.Mob;
 import me.jetby.evilmobs.records.Phases;
 import me.jetby.evilmobs.records.Rtp;
 import me.jetby.evilmobs.records.Task;
+import me.jetby.evilmobs.tools.MiniBar;
 import me.jetby.evilmobs.tools.MiniTask;
 import me.jetby.evilmobs.tools.Placeholders;
 import me.jetby.treex.actions.ActionContext;
@@ -40,7 +42,7 @@ public class MobCreator {
     @Getter
     private Location spawnedLocation;
 
-    @Getter
+    @Getter @Setter
     private LivingEntity livingEntity;
     private final List<LivingEntity> minions = new ArrayList<>();
 
@@ -120,10 +122,10 @@ public class MobCreator {
     private void startPhases(LivingEntity entity) {
         if (!mainMob.phases().isEmpty() && phases.isEmpty()) {
             for (Phases p : mainMob.phases()) {
-                phases.put(p.type(), new HashMap<>(p.actions()));  // Deep copy to avoid mutating original
+                phases.put(p.type(), new HashMap<>(p.actions()));
             }
 
-            Bukkit.getScheduler().runTaskTimerAsynchronously(EvilMobs.getInstance(), (t) -> {
+            Bukkit.getScheduler().runTaskTimer(EvilMobs.getInstance(), (t) -> {
 
                 if (entity.isDead()) {
                     t.cancel();
@@ -228,14 +230,15 @@ public class MobCreator {
         ActionExecutor.execute(ctx, ActionRegistry.transform(Placeholders.set(mob.onSpawnActions(), mob, boss)));
 
         if (!isMinion) {
-            startPhases(boss);
             livingEntity = boss;
         }
+        startPhases(boss);
 
         return boss;
     }
 
     public void spawnMinion(String id, Location location) {
+        if (minions.size()==mainMob.maxAliveMinions()) return;
         LivingEntity entity = spawn(Maps.mobs.get(id), location, true);
         minions.add(entity);
     }
@@ -301,5 +304,11 @@ public class MobCreator {
         Bukkit.getScheduler().cancelTask(taskId);
         killAllMinions();
         Maps.mobCreators.remove(mainMob.id());
+        Map<String, MiniTask> tasks = Maps.tasks.get(livingEntity.getUniqueId());
+        for (String key : tasks.keySet()) {
+            MiniTask miniTask = tasks.get(key);
+            miniTask.cancel();
+        }
+        MiniBar.deleteBossBar(livingEntity.getUniqueId());
     }
 }
