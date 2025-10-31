@@ -176,7 +176,6 @@ public class Admin implements CommandExecutor, TabCompleter {
                     Config cfg = new Config(plugin);
                     cfg.load();
                     plugin.setCfg(cfg);
-                    plugin.getItems().load();
                     plugin.getMobs().load();
                     plugin.getParticles().load();
 
